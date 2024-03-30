@@ -110,7 +110,7 @@ export const usePermissionsStore = defineStore('permissions', {
             type: 'negative',
             message: e.message ?? e.response.statusText
           })
-          this.router.replace({name: 'app.unauthorized'})
+          this.router.replace({name: 'admin.unauthorized'})
         }
       }else{
         Notify.create({
