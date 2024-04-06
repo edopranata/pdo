@@ -18,6 +18,13 @@ export const usePageStore = defineStore('page', {
       min: undefined,
       max: undefined,
     },
+    percentFormat: {
+      prefix: '',
+      suffix: '%',
+      reverseFill: false,
+      min: undefined,
+      max: undefined,
+    },
     unitFormat: {
       prefix: '',
       suffix: ' kg',
