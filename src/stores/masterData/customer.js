@@ -58,7 +58,7 @@ export const useCustomersStore = defineStore('customers', {
 
   actions: {
     onReset(form = null) {
-      if(form){
+      if(form === null){
         for (let property in this.form) {
           this.form[property] = '';
         }
@@ -177,7 +177,6 @@ export const useCustomersStore = defineStore('customers', {
           message: params.hasOwnProperty('id') ? 'Data customer berhasil diubah' : 'Data customer berhasil disimpan'
         })
         this.table.filter = String(Date.now())
-        this.onReset()
       }).catch(e => {
         this.setError(e);
       }).finally(() => this.table.loading = false);

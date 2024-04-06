@@ -1,7 +1,7 @@
 <script setup>
 import {useCustomersStore} from "stores/masterData/customer";
 import {useAuthStore} from "stores/auth";
-import {onMounted, ref, watch} from 'vue'
+import {onBeforeMount, onMounted, ref, watch} from 'vue'
 import {useRoute} from "vue-router";
 import {storeToRefs} from "pinia";
 import {useQuasar} from "quasar";
@@ -15,7 +15,7 @@ const {getSelected: selected, customers: customer_model, errors} = storeToRefs(u
 const {path} = useRoute()
 
 const tableRef = ref()
-
+const customerForm = ref()
 async function onRequest(props) {
   await customers.getCustomersData(path, props)
 }
@@ -31,9 +31,7 @@ watch(selected, (selected_item) => {
   if (selected_item.length > 0) {
     deleted.customer_id = selected_item.map(i => i['id'])
     deleted.data = selected_item.map(i => `${i['name']}`)
-
   } else {
-    customers.onReset()
     deleted.customer_id = []
     deleted.data = []
   }
@@ -41,25 +39,35 @@ watch(selected, (selected_item) => {
 }, {
   deep: true,
 })
+onBeforeMount( () => {
+})
 onMounted(() => {
-  customers.onReset()
-  table.selected = []
   // get initial data from server (1st page)
   tableRef.value.requestServerInteraction()
+  onReset()
+
 })
 
 const onReset = () => {
   customers.onReset()
+  setTimeout( () => {
+    customerForm.value.resetValidation()
+  }, 600)
 }
 
 const onSubmit = () => {
-  $q.dialog({
-    title: 'Simpan data',
-    message: 'Apakah data yang di input sudah benar?',
-    cancel: true,
-    persistent: true
-  }).onOk(async () => {
-    await customers.submitForm(path)
+  customerForm.value.validate().then(success => {
+    if (success) {
+      $q.dialog({
+        title: 'Simpan data',
+        message: 'Apakah data yang di input sudah benar?',
+        cancel: true,
+        persistent: true
+      }).onOk(async () => {
+        await customers.submitForm(path)
+        onReset()
+      })
+    }
   })
 }
 
@@ -94,8 +102,7 @@ const onEdit = () => {
     <q-card>
       <q-form
         class="q-gutter-md"
-        @reset="onReset()"
-        @submit="onSubmit()"
+        ref="customerForm"
       >
         <q-card-section>
           <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2">
@@ -106,6 +113,7 @@ const onEdit = () => {
                 </q-toolbar-title>
               </q-toolbar>
               <q-input
+                :bg-color="!!form.id ? 'yellow-2' : ''"
                 v-model="form.name"
                 :error="errors.hasOwnProperty('name')"
                 :error-message="errors.name"
@@ -116,6 +124,7 @@ const onEdit = () => {
               />
               <div class="tw-flex tw-space-x-4">
                 <q-input
+                  :bg-color="!!form.id ? 'yellow-2' : ''"
                   v-model="form.phone"
                   :error="errors.hasOwnProperty('phone')"
                   :error-message="errors.phone"
@@ -128,6 +137,7 @@ const onEdit = () => {
                 />
               </div>
               <q-input
+                :bg-color="!!form.id ? 'yellow-2' : ''"
                 v-model="form.address"
                 label="Address"
                 type="textarea"
@@ -146,7 +156,7 @@ const onEdit = () => {
             :dense="$q.screen.lt.md"
             color="info"
             glossy
-            type="reset"/>
+            @click="onReset"/>
           <q-btn
             v-if="can('admin.masterData.customer.createCustomer')"
             :label="!$q.screen.lt.md ? form.id ? 'Update' : 'Save' : ''"
@@ -156,7 +166,7 @@ const onEdit = () => {
             color="secondary"
             glossy
             icon="save"
-            type="submit"
+            @click.prevent="onSubmit"
           >
             <q-tooltip>
               Update or Save
@@ -242,11 +252,7 @@ const onEdit = () => {
             {{ props.rowIndex + 1 }}
           </q-td>
         </template>
-        <template v-slot:body-cell-type="props">
-          <q-td :props="props">
-            {{ props.row.type === 'farmers' ? 'Petani' : 'Pengepul' }}
-          </q-td>
-        </template>
+
       </q-table>
     </q-card>
   </q-page>
