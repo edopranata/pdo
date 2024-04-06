@@ -15,7 +15,7 @@
           color="white"
           text-color="blue"
           unelevated
-          to="/app"
+          to="/"
           label="Go Home"
           no-caps
         />
