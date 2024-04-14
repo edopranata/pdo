@@ -107,7 +107,9 @@ const onEdit = () => {
         ref="factoryForm"
         class="q-gutter-md"
       >
-        <q-card-section>
+        <q-card-section
+          v-if="can('admin.masterData.factory.[deleteFactory,createFactory,updateFactory]')"
+        >
           <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2">
             <div>
               <q-toolbar class="text-primary">
@@ -184,6 +186,7 @@ const onEdit = () => {
 
         <q-card-actions class="q-pa-md ">
           <q-btn
+            v-if="can('admin.masterData.factory.[deleteFactory,createFactory,updateFactory]')"
             :dense="$q.screen.lt.md"
             :label="!$q.screen.lt.md ? 'Batalkan' : ''"
             :loading="table.loading"
@@ -249,7 +252,7 @@ const onEdit = () => {
         :filter="table.filter"
         :loading="table.loading"
         :rows="table.data ?? []"
-        :selection="can('admin.masterData.factory.[deleteFactory]') ? 'multiple' :'single'"
+        :selection="can('admin.masterData.factory.deleteFactory') ? 'multiple' :'single'"
         binary-state-sort
         bordered
         row-key="id"
