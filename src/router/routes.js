@@ -1,6 +1,7 @@
 import {LocalStorage} from "quasar";
 import managementRoute from "src/router/partial/managementRoute";
 import masterDataRoute from "src/router/partial/masterDataRoute";
+import transactionRoute from "src/router/partial/transactionRoute";
 
 const routes = [
   {
@@ -40,6 +41,7 @@ const routes = [
       },
       ...managementRoute,
       ...masterDataRoute,
+      ...transactionRoute,
     ]
   },
 ]

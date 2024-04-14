@@ -63,7 +63,6 @@ export const useAuthStore = defineStore('auth', {
 
     },
     setAuthenticated(data, token) {
-      console.log('trigger')
       if (data && token) {
         const permissions = data.routes
         // const menu = data.menu
