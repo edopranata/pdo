@@ -48,6 +48,14 @@ export default [
           },
         },
       },
+      {
+        path: 'cash',
+        name: 'admin.management.cash.index',
+        component: () => import('pages/admin/management/cash/CashIndex.vue'),
+        meta: {
+          auth: true,
+        },
+      },
     ]
   },
 ]
