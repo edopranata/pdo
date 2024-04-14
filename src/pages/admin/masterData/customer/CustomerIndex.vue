@@ -8,10 +8,10 @@ import {useQuasar} from "quasar";
 import DialogDelete from "pages/admin/masterData/customer/dialog/DialogDelete.vue";
 
 const $q = useQuasar()
-const {table, dialog, form, deleted} = useCustomersStore()
+const {table, form, deleted} = useCustomersStore()
 const customers = useCustomersStore()
 const {can} = useAuthStore()
-const {getSelected: selected, customers: customer_model, errors} = storeToRefs(useCustomersStore())
+const {getSelected: selected, errors, getSearch} = storeToRefs(useCustomersStore())
 const {path} = useRoute()
 
 const tableRef = ref()
@@ -20,7 +20,7 @@ async function onRequest(props) {
   await customers.getCustomersData(path, props)
 }
 
-watch(table.search, () => {
+watch(getSearch, () => {
   table.filter = String(Date.now())
 }, {
   deep: true,

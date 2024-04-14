@@ -53,6 +53,9 @@ export const useCustomersStore = defineStore('customers', {
   getters: {
     getSelected(state){
       return state.table.selected
+    },
+    getSearch(state){
+      return state.table.search
     }
   },
 

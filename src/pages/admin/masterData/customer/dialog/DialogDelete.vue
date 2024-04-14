@@ -3,7 +3,7 @@ import {useCustomersStore} from "stores/masterData/customer";
 import {useRoute} from "vue-router";
 
 const {path} = useRoute()
-const {form, submitDelete, table, deleted} = useCustomersStore()
+const {submitDelete, table, deleted} = useCustomersStore()
 
 </script>
 
