@@ -14,12 +14,12 @@
   },
   "dependencies": {
     "@coders-tm/vue-number-format": "^3.34.1",
-    "@quasar/extras": "^1.16.4",
-    "axios": "^1.2.1",
-    "pinia": "^2.0.11",
-    "quasar": "^2.8.0",
-    "vue": "^3.4.18",
-    "vue-router": "^4.0.12"
+    "@quasar/extras": "^1.16.11",
+    "axios": "^1.6.8",
+    "pinia": "^2.1.7",
+    "quasar": "^2.15.2",
+    "vue": "^3.4.21",
+    "vue-router": "^4.3.0"
   },
   "devDependencies": {
     "@quasar/app-vite": "^1.8.0",
@@ -29,7 +29,7 @@
     "eslint-plugin-vue": "^9.0.0",
     "postcss": "^8.4.38",
     "prettier": "^3.2.5",
-    "tailwindcss": "^3.4.1",
+    "tailwindcss": "^3.4.3",
     "vite-plugin-checker": "^0.6.4"
   },
   "engines": {

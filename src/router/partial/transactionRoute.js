@@ -12,6 +12,14 @@ export default [
           auth: true,
         },
       },
+      {
+        path: 'order',
+        name: 'admin.transaction.order.index',
+        component: () => import('pages/admin/transaction/order/OrderIndex.vue'),
+        meta: {
+          auth: true,
+        },
+      },
 
     ]
   },
