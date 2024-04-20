@@ -20,7 +20,23 @@ export default [
           auth: true,
         },
       },
+      {
+        path: 'invoice',
+        name: 'admin.transaction.invoice.index',
+        component: () => import('pages/admin/transaction/invoice/InvoiceIndex.vue'),
+        meta: {
+          auth: true,
+        },
+      },
 
+      {
+        path: 'invoice/:id',
+        name: 'admin.transaction.invoice.showInvoice',
+        component: () => import('pages/admin/transaction/invoice/InvoiceView.vue'),
+        meta: {
+          auth: true,
+        },
+      },
     ]
   },
 ]

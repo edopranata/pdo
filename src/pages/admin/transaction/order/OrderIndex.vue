@@ -568,7 +568,7 @@ const onUpdate = () => {
             color="positive"
             glossy
             icon="document_scanner"
-            @click.stop="onInvoice"
+            :to="{name:'admin.transaction.invoice.showInvoice', params: {id: form.customer_id ?? '0' }}"
           >
             <q-tooltip>
               Create invoice
