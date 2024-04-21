@@ -20,9 +20,9 @@
       </router-view>
     </q-page-container>
 
-    <q-footer v-if="!print" class="bg-grey-8 text-white print-hide" elevated>
-      <MainFooter/>
-    </q-footer>
+<!--    <q-footer v-if="!print" class="bg-grey-8 text-white print-hide" elevated>-->
+<!--      <MainFooter/>-->
+<!--    </q-footer>-->
 
   </q-layout>
 </template>
@@ -30,7 +30,6 @@
 <script setup>
 import {usePageStore} from "stores/pages";
 import {storeToRefs} from "pinia";
-import MainFooter from "layouts/part/MainFooter.vue";
 import MainHeader from "layouts/part/MainHeader.vue";
 import MainLeftSidebar from "layouts/part/MainLeftSidebar.vue";
 import MainRightSidebar from "layouts/part/MainRightSidebar.vue";

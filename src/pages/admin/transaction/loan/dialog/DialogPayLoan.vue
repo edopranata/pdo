@@ -125,6 +125,7 @@ const onSubmit = async () => {
               </div>
             </template>
           </q-field>
+          <q-checkbox v-model="dialog.print" :val="dialog.print" label="Simpan dan print" size="lg"/>
         </q-card-section>
 
         <q-card-actions align="right">

@@ -13,6 +13,14 @@ export default [
         },
       },
       {
+        path: 'loan/:id',
+        name: 'admin.transaction.loan.print',
+        component: () => import('pages/admin/report/invoiceData/InvoicePrint.vue'),
+        meta: {
+          auth: true,
+        },
+      },
+      {
         path: 'order',
         name: 'admin.transaction.order.index',
         component: () => import('pages/admin/transaction/order/OrderIndex.vue'),
@@ -33,6 +41,15 @@ export default [
         path: 'invoice/:id',
         name: 'admin.transaction.invoice.showInvoice',
         component: () => import('pages/admin/transaction/invoice/InvoiceView.vue'),
+        meta: {
+          auth: true,
+        },
+      },
+
+      {
+        path: 'invoice/:id/print',
+        name: 'admin.transaction.invoice.print',
+        component: () => import('pages/admin/report/invoiceData/InvoicePrint.vue'),
         meta: {
           auth: true,
         },

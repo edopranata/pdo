@@ -9,7 +9,7 @@ import DialogAddLLoan from "pages/admin/transaction/loan/dialog/DialogAddLLoan.v
 import DialogPayLoan from "pages/admin/transaction/loan/dialog/DialogPayLoan.vue";
 
 const $q = useQuasar()
-const {table, dialog} = useLoanStore()
+const {table, dialog, form} = useLoanStore()
 const loan = useLoanStore()
 const {can} = useAuthStore()
 const {errors, getSearch} = storeToRefs(useLoanStore())
@@ -20,6 +20,18 @@ const tableRef = ref()
 watch(getSearch, () => {
   table.filter = String(Date.now())
 })
+
+watch(form, (newForm) => {
+  if(newForm.balance > 0){
+    if(dialog.take){
+      form.ending = parseFloat(newForm.current) - parseFloat(newForm.balance)
+    }
+
+    if(dialog.give) {
+      form.ending = parseFloat(newForm.current) + parseFloat(newForm.balance)
+    }
+  }
+}, {deep: true})
 
 async function onRequest(props) {
   await loan.getLoanData(path, props)
@@ -40,13 +52,15 @@ onMounted(() => {
 })
 
 const addLoan = (index) => {
-  setForm(index)
+  dialog.print = false
   dialog.give = true
+  setForm(index)
 }
 
 const payLoan = (index) => {
-  setForm(index)
+  dialog.print = false
   dialog.take = true
+  setForm(index)
 }
 
 const setForm = (id) => {

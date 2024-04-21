@@ -17,6 +17,7 @@ export const useLoanStore = defineStore('loan', {
     dialog: {
       give: false,
       take: false,
+      print: false,
     },
     table: {
       pagination: {
@@ -145,33 +146,44 @@ export const useLoanStore = defineStore('loan', {
       return true
     },
 
-    async submit() {
+    async submit(url, params) {
 
+      try {
+        const response = await api.post(url, params)
+        if(response.hasOwnProperty('data')) {
+          return response.data
+        }else{
+          this.setError(response)
+        }
+
+      } catch (e) {
+        this.setError(e)
+      }
     },
 
-    async addLoan(path) {
+    addLoan: async function (path) {
       this.table.loading = true
       const params = {
         balance: this.form.balance
       };
-      const url =  `${path}/${this.form.id}/addLoan`
-      await api({
-        method: 'post',
-        url: url,
-        data: params
-      }).then(() => {
-        Notify.create({
-          position: "top",
-          type: 'positive',
-          message: 'Data berhasil disimpan'
-        })
+      const url = `${path}/${this.form.id}/addLoan`
+      const response = await this.submit(url, params)
+
+      if(response){
         this.dialog.give = false
         this.onReset()
         this.table.filter = String(Date.now())
+        this.table.loading = false
 
-      }).catch(e => {
-        this.setError(e);
-      }).finally(() => this.table.loading = false);
+        if(this.dialog.print){
+          console.log(response.data)
+          const id = response?.data.hasOwnProperty('id') ? response.data.id : 0
+          this.router.push({name: 'admin.transaction.loan.print', params: {id: id}})
+        }
+
+      }else{
+        this.table.loading = false
+      }
     },
 
     async payLoan(path) {
@@ -180,23 +192,24 @@ export const useLoanStore = defineStore('loan', {
         balance: this.form.balance
       };
       const url =  `${path}/${this.form.id}/payLoan`
-      await api({
-        method: 'post',
-        url: url,
-        data: params
-      }).then(() => {
-        Notify.create({
-          position: "top",
-          type: 'positive',
-          message: 'Data berhasil disimpan'
-        })
-        this.dialog.take = false
+      const response = await this.submit(url, params)
+
+      if(response){
+        this.dialog.give = false
         this.onReset()
         this.table.filter = String(Date.now())
+        this.table.loading = false
 
-      }).catch(e => {
-        this.setError(e);
-      }).finally(() => this.table.loading = false);
+        if(this.dialog.print){
+          console.log(response.data)
+          const id = response?.data.hasOwnProperty('id') ? response.data.id : 0
+          this.router.push({name: 'admin.transaction.loan.print', params: {id: id}})
+        }
+
+      }else{
+        this.table.loading = false
+      }
+
     },
   }
 })

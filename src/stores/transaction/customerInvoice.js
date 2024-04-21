@@ -126,7 +126,6 @@ export const useCustomerInvoiceStore = defineStore('customerInvoice', {
       this.table.selected = []
       for (let property in this.form) {
         this.form[property] = null
-        console.log(property)
       }
 
       this.dialog.open = false
@@ -216,15 +215,17 @@ export const useCustomerInvoiceStore = defineStore('customerInvoice', {
           type: 'positive',
           message: 'Data transaksi berhasil disimpan'
         })
-        const invoice_number = response.data.data?.invoice_number
-        if (this.dialog.print && invoice_number) {
+        const id = response.data.data?.id
+        if (this.dialog.print && id) {
           this.router.replace({
-            name: 'app.deliveryOrder.dataInvoicePengepul.printInvoice',
-            params: {invoice_number: invoice_number}
+            name: 'admin.transaction.invoice.print',
+            params: {id: id}
           })
         } else {
           this.table.data = []
-          this.table.filter = Date.now().toString()
+          this.router.replace({
+            name: 'admin.transaction.invoice.index'
+          })
         }
 
       }).catch(e => {
