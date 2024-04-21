@@ -9,7 +9,7 @@ import DialogGiveCash from "pages/admin/management/cash/dialog/DialogGiveCash.vu
 import DialogTakeCash from "pages/admin/management/cash/dialog/DialogTakeCash.vue";
 
 const $q = useQuasar()
-const {table, dialog} = useCashStore()
+const {table, dialog, form} = useCashStore()
 const cash = useCashStore()
 const {can} = useAuthStore()
 const {errors, getSearch} = storeToRefs(useCashStore())
@@ -20,6 +20,18 @@ const tableRef = ref()
 watch(getSearch, () => {
   table.filter = String(Date.now())
 })
+
+watch(form, (newForm) => {
+  if(newForm.balance > 0){
+    if(dialog.take){
+      form.ending = parseFloat(newForm.current) - parseFloat(newForm.balance)
+    }
+
+    if(dialog.give) {
+      form.ending = parseFloat(newForm.current) + parseFloat(newForm.balance)
+    }
+  }
+}, {deep: true})
 
 async function onRequest(props) {
   await cash.getCashData(path, props)
