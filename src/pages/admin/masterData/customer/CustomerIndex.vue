@@ -1,13 +1,16 @@
 <script setup>
 import {useCustomersStore} from "stores/masterData/customer";
 import {useAuthStore} from "stores/auth";
+import {usePageStore} from "stores/pages";
 import {onBeforeMount, onMounted, ref, watch} from 'vue'
 import {useRoute} from "vue-router";
 import {storeToRefs} from "pinia";
 import {useQuasar} from "quasar";
 import DialogDelete from "pages/admin/masterData/customer/dialog/DialogDelete.vue";
+import QNumber from "components/Input/QNumber.vue";
 
 const $q = useQuasar()
+const page = usePageStore()
 const {table, form, deleted} = useCustomersStore()
 const customers = useCustomersStore()
 const {can} = useAuthStore()
@@ -16,6 +19,7 @@ const {path} = useRoute()
 
 const tableRef = ref()
 const customerForm = ref()
+
 async function onRequest(props) {
   await customers.getCustomersData(path, props)
 }
@@ -39,7 +43,7 @@ watch(selected, (selected_item) => {
 }, {
   deep: true,
 })
-onBeforeMount( () => {
+onBeforeMount(() => {
 })
 onMounted(() => {
   // get initial data from server (1st page)
@@ -50,7 +54,7 @@ onMounted(() => {
 
 const onReset = () => {
   customers.onReset()
-  setTimeout( () => {
+  setTimeout(() => {
     customerForm.value.resetValidation()
   }, 600)
 }
@@ -84,27 +88,26 @@ const onEdit = () => {
     cancel: true,
     persistent: true
   }).onOk(() => {
-    console.log(selected.length)
-
     if (table.selected.length === 1) {
-        form.id = table.selected[0].id
-        form.name = table.selected[0].name
-        form.phone = table.selected[0].phone
-        form.address = table.selected[0].address
-      }
+      form.id = table.selected[0].id
+      form.name = table.selected[0].name
+      form.phone = table.selected[0].phone
+      form.address = table.selected[0].address
+      form.loan = null
+    }
   })
 }
 </script>
 
 <template>
   <q-page padding>
-    <DialogDelete />
+    <DialogDelete/>
     <q-card>
       <q-form
-        class="q-gutter-md"
         ref="customerForm"
+        class="q-gutter-md"
       >
-        <q-card-section>
+        <q-card-section v-if="can('admin.masterData.customer.[createCustomer,updateCustomer]')">
           <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2">
             <div>
               <q-toolbar class="text-primary">
@@ -112,57 +115,67 @@ const onEdit = () => {
                   Customers Data
                 </q-toolbar-title>
               </q-toolbar>
-              <q-input
-                :bg-color="!!form.id ? 'yellow-2' : ''"
-                v-model="form.name"
-                :error="errors.hasOwnProperty('name')"
-                :error-message="errors.name"
-                :rules="[ val => val && val.length > 4 || 'Customer name must be greater than 3 characters.']"
-                :dense="$q.screen.lt.md"
-                filled
-                label="Nama Lengkap"
-              />
-              <div class="tw-flex tw-space-x-4">
+              <div class="tw-flex tw-flex-col">
                 <q-input
+                  v-model="form.name"
                   :bg-color="!!form.id ? 'yellow-2' : ''"
+                  :dense="$q.screen.lt.md"
+                  :error="errors.hasOwnProperty('name')"
+                  :error-message="errors.name"
+                  :rules="[ val => val && val.length > 4 || 'Customer name must be greater than 3 characters.']"
+                  filled
+                  label="Nama Lengkap"
+                />
+                <q-input
                   v-model="form.phone"
+                  :bg-color="!!form.id ? 'yellow-2' : ''"
+                  :dense="$q.screen.lt.md"
                   :error="errors.hasOwnProperty('phone')"
                   :error-message="errors.phone"
                   :rules="[ val => val && val.length <= 20 || 'Phone number must be lower than 20 characters.']"
-                  class="tw-w-full"
-                  :dense="$q.screen.lt.md"
                   filled
                   label="No Telp"
                   lazy-rules
                 />
+                <q-number
+                  v-if="can('admin.masterData.customer.firstLoan') && !form.id"
+                  v-model="form.loan"
+                  :bg-color="!!form.id ? 'yellow-2' : ''"
+                  :dense="$q.screen.lt.md"
+                  :options="page.currencyFormat"
+                  hint=""
+                  filled
+                  label="First Loan"
+                />
+                <q-input
+                  v-model="form.address"
+                  :bg-color="!!form.id ? 'yellow-2' : ''"
+                  :dense="$q.screen.lt.md"
+                  filled
+                  label="Address"
+                  type="textarea"
+                />
               </div>
-              <q-input
-                :bg-color="!!form.id ? 'yellow-2' : ''"
-                v-model="form.address"
-                label="Address"
-                type="textarea"
-                :dense="$q.screen.lt.md"
-                filled
-              />
             </div>
           </div>
         </q-card-section>
 
         <q-card-actions class="q-pa-md ">
           <q-btn
+            v-if="can('admin.masterData.customer.[createCustomer,updateCustomer,deleteCustomer]')"
+            :dense="$q.screen.lt.md"
             :label="!$q.screen.lt.md ? 'Batalkan' : ''"
             :loading="table.loading"
             :round="$q.screen.lt.md"
-            :dense="$q.screen.lt.md"
             color="info"
             glossy
             @click="onReset"/>
           <q-btn
             v-if="can('admin.masterData.customer.createCustomer')"
+            :dense="$q.screen.lt.md"
             :label="!$q.screen.lt.md ? form.id ? 'Update' : 'Save' : ''"
             :loading="table.loading"
             :round="$q.screen.lt.md"
-            :dense="$q.screen.lt.md"
             color="secondary"
             glossy
             icon="save"
@@ -174,11 +187,11 @@ const onEdit = () => {
           </q-btn>
           <q-btn
             v-if="can('admin.masterData.customer.deleteCustomer')"
+            :dense="$q.screen.lt.md"
             :disable="!selected.length > 0"
             :label="!$q.screen.lt.md ? 'Delete' : ''"
             :loading="table.loading"
             :round="$q.screen.lt.md"
-            :dense="$q.screen.lt.md"
             color="negative"
             glossy
             icon="delete"
@@ -190,11 +203,11 @@ const onEdit = () => {
           </q-btn>
           <q-btn
             v-if="can('admin.masterData.customer.updateCustomer')"
+            :dense="$q.screen.lt.md"
             :disable="selected.length !== 1"
             :label="!$q.screen.lt.md ? 'Edit Data' : ''"
             :loading="table.loading"
             :round="$q.screen.lt.md"
-            :dense="$q.screen.lt.md"
             color="warning"
             glossy
             icon="edit"

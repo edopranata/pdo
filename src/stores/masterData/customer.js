@@ -10,7 +10,7 @@ export const useCustomersStore = defineStore('customers', {
       name: '',
       phone: '',
       address: '',
-      distance: '',
+      loan: '',
     },
     deleted: {
       dialog: false,
