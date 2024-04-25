@@ -77,7 +77,7 @@ const onRequest = async (props) => {
             </div>
           </div>
         </q-card-section>
-        <q-checkbox v-model="dialog.print" :val="dialog.print" label="Simpan dan print" size="lg"/>
+        <q-checkbox v-if="can('admin.transaction.invoice.print')" v-model="dialog.print" :val="dialog.print" label="Simpan dan print" size="lg"/>
         <q-card-actions>
           <q-btn
             v-close-popup
@@ -105,7 +105,7 @@ const onRequest = async (props) => {
         @reset="onReset"
         @submit="dialog.open = true"
       >
-        <q-card-section class="tw-space-y-4">
+        <q-card-section class="tw-space-y-4" v-if="can('admin.transaction.invoice.createInvoice')">
           <div class="md:tw-grid md:tw-grid-cols-3 md:tw-gap-4">
             <div class="lg:tw-col-span-1 tw-col-span-2">
               <q-field

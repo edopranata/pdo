@@ -74,13 +74,14 @@ const formattedNUmber = (calcItem, format = 'currency') => {
               :label="!$q.screen.lt.md ? 'Buat Invoice' : ''"
               :loading="table.loading"
               :round="$q.screen.lt.md"
+              :disable="!can('admin.transaction.invoice.showInvoice')"
               glossy
               icon="print"
               size="sm"
               :to="{name: 'admin.transaction.invoice.showInvoice', params: {id: props.value}}"
             >
               <q-tooltip>
-                Create Invoice
+                {{ can('admin.transaction.invoice.showInvoice') ? 'Create invoice' : 'User is not authorized to create invoice' }}
               </q-tooltip>
             </q-btn>
           </q-td>

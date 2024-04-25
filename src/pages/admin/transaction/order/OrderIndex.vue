@@ -35,12 +35,12 @@ const calc = reactive({
   customer_total_price: {type: Number, default: 0},
 })
 onMounted(async () => {
-  deliveries.customers_option = deliveries.customers
   deliveries.onReset()
   // if(setting.hasOwnProperty('do_margin')){
   //   form.margin = setting.do_margin
   // }
   tableRef.value.requestServerInteraction()
+  await deliveries.getCustomerAndFactoryData(path)
 })
 
 const formattedNUmber = (calcItem, format = 'currency') => {
@@ -68,7 +68,7 @@ const searchCustomer = (val, update) => {
   })
 }
 
-watch([selected_customer, selected_factory],( [selectedC, selectedF]) => {
+watch([selected_customer, selected_factory], ([selectedC, selectedF]) => {
   if (selectedC) {
     if (selectedC.hasOwnProperty('id')) {
       form.customer_id = selectedC.id
@@ -85,8 +85,6 @@ watch([selected_customer, selected_factory],( [selectedC, selectedF]) => {
   if (selectedF) {
     if (selectedF.hasOwnProperty('id')) {
       form.factory_id = selectedF.id
-      form.margin = selectedF.margin
-      form.net_price = selectedF.price
       form.ppn_tax = selectedF.ppn_tax
       form.pph22_tax = selectedF.pph22_tax
 
@@ -95,8 +93,6 @@ watch([selected_customer, selected_factory],( [selectedC, selectedF]) => {
 
   } else {
     form.factory_id = selectedF
-    form.margin = selectedF
-    form.net_price = selectedF
     form.ppn_tax = selectedF
     form.pph22_tax = selectedF
     table.search.factory_id = selectedF
@@ -117,32 +113,36 @@ const searchFactory = (val, update) => {
   })
 }
 
-// watch(selected_factory, (selected) => {
-//
-//   tableRef.value.requestServerInteraction()
-//
-// })
+watch(form, async (update) => {
+  if (update.factory_id  && update.trade_date ) {
+    let date = form.trade_date.replace(/\//g, '-')
+    let prices = deliveries.selected_factory.hasOwnProperty('prices') ? deliveries.selected_factory.prices : []
 
+    let price = prices.filter( (p) => p.date === date)
 
-watch(formField, (newValue) => {
+    form.net_price = price.length > 0 ? price[0].hasOwnProperty('price') ? price[0]['price'] : 0 : 0
+  }
+}, {deep: true})
+
+watch(formField, async (newValue) => {
   for (let property in newValue) {
     if (!!newValue[property]) {
       deliveries.unsetError(property)
     }
   }
-  if (newValue.net_price && newValue.net_weight && newValue.margin && newValue.pph22_tax && newValue.ppn_tax) {
+  if (newValue.customer_price && newValue.net_weight && newValue.pph22_tax && newValue.ppn_tax) {
     calc.customer_weight = parseFloat(newValue.net_weight)
-
-    calc.customer_weight = parseFloat(newValue.net_weight)
-    calc.customer_price = parseFloat(newValue.net_price) - parseFloat(newValue.margin)
+    calc.customer_price = form.customer_price
     calc.customer_total_price = calc.customer_price * calc.customer_weight
+
+    form.margin = form.net_price - form.customer_price
 
     form.gross_total = parseFloat(newValue.net_price) * parseFloat(newValue.net_weight)
 
     form.ppn = form.ppn_tax ? parseFloat(form.gross_total) * parseFloat(newValue.ppn_tax) / 100 : null
     form.pph22 = form.pph22_tax ? parseFloat(form.gross_total) * parseFloat(newValue.pph22_tax) / 100 : null
 
-    form.net_total = parseFloat(newValue.net_weight) * parseFloat(newValue.margin)
+    form.net_total = parseFloat(newValue.net_weight) * parseFloat(form.margin)
 
   } else {
     for (let property in calc) {
@@ -210,7 +210,7 @@ const onUpdate = () => {
 </script>
 <template>
   <q-page class="tw-space-y-4" padding>
-    <q-card bordered>
+    <q-card v-if="can('admin.transaction.order.[createOrder,updateOrder,deleteOrder]')" bordered>
       <q-form
         class="tw-w-full"
         @reset="onReset"
@@ -240,14 +240,10 @@ const onUpdate = () => {
               <template v-slot:option="scope">
                 <q-item v-bind="scope.itemProps">
                   <q-item-section avatar>
-                    <q-icon name="person"/>
+                    <q-icon name="factory"/>
                   </q-item-section>
                   <q-item-section>
                     <q-item-label>{{ scope.opt.name }}</q-item-label>
-                    <q-item-label caption>
-                      <q-icon name="money"/>
-                      {{ scope.opt.price }}
-                    </q-item-label>
                   </q-item-section>
                 </q-item>
               </template>
@@ -349,7 +345,7 @@ const onUpdate = () => {
 
           </div>
 
-          <div :class="$q.screen.lt.md ? 'tw-font-bold' : 'text-h6'" class="q-mt-sm q-mb-xs">Data Timbangan Pabrik</div>
+          <div :class="$q.screen.lt.md ? 'tw-font-bold' : 'text-h6'" class="q-mt-sm q-mb-xs">Data Timbangan dan harga beli customer</div>
           <div class="tw-grid lg:tw-gap-4 tw-gap-2 lg:tw-grid-cols-5 md:tw-grid-cols-4 tw-grid-cols-3">
             <q-number
               v-model="form.net_weight"
@@ -362,27 +358,17 @@ const onUpdate = () => {
               filled
               label="Berat bersih (pabrik)"
             />
+
             <q-number
-              v-model="form.net_price"
+              v-model="form.customer_price"
               :bg-color="!!form.id ? 'yellow-2' : ''"
               :dense="$q.screen.lt.md"
-              :error="errors.hasOwnProperty('net_price')"
-              :error-message="errors.net_price"
+              :error="errors.hasOwnProperty('customer_price')"
+              :error-message="errors.customer_price"
               :options="page.currencyFormat"
               class="tw-w-full"
               filled
-              label="Harga Pabrik"
-            />
-            <q-number
-              v-model="form.margin"
-              :bg-color="!!form.id ? 'yellow-2' : ''"
-              :dense="$q.screen.lt.md"
-              :error="errors.hasOwnProperty('margin')"
-              :error-message="errors.margin"
-              :options="page.currencyFormat"
-              class="tw-w-full"
-              filled
-              label="Margin"
+              label="Harga beli (pengepul)"
             />
           </div>
           <!-- PPN -->
@@ -445,7 +431,42 @@ const onUpdate = () => {
                 </div>
               </template>
             </q-field>
+          </div>
 
+          <div class="tw-grid lg:tw-gap-4 tw-gap-2 lg:tw-grid-cols-5 md:tw-grid-cols-4 tw-grid-cols-3">
+            <q-field
+              :dense="$q.screen.lt.md"
+              bg-color="blue-grey"
+              color="blue-grey-2"
+              filled
+              :error="errors.hasOwnProperty('net_price')"
+              :error-message="errors.net_price"
+              label="Harga Pabrik (Rp)"
+              stack-label
+              tabindex="-1">
+              <template v-slot:control>
+                <div class="self-center full-width no-outline" tabindex="-1">
+                  {{ new Intl.NumberFormat('id-ID', {style: 'currency', currency: "IDR"}).format(form.net_price) }}
+                </div>
+              </template>
+            </q-field>
+
+            <q-field
+              :dense="$q.screen.lt.md"
+              bg-color="blue-grey"
+              color="blue-grey-2"
+              filled
+              :error="errors.hasOwnProperty('margin')"
+              :error-message="errors.margin"
+              label="Margin (Rp)"
+              stack-label
+              tabindex="-1">
+              <template v-slot:control>
+                <div class="self-center full-width no-outline" tabindex="-1">
+                  {{ new Intl.NumberFormat('id-ID', {style: 'currency', currency: "IDR"}).format(form.margin) }}
+                </div>
+              </template>
+            </q-field>
           </div>
 
           <div class="tw-grid lg:tw-gap-4 tw-gap-2 lg:tw-grid-cols-5 md:tw-grid-cols-4 tw-grid-cols-3">
@@ -528,6 +549,7 @@ const onUpdate = () => {
         </q-card-section>
         <q-card-actions class="tw-p-4">
           <q-btn
+            v-if="can('admin.transaction.order.createOrder')"
             :dense="$q.screen.lt.lg"
             :disable="!form.factory_id"
             :label="!$q.screen.lt.md ? 'Simpan' : ''"
@@ -544,6 +566,7 @@ const onUpdate = () => {
             </q-tooltip>
           </q-btn>
           <q-btn
+            v-if="can('admin.transaction.order.[createOrder,updateOrder,deleteOrder]')"
             :dense="$q.screen.lt.lg"
             :label="!$q.screen.lt.md ? 'Batalkan' : ''"
             :loading="table.loading"
@@ -559,22 +582,24 @@ const onUpdate = () => {
           </q-btn>
           <q-space></q-space>
           <q-btn
+            v-if="can('admin.transaction.invoice.showInvoice') && can('admin.transaction.invoice.index')"
             :dense="$q.screen.lt.lg"
             :disable="!form.customer_id || !table.data.length"
             :label="!$q.screen.lt.md ? 'Invoice' : ''"
             :loading="table.loading"
             :round="$q.screen.lt.md"
             :size="$q.screen.lt.lg ? 'md' : 'lg'"
+            :to="{name:'admin.transaction.invoice.showInvoice', params: {id: form.customer_id ?? '0' }}"
             color="positive"
             glossy
             icon="document_scanner"
-            :to="{name:'admin.transaction.invoice.showInvoice', params: {id: form.customer_id ?? '0' }}"
           >
             <q-tooltip>
               Create invoice
             </q-tooltip>
           </q-btn>
           <q-btn
+            v-if="can('admin.transaction.order.deleteOrder')"
             :dense="$q.screen.lt.lg"
             :disable="selected.length !== 1"
             :label="!$q.screen.lt.md ? 'Hapus' : ''"
@@ -591,6 +616,7 @@ const onUpdate = () => {
             </q-tooltip>
           </q-btn>
           <q-btn
+            v-if="can('admin.transaction.order.updateOrder')"
             :dense="$q.screen.lt.lg"
             :disable="selected.length !== 1"
             :label="!$q.screen.lt.md ? 'Ubah' : ''"

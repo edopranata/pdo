@@ -1,6 +1,7 @@
 <script setup>
 import {useInvoiceDataStore} from "stores/report/invoiceData";
 import {usePageStore} from "stores/pages";
+import {useAuthStore} from "stores/auth";
 import {useRoute, useRouter} from "vue-router";
 import {onMounted, ref} from "vue";
 import {useQuasar} from "quasar";
@@ -10,6 +11,7 @@ const $q = useQuasar()
 const router = useRouter()
 const page = usePageStore()
 const invoice = useInvoiceDataStore()
+const {can} = useAuthStore()
 const {table} = useInvoiceDataStore()
 const {path} = useRoute()
 
@@ -77,12 +79,21 @@ const onRequest = async (props) => {
           <template v-slot:body-cell-invoice_number="props">
             <q-td :props="props">
               <q-chip
+                v-if="can('admin.report.invoiceData.print')"
                 clickable
                 :color="props.row.type === 'LN' ? 'warning' : 'primary'"
                 icon="print"
                 text-color="white"
                 @click="toPrint(props.row.invoice_number, props.row.id)"
                 >
+                {{ props.value }}
+              </q-chip>
+              <q-chip
+                v-else
+                :color="props.row.type === 'LN' ? 'warning' : 'primary'"
+                icon="print"
+                text-color="white"
+              >
                 {{ props.value }}
               </q-chip>
             </q-td>

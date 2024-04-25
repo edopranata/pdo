@@ -18,6 +18,7 @@ export const useOrderStore = defineStore('order', {
       factory_id: '',
       net_weight: '',
       net_price: '',
+      customer_price: '',
       margin: '',
       net_total: '',
       gross_total: '',
@@ -70,13 +71,13 @@ export const useOrderStore = defineStore('order', {
   actions: {
 
     setError(e) {
-      if(e.hasOwnProperty('response')){
+      if (e.hasOwnProperty('response')) {
         if (e.response.status === 422) {
           let error = e.response.data.errors;
           for (let property in error) {
             this.errors[property] = error[property][0];
           }
-        }else if (e.response.status === 401) {
+        } else if (e.response.status === 401) {
           LocalStorage.remove('token')
           LocalStorage.remove('permission')
           this.router.replace({name: 'unauthorized'})
@@ -89,7 +90,7 @@ export const useOrderStore = defineStore('order', {
           })
           this.router.replace({name: 'app.unauthorized'})
         }
-      }else{
+      } else {
         Notify.create({
           position: "top",
           type: 'negative',
@@ -171,10 +172,6 @@ export const useOrderStore = defineStore('order', {
 
       // clear out existing data and add new
       this.table.data = returnedData.order.data
-      this.customers = returnedData.customers
-      // this.customers_option = returnedData.customers?.slice(0, 10)
-      this.factories = returnedData.factories
-      // this.factories_option = returnedData.factories?.slice(0, 10)
       // update only rowsNumber = total rows
       this.table.pagination.rowsNumber = returnedData.order.meta.total
 
@@ -188,6 +185,65 @@ export const useOrderStore = defineStore('order', {
       this.table.loading = false
       return true
     },
+
+
+    async getCustomerAndFactoryFromApi(path) {
+
+      try {
+        const response = await api.get(path)
+        return response.data
+      } catch (e) {
+        this.setError(e)
+      }
+    },
+    async getCustomerAndFactoryData(path) {
+
+      this.table.loading = true
+
+      // calculate starting row of data
+      // fetch data from "server"
+      const returnedData = await this.getCustomerAndFactoryFromApi(path)
+
+      // clear out existing data and add new
+      this.customers = returnedData.customers
+      // this.customers_option = returnedData.customers?.slice(0, 10)
+      this.factories = returnedData.factories
+      // this.factories_option = returnedData.factories?.slice(0, 10)
+
+      // turn of loading indicator
+      this.table.loading = false
+      return true
+    },
+
+    async getFactoryPriceFromApi(path) {
+      const data = {
+        trade_date: this.form.trade_date ?? '',
+        factory_id: this.form.factory_id ?? '',
+      }
+
+      try {
+        const params = new URLSearchParams(data);
+
+        const response = await api.get(path, {params})
+        return response.data
+      } catch (e) {
+        this.setError(e)
+      }
+    },
+    async getFactoryPriceData(path) {
+
+      this.table.loading = true
+
+      // calculate starting row of data
+      // fetch data from "server"
+      const returnedData = await this.getFactoryPriceFromApi(path)
+      console.log(returnedData)
+      this.form.net_price = returnedData.factory_price?.price ?? 0
+      // turn of loading indicator
+      this.table.loading = false
+      return true
+    },
+
     async submitForm(path) {
       this.table.loading = true
       const params = this.form;
