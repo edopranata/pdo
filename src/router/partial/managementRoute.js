@@ -56,6 +56,14 @@ export default [
           auth: true,
         },
       },
+      {
+        path: 'price',
+        name: 'admin.management.price.index',
+        component: () => import('pages/admin/management/price/PriceIndex.vue'),
+        meta: {
+          auth: true,
+        },
+      },
     ]
   },
 ]
