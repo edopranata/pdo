@@ -4,6 +4,9 @@ import {usePageStore} from "stores/pages";
 import {useRoute} from "vue-router";
 import QNumber from "components/Input/QNumber.vue";
 import {storeToRefs} from "pinia";
+import {useAuthStore} from "stores/auth";
+
+const {can} = useAuthStore();
 const {dialog, form, table} = useLoanStore();
 const {errors} = storeToRefs(useLoanStore())
 const loan = useLoanStore()
@@ -81,7 +84,7 @@ const onSubmit = async () => {
             :options="page.currencyFormat"
             class="tw-w-full"
             filled
-            label="Amount (kg)"
+            label="Amount (Rp)"
           />
           <q-field
             bg-color="blue-grey"
@@ -125,7 +128,7 @@ const onSubmit = async () => {
               </div>
             </template>
           </q-field>
-          <q-checkbox v-model="dialog.print" :val="dialog.print" label="Simpan dan print" size="lg"/>
+          <q-checkbox v-if="can('admin.transaction.loan.print')" v-model="dialog.print" :val="dialog.print" label="Simpan dan print" size="lg"/>
         </q-card-section>
 
         <q-card-actions align="right">

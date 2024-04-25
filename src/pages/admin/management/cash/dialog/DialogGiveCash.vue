@@ -81,7 +81,7 @@ const onSubmit = async () => {
             :options="page.currencyFormat"
             class="tw-w-full"
             filled
-            label="Amount (kg)"
+            label="Amount (Rp)"
           />
           <q-field
             bg-color="blue-grey"

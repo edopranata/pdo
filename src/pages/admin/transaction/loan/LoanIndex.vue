@@ -44,7 +44,7 @@ const cardContainerClass = computed(() => {
 })
 const rowsPerPageOptions = computed(() => {
   return $q.screen.gt.xs
-    ? $q.screen.gt.sm ? [3, 6, 9] : [3, 6]
+    ? $q.screen.gt.sm ? [3, 6, 9, 12, 21, 30] : [3, 6]
     : [3]
 })
 onMounted(() => {
@@ -152,8 +152,9 @@ const setForm = (id) => {
                   </template>
                 </q-field>
               </q-card-section>
-              <q-card-actions class="tw-px-4">
+              <q-card-actions class="tw-px-4" v-if="can('admin.transaction.loan.[addLoan,payLoan]')">
                 <q-btn
+                  v-if="can('admin.transaction.loan.addLoan')"
                   :dense="$q.screen.lt.md"
                   label="Tambah"
                   :loading="table.loading"
@@ -163,6 +164,7 @@ const setForm = (id) => {
                 />
                 <q-space/>
                 <q-btn
+                  v-if="can('admin.transaction.loan.payLoan')"
                   :dense="$q.screen.lt.md"
                   label="Bayar"
                   :loading="table.loading"

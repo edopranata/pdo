@@ -151,8 +151,9 @@ const setForm = (id) => {
                   </template>
                 </q-field>
               </q-card-section>
-              <q-card-actions class="tw-px-4">
+              <q-card-actions class="tw-px-4" v-if="can('admin.management.cash.[giveCash,takeCash]')">
                 <q-btn
+                  v-if="can('admin.management.cash.giveCash')"
                   :dense="$q.screen.lt.md"
                   label="Tambah kas"
                   :loading="table.loading"
@@ -162,6 +163,7 @@ const setForm = (id) => {
                 />
                 <q-space/>
                 <q-btn
+                  v-if="can('admin.management.cash.takeCash')"
                   :dense="$q.screen.lt.md"
                   label="Tarik Kas"
                   :loading="table.loading"
