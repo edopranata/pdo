@@ -10,7 +10,7 @@ import DialogDelete from "pages/admin/masterData/factory/dialog/DialogDelete.vue
 import QNumber from "components/Input/QNumber.vue";
 
 const $q = useQuasar()
-const {table, dialog, form, deleted} = useFactoriesStore()
+const {table, form, deleted} = useFactoriesStore()
 const factory = useFactoriesStore()
 const page = usePageStore()
 const {can} = useAuthStore()
@@ -128,18 +128,6 @@ const onEdit = () => {
                 label="Nama Pabrik"
               />
               <div class="tw-flex tw-space-x-4">
-                <q-number
-                  v-model="form.price"
-                  :bg-color="!!form.id ? 'yellow-2' : ''"
-                  :dense="$q.screen.lt.md"
-                  :error="errors.hasOwnProperty('price')"
-                  :error-message="errors.price"
-                  :options="page.currencyFormat"
-
-                  class="tw-w-full"
-                  filled
-                  label="Price (Rp)"
-                />
                 <q-number
                   v-model="form.margin"
                   :bg-color="!!form.id ? 'yellow-2' : ''"
