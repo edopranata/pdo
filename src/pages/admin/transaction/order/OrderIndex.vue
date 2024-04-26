@@ -115,7 +115,7 @@ const searchFactory = (val, update) => {
 
 watch(form, async (update) => {
   if (update.factory_id  && update.trade_date ) {
-    let date = form.trade_date.replace(/\//g, '-')
+    let date = form.trade_date
     let prices = deliveries.selected_factory.hasOwnProperty('prices') ? deliveries.selected_factory.prices : []
 
     let price = prices.filter( (p) => p.date === date)
@@ -165,9 +165,6 @@ const onSubmit = () => {
 }
 const onReset = () => {
   deliveries.onReset()
-}
-const onInvoice = () => {
-
 }
 const onDelete = () => {
   $q.dialog({
@@ -273,7 +270,11 @@ const onUpdate = () => {
               <template v-slot:append>
                 <q-icon class="cursor-pointer" name="event" tabindex="0">
                   <q-popup-proxy cover transition-hide="scale" transition-show="scale">
-                    <q-date v-model="form.trade_date">
+                    <q-date
+                      v-model="form.trade_date"
+                      :title="`Rp. ${new Intl.NumberFormat('en-US').format(form.net_price ?? 0)}`"
+                      :subtitle="date.formatDate(form.trade_date, 'dddd, DD MMMM YYYY')"
+                    >
                       <div class="row items-center justify-end">
                         <q-btn v-close-popup color="primary" flat label="Close"/>
                       </div>
