@@ -23,8 +23,8 @@ const routes = [
       },
       {
         path: "unauthorized",
-        name: "admin.unauthorized",
-        component: () => import("pages/ErrorPage403.vue")
+        name: "home.unauthorized",
+        component: () => import("pages/ErrorPage401.vue")
       },
     ],
   },
@@ -32,6 +32,11 @@ const routes = [
     path: '/admin',
     component: () => import('layouts/MainLayout.vue'),
     children: [
+      {
+        path: "unauthorized",
+        name: "admin.unauthorized",
+        component: () => import("pages/ErrorPage403.vue")
+      },
       {
         path: '',
         name: 'admin.index',

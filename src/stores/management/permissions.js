@@ -102,7 +102,7 @@ export const usePermissionsStore = defineStore('permissions', {
         }else if (e.response.status === 401) {
           LocalStorage.remove('token')
           LocalStorage.remove('permission')
-          this.router.replace({name: 'unauthorized'})
+          this.router.replace({name: 'home.unauthorized'})
         } else {
           this.errors = {};
           Notify.create({

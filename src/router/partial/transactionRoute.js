@@ -29,6 +29,14 @@ export default [
         },
       },
       {
+        path: 'income',
+        name: 'admin.transaction.income.index',
+        component: () => import('pages/admin/transaction/income/IncomeIndex.vue'),
+        meta: {
+          auth: true,
+        },
+      },
+      {
         path: 'invoice',
         name: 'admin.transaction.invoice.index',
         component: () => import('pages/admin/transaction/invoice/InvoiceIndex.vue'),

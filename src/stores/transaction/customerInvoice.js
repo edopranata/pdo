@@ -91,7 +91,7 @@ export const useCustomerInvoiceStore = defineStore('customerInvoice', {
         } else if (e.response.status === 401) {
           LocalStorage.remove('token')
           LocalStorage.remove('permission')
-          this.router.replace({name: 'unauthorized'})
+          this.router.replace({name: 'home.unauthorized'})
         } else if (e.response.status === 403) {
           this.errors = {};
           Notify.create({
@@ -99,7 +99,7 @@ export const useCustomerInvoiceStore = defineStore('customerInvoice', {
             type: 'negative',
             message: e.response.message ?? e.response.statusText
           })
-          this.router.replace({name: 'app.unauthorized'})
+          this.router.replace({name: 'admin.unauthorized'})
         } else {
           this.errors = {};
           Notify.create({
