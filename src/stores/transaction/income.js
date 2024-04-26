@@ -20,6 +20,19 @@ export const useIncomeStore = defineStore('income', {
     table: {
       loading: false,
       data: [],
+      orders: [],
+      headers: reactive([
+        {name: "no", label: "No", field: 'id', sortable: false, align: 'left'},
+        {name: "trade_date", label: "Trade Date", field: "trade_date", sortable: false, align: 'left'},
+        {name: "factory_name", label: "Factory", field: "factory", sortable: true, align: 'left'},
+        {name: "customer_name", label: "Customer", field: "customer", sortable: true, align: 'left'},
+        {name: "net_weight", label: "Net Weight (kg)", field: "net_weight", sortable: true},
+        {name: "net_price", label: "Price (Rp)", field: "customer_price", sortable: true},
+        {name: "gross_total", label: "Total", field: "gross_total", sortable: true},
+        {name: "ppn_total", label: "PPN", field: "ppn_total", sortable: true},
+        {name: "pph22_total", label: "PPh 22", field: "pph22_total", sortable: true},
+        {name: "total", label: "Net Total", field: "total", sortable: true},
+      ]),
     },
     order: {},
     errors: {},
@@ -75,7 +88,6 @@ export const useIncomeStore = defineStore('income', {
             this.selected_factory = null
           }
         }
-        this.table.selected = []
       } else {
         this.form[name] = null
         if (this.errors.hasOwnProperty(name)) {
@@ -102,23 +114,53 @@ export const useIncomeStore = defineStore('income', {
       }
     },
     async getIncomeData(path) {
-
-
       this.table.loading = true
 
       // fetch data from "server"
       const returnedData = await this.getIncomeDataFromApi(path)
 
       // clear out existing data and add new
-      this.table = returnedData.order
-      // this.customers_option = returnedData.customers?.slice(0, 10)
-      this.factories = returnedData.factories
+      if(returnedData.hasOwnProperty('order')){
+        this.order = returnedData.order.hasOwnProperty('orders') ? returnedData.order.orders : null
+        this.table.data = returnedData.order.hasOwnProperty('data') ? returnedData.order.data : []
+        this.table.orders = returnedData.order.hasOwnProperty('orders') ? returnedData.order.orders : []
+      }
 
-      this.order = returnedData.order.orders
+      if(returnedData.hasOwnProperty('factories')){
+        this.factories = returnedData.factories
+      }
+
 
       // ...and turn of loading indicator
       this.table.loading = false
       return true
     },
+    async submitForm(path) {
+      this.table.loading = true
+      const params = this.form;
+      await api({
+        method: 'post',
+        url: `${path}/${params.factory_id}`,
+        data: params
+      }).then(() => {
+
+        Notify.create({
+          position: "top",
+          type: 'positive',
+          message: 'Income Data berhasil disimpan'
+        })
+
+        this.onReset()
+        this.order = null
+        this.errors = []
+        this.table.data = []
+        this.table.orders = null
+      }).catch(e => {
+        this.setError(e);
+      }).finally(() => {
+        this.table.loading = false
+        this.dialog.open = false
+      });
+    }
   }
 })
