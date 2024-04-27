@@ -39,6 +39,10 @@ watch([form], async ([newForm]) => {
 
 onMounted(async () => {
   income.onReset()
+  income.order = null
+  income.errors = []
+  income.table.data = []
+  income.table.orders = null
   await income.getIncomeData(path)
 })
 
@@ -328,6 +332,7 @@ const onReset = () => {
       </q-form>
       <q-card-section class="no-padding">
         <q-table
+          ref="tableRef"
           :title="selected_factory ? selected_factory.hasOwnProperty('name') ? selected_factory.name : '' : ''"
           :rows="table.data"
           :columns="table.headers"

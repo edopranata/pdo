@@ -36,9 +36,7 @@ const calc = reactive({
 })
 onMounted(async () => {
   deliveries.onReset()
-  // if(setting.hasOwnProperty('do_margin')){
-  //   form.margin = setting.do_margin
-  // }
+
   tableRef.value.requestServerInteraction()
   await deliveries.getCustomerAndFactoryData(path)
 })
@@ -87,15 +85,20 @@ watch([selected_customer, selected_factory], ([selectedC, selectedF]) => {
       form.factory_id = selectedF.id
       form.ppn_tax = selectedF.ppn_tax
       form.pph22_tax = selectedF.pph22_tax
-
+      form.margin = selectedF.margin
       table.search.factory_id = selectedF.id
+      deliveries.date.subtitle = selectedF.name
+      deliveries.date.events = selectedF.hasOwnProperty('events') ? selectedF.events : []
     }
 
   } else {
     form.factory_id = selectedF
+    form.margin = selectedF
     form.ppn_tax = selectedF
     form.pph22_tax = selectedF
     table.search.factory_id = selectedF
+    deliveries.date.subtitle = selectedF
+    deliveries.date.events = []
   }
 
   tableRef.value.requestServerInteraction()
@@ -121,21 +124,27 @@ watch(form, async (update) => {
     let price = prices.filter( (p) => p.date === date)
 
     form.net_price = price.length > 0 ? price[0].hasOwnProperty('price') ? price[0]['price'] : 0 : 0
+    deliveries.date.title = setNumberFormat(form.net_price)
   }
 }, {deep: true})
 
+const setNumberFormat = (number) => {
+  return new Intl.NumberFormat("id-ID", {style: 'currency', currency: 'IDR'}).format(number)
+}
 watch(formField, async (newValue) => {
   for (let property in newValue) {
     if (!!newValue[property]) {
       deliveries.unsetError(property)
     }
   }
-  if (newValue.customer_price && newValue.net_weight && newValue.pph22_tax && newValue.ppn_tax) {
+  if (newValue.net_weight && newValue.customer_id && newValue.factory_id && newValue.trade_date) {
+
+    form.customer_price = form.net_price - form.margin
+
     calc.customer_weight = parseFloat(newValue.net_weight)
     calc.customer_price = form.customer_price
     calc.customer_total_price = calc.customer_price * calc.customer_weight
 
-    form.margin = form.net_price - form.customer_price
 
     form.gross_total = parseFloat(newValue.net_price) * parseFloat(newValue.net_weight)
 
@@ -272,10 +281,13 @@ const onUpdate = () => {
                   <q-popup-proxy cover transition-hide="scale" transition-show="scale">
                     <q-date
                       v-model="form.trade_date"
-                      :title="`Rp. ${new Intl.NumberFormat('en-US').format(form.net_price ?? 0)}`"
-                      :subtitle="date.formatDate(form.trade_date, 'dddd, DD MMMM YYYY')"
+                      :title="deliveries.date.title"
+                      :subtitle="deliveries.date.subtitle"
+                      :events="deliveries.date.events"
+                      :options="deliveries.date.periods"
                     >
-                      <div class="row items-center justify-end">
+                      <div class="row items-center justify-between">
+                        <q-btn color="negative" flat label="Remove" @click="form.trade_date = null"/>
                         <q-btn v-close-popup color="primary" flat label="Close"/>
                       </div>
                     </q-date>

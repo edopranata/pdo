@@ -25,7 +25,7 @@ const {path} = useRoute()
 watch([selected_factory],( [selectedF]) => {
   if (selectedF) {
     if (selectedF.hasOwnProperty('id')) {
-      price.date.period = selectedF.hasOwnProperty('event') ? selectedF.event : []
+      price.date.events = selectedF.hasOwnProperty('event') ? selectedF.event : []
       form.factory_id = selectedF.id
       table.data = selectedF.hasOwnProperty('price') ? selectedF.price : []
       table.name = selectedF.hasOwnProperty('name') ? selectedF.name : null
@@ -41,11 +41,15 @@ watch(getTradeDate,( newForm) => {
     let prices = price.selected_factory.hasOwnProperty('price') ? price.selected_factory.price : []
     let selectedItem = prices.filter( (p) => p.date === newForm)
     form.price = selectedItem.length > 0 ? selectedItem[0].hasOwnProperty('price') ? selectedItem[0].price : 0 : 0
+    table.price = selectedItem.length > 0 ? selectedItem[0].hasOwnProperty('price') ? setNumberFormat(selectedItem[0].price) : setNumberFormat(0) : setNumberFormat(0)
     form.id = selectedItem.length > 0 ? selectedItem[0].hasOwnProperty('id') ? selectedItem[0].id : null : null
   }
 })
-
+const setNumberFormat = (number) => {
+  return new Intl.NumberFormat("id-ID", {style: 'currency', currency: 'IDR'}).format(number)
+}
 onMounted( () => {
+  price.onReset()
   price.getPriceData(path)
 })
 
@@ -171,8 +175,10 @@ const onReset = () => {
                     <q-popup-proxy cover transition-hide="scale" transition-show="scale">
                       <q-date
                         v-model="form.price_date"
-                        :events="datePicker?.event"
-
+                        :options="price.date.period"
+                        :events="price.date.events"
+                        :subtitle="table.name"
+                        :title="table.price"
                       >
                         <div class="row items-center justify-end">
                           <q-btn v-close-popup color="primary" flat label="Close"/>

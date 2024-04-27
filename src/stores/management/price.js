@@ -19,12 +19,14 @@ export const usePriceStore = defineStore('price', {
       start_date: null,
       end_date: null,
       period: [],
+      events: [],
     },
     factories: [],
     factories_option: [],
     selected_factory: null,
     table: {
       name: null,
+      price: null,
       loading: false,
       data: [],
       headers: reactive([

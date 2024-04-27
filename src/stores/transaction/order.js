@@ -11,6 +11,12 @@ export const useOrderStore = defineStore('order', {
     factories: [],
     factories_option: [],
     selected_factory: null,
+    date: {
+      title: null,
+      subtitle: null,
+      events: [],
+      periods: [],
+    },
     form: {
       id: '',
       trade_date: '',
@@ -208,6 +214,7 @@ export const useOrderStore = defineStore('order', {
       this.customers = returnedData.customers
       // this.customers_option = returnedData.customers?.slice(0, 10)
       this.factories = returnedData.factories
+      this['date'].periods = returnedData.periods
       // this.factories_option = returnedData.factories?.slice(0, 10)
 
       // turn of loading indicator
