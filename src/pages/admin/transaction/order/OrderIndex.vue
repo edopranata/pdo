@@ -3,15 +3,16 @@ import {useOrderStore} from "stores/transaction/order";
 import {useAuthStore} from "stores/auth";
 import {usePageStore} from "stores/pages";
 import {useRoute} from "vue-router";
-import {onMounted, reactive, ref, watch} from "vue";
+import {onMounted, ref, watch} from "vue";
 import {storeToRefs} from "pinia";
 import {date, useQuasar} from "quasar";
 import QNumber from "components/Input/QNumber.vue";
+import NewCustomer from "pages/admin/transaction/order/NewCustomer.vue";
 
 const page = usePageStore()
 const {path} = useRoute()
 const {can} = useAuthStore()
-const {form, table} = useOrderStore()
+const {form, table, dialog} = useOrderStore()
 const deliveries = useOrderStore()
 const {
   errors,
@@ -20,7 +21,8 @@ const {
   factories_option,
   selected_factory,
   form: formField,
-  getSelected: selected
+  getSelected: selected,
+  getTradeDate
 } = storeToRefs(useOrderStore())
 const tableRef = ref()
 const $q = useQuasar()
@@ -29,31 +31,13 @@ const $q = useQuasar()
 const onRequest = async (props) => {
   await deliveries.getDeliveriesData(path, props)
 }
-const calc = reactive({
-  customer_weight: {type: Number, default: 0},
-  customer_price: {type: Number, default: 0},
-  customer_total_price: {type: Number, default: 0},
-})
+
 onMounted(async () => {
   deliveries.onReset()
 
   tableRef.value.requestServerInteraction()
   await deliveries.getCustomerAndFactoryData(path)
 })
-
-const formattedNUmber = (calcItem, format = 'currency') => {
-
-  const options = {}
-  options.style = format
-
-  if (format === "currency") {
-    options.currency = "IDR"
-  } else {
-    options.unit = "kilogram"
-  }
-
-  return new Intl.NumberFormat('id-ID', options).format(calc[calcItem])
-}
 
 const searchCustomer = (val, update) => {
   update(() => {
@@ -116,17 +100,19 @@ const searchFactory = (val, update) => {
   })
 }
 
-watch(form, async (update) => {
-  if (update.factory_id  && update.trade_date ) {
+watch(getTradeDate, async (update) => {
+  console.log(update)
+  if (update) {
     let date = form.trade_date
     let prices = deliveries.selected_factory.hasOwnProperty('prices') ? deliveries.selected_factory.prices : []
 
-    let price = prices.filter( (p) => p.date === date)
+    let price = prices.filter((p) => p.date === date)
 
     form.net_price = price.length > 0 ? price[0].hasOwnProperty('price') ? price[0]['price'] : 0 : 0
     deliveries.date.title = setNumberFormat(form.net_price)
+    form.customer_price = form.net_price - form.margin
   }
-}, {deep: true})
+})
 
 const setNumberFormat = (number) => {
   return new Intl.NumberFormat("id-ID", {style: 'currency', currency: 'IDR'}).format(number)
@@ -137,14 +123,9 @@ watch(formField, async (newValue) => {
       deliveries.unsetError(property)
     }
   }
-  if (newValue.net_weight && newValue.customer_id && newValue.factory_id && newValue.trade_date) {
+  if (newValue.net_weight && newValue.customer_price && newValue.customer_id && newValue.factory_id && newValue.trade_date) {
 
-    form.customer_price = form.net_price - form.margin
-
-    calc.customer_weight = parseFloat(newValue.net_weight)
-    calc.customer_price = form.customer_price
-    calc.customer_total_price = calc.customer_price * calc.customer_weight
-
+    form.margin = parseFloat(newValue.net_price) - parseFloat(newValue.customer_price)
 
     form.gross_total = parseFloat(newValue.net_price) * parseFloat(newValue.net_weight)
 
@@ -152,11 +133,7 @@ watch(formField, async (newValue) => {
     form.pph22 = form.pph22_tax ? parseFloat(form.gross_total) * parseFloat(newValue.pph22_tax) / 100 : null
 
     form.net_total = parseFloat(newValue.net_weight) * parseFloat(form.margin)
-
-  } else {
-    for (let property in calc) {
-      calc[property] = ''
-    }
+    form.customer_total_price = parseFloat(newValue.customer_price) * parseFloat(form.net_weight)
   }
 }, {
   deep: true
@@ -216,6 +193,7 @@ const onUpdate = () => {
 </script>
 <template>
   <q-page class="tw-space-y-4" padding>
+    <NewCustomer />
     <q-card v-if="can('admin.transaction.order.[createOrder,updateOrder,deleteOrder]')" bordered>
       <q-form
         class="tw-w-full"
@@ -281,10 +259,10 @@ const onUpdate = () => {
                   <q-popup-proxy cover transition-hide="scale" transition-show="scale">
                     <q-date
                       v-model="form.trade_date"
-                      :title="deliveries.date.title"
-                      :subtitle="deliveries.date.subtitle"
                       :events="deliveries.date.events"
                       :options="deliveries.date.periods"
+                      :subtitle="deliveries.date.subtitle"
+                      :title="deliveries.date.title"
                     >
                       <div class="row items-center justify-between">
                         <q-btn color="negative" flat label="Remove" @click="form.trade_date = null"/>
@@ -338,6 +316,15 @@ const onUpdate = () => {
                   </q-item-section>
                 </q-item>
               </template>
+              <template v-slot:after v-if="can('admin.masterData.customer.createCustomer')">
+                <q-btn
+                  round
+                  dense
+                  flat
+                  icon="person_add"
+                  @click="dialog.create = true"
+                />
+              </template>
             </q-select>
 
             <q-field
@@ -358,7 +345,9 @@ const onUpdate = () => {
 
           </div>
 
-          <div :class="$q.screen.lt.md ? 'tw-font-bold' : 'text-h6'" class="q-mt-sm q-mb-xs">Data Timbangan dan harga beli customer</div>
+          <div :class="$q.screen.lt.md ? 'tw-font-bold' : 'text-h6'" class="q-mt-sm q-mb-xs">Data Timbangan dan harga
+            beli customer
+          </div>
           <div class="tw-grid lg:tw-gap-4 tw-gap-2 lg:tw-grid-cols-5 md:tw-grid-cols-4 tw-grid-cols-3">
             <q-number
               v-model="form.net_weight"
@@ -449,11 +438,11 @@ const onUpdate = () => {
           <div class="tw-grid lg:tw-gap-4 tw-gap-2 lg:tw-grid-cols-5 md:tw-grid-cols-4 tw-grid-cols-3">
             <q-field
               :dense="$q.screen.lt.md"
+              :error="errors.hasOwnProperty('net_price')"
+              :error-message="errors.net_price"
               bg-color="blue-grey"
               color="blue-grey-2"
               filled
-              :error="errors.hasOwnProperty('net_price')"
-              :error-message="errors.net_price"
               label="Harga Pabrik (Rp)"
               stack-label
               tabindex="-1">
@@ -466,11 +455,11 @@ const onUpdate = () => {
 
             <q-field
               :dense="$q.screen.lt.md"
+              :error="errors.hasOwnProperty('margin')"
+              :error-message="errors.margin"
               bg-color="blue-grey"
               color="blue-grey-2"
               filled
-              :error="errors.hasOwnProperty('margin')"
-              :error-message="errors.margin"
               label="Margin (Rp)"
               stack-label
               tabindex="-1">
@@ -526,7 +515,7 @@ const onUpdate = () => {
               tabindex="-1">
               <template v-slot:control>
                 <div class="self-center full-width no-outline" tabindex="-1">
-                  {{ formattedNUmber('customer_weight', 'unit') }}
+                  {{ new Intl.NumberFormat('id-ID', {style: 'unit', unit: "kilogram"}).format(form.net_weight) }}
                 </div>
               </template>
             </q-field>
@@ -535,11 +524,17 @@ const onUpdate = () => {
               bg-color="blue-grey"
               color="blue-grey-2"
               filled
-              label="Harga jual (pengepul)"
+              label="Harga beli (pengepul)"
               stack-label
               tabindex="-1">
               <template v-slot:control>
-                <div class="self-center full-width no-outline" tabindex="-1">{{ formattedNUmber('customer_price') }}
+                <div class="self-center full-width no-outline" tabindex="-1">
+                  {{
+                    new Intl.NumberFormat('id-ID', {
+                      style: 'currency',
+                      currency: "IDR"
+                    }).format(formField.customer_price ?? 0)
+                  }}
                 </div>
               </template>
             </q-field>
@@ -554,7 +549,12 @@ const onUpdate = () => {
               tabindex="-1">
               <template v-slot:control>
                 <div class="self-center full-width no-outline" tabindex="-1">
-                  {{ formattedNUmber('customer_total_price') }}
+                  {{
+                    new Intl.NumberFormat('id-ID', {
+                      style: 'currency',
+                      currency: "IDR"
+                    }).format(form.customer_total_price ?? 0)
+                  }}
                 </div>
               </template>
             </q-field>

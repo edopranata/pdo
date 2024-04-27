@@ -7,7 +7,6 @@ const {dialog, form, onReset, table} = useUsersStore()
 
 const user = useUsersStore()
 const onSubmit = async () => {
-  console.log(path)
   await user.submitCreate(path)
 }
 

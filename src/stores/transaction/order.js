@@ -17,6 +17,9 @@ export const useOrderStore = defineStore('order', {
       events: [],
       periods: [],
     },
+    dialog: {
+      create: false
+    },
     form: {
       id: '',
       trade_date: '',
@@ -25,6 +28,7 @@ export const useOrderStore = defineStore('order', {
       net_weight: '',
       net_price: '',
       customer_price: '',
+      customer_total_price: '',
       margin: '',
       net_total: '',
       gross_total: '',
@@ -71,6 +75,9 @@ export const useOrderStore = defineStore('order', {
   getters: {
     getSelected(state) {
       return state.table.selected
+    },
+    getTradeDate(state){
+      return state.form.trade_date
     }
   },
 
