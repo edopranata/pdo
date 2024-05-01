@@ -2,7 +2,9 @@ import {defineStore} from 'pinia'
 import {reactive} from "vue";
 import {LocalStorage, Notify} from "quasar";
 import {api} from "boot/axios";
-
+import {useRoute} from "vue-router";
+import router from "src/router";
+const route = useRoute()
 export const useCashStore = defineStore('cash', {
   state: () => ({
     form:{
@@ -11,6 +13,7 @@ export const useCashStore = defineStore('cash', {
       username: null,
       email: null,
       balance: null,
+      description: null,
       current: null,
       ending: null,
     },
@@ -29,12 +32,23 @@ export const useCashStore = defineStore('cash', {
       search: '',
       filter: '',
       loading: false,
+      user: {},
+      cash: {},
       headers: reactive([
         {name: "no", label: "No", field: "id", sortable: false, align: 'left'},
         {name: "name", label: "Name", field: "user", sortable: true, align: 'left'},
         {name: "username", label: "Username", field: "user", sortable: true, align: 'left'},
         {name: "email", label: "Email", field: "user", sortable: true, align: 'left'},
         {name: "balance", label: "Cash", field: "balance", sortable: true, align: 'left'},
+      ]),
+      details: reactive([
+        {name: "no", label: "Id", field: "id", sortable: true, align: 'left'},
+        {name: "trade_date", label: "Tanggal Transaksi", field: "trade_date", sortable: false, align: 'left'},
+        {name: "description", label: "Keterangan", field: "description", sortable: false, align: 'left'},
+        {name: "opening_balance", label: "Saldo Awal", field: "opening_balance", sortable: false, align: 'right'},
+        {name: "balance_in", label: "Uang Masuk", field: "balance_in", sortable: false, align: 'right'},
+        {name: "balance_out", label: "Uang Keluar", field: "balance_out", sortable: false, align: 'right'},
+        {name: "ending_balance", label: "Saldo Akhir", field: "ending_balance", sortable: false, align: 'right'},
       ]),
       data: [],
     },
@@ -128,11 +142,18 @@ export const useCashStore = defineStore('cash', {
       const returnedData = await this.getCashDataFromApi(path, page, fetchCount, filter, sortBy, descending)
 
       // clear out existing data and add new
-      this.table.data = returnedData.data
-      this.table.roles = returnedData.roles
+      // this.table.data = returnedData.data
+      if(path.endsWith('details')){
+        this.table.data = returnedData.hasOwnProperty('details') ? returnedData.details.data : []
+        this.table.pagination.rowsNumber = returnedData.hasOwnProperty('details') ? returnedData.details.hasOwnProperty('meta') ? returnedData.details.meta.total : 0 :0
+        this.table.user = returnedData.hasOwnProperty('user') ? returnedData.user.hasOwnProperty('user') ? returnedData.user.user : {} : {}
+        this.table.cash = returnedData.hasOwnProperty('cash') ? returnedData.cash : {}
+      }else{
+        this.table.data = returnedData.hasOwnProperty('data') ? returnedData.data : []
+        this.table.pagination.rowsNumber = returnedData.hasOwnProperty('meta') ? returnedData.meta.total : 0
+      }
 
       // update only rowsNumber = total rows
-      this.table.pagination.rowsNumber = returnedData.meta.total
 
       // don't forget to update local pagination object
       this.table.pagination.page = page
@@ -152,7 +173,8 @@ export const useCashStore = defineStore('cash', {
     async giveCash(path) {
       this.table.loading = true
       const params = {
-        balance: this.form.balance
+        balance: this.form.balance,
+        description : this.form.description,
       };
       const url =  `${path}/${this.form.id}/giveCash`
       await api({
@@ -177,7 +199,8 @@ export const useCashStore = defineStore('cash', {
     async takeCash(path) {
       this.table.loading = true
       const params = {
-        balance: this.form.balance
+        balance: this.form.balance,
+        description : this.form.description,
       };
       const url =  `${path}/${this.form.id}/takeCash`
       await api({

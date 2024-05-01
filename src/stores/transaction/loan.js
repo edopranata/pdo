@@ -176,7 +176,6 @@ export const useLoanStore = defineStore('loan', {
         this.table.loading = false
 
         if(this.dialog.print){
-          console.log(response.data)
           const id = response?.data.hasOwnProperty('id') ? response.data.id : 0
           this.router.push({name: 'admin.transaction.loan.print', params: {id: id}})
         }
@@ -195,13 +194,12 @@ export const useLoanStore = defineStore('loan', {
       const response = await this.submit(url, params)
 
       if(response){
-        this.dialog.give = false
+        this.dialog.take = false
         this.onReset()
         this.table.filter = String(Date.now())
         this.table.loading = false
 
         if(this.dialog.print){
-          console.log(response.data)
           const id = response?.data.hasOwnProperty('id') ? response.data.id : 0
           this.router.push({name: 'admin.transaction.loan.print', params: {id: id}})
         }

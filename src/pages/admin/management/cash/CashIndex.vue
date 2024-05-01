@@ -3,10 +3,12 @@ import {useCashStore} from "stores/management/cash";
 import {useAuthStore} from "stores/auth";
 import {computed, onMounted, ref, watch} from 'vue'
 import {useRoute} from "vue-router";
+
 import {storeToRefs} from "pinia";
 import {useQuasar} from "quasar";
 import DialogGiveCash from "pages/admin/management/cash/dialog/DialogGiveCash.vue";
 import DialogTakeCash from "pages/admin/management/cash/dialog/DialogTakeCash.vue";
+import router from "src/router";
 
 const $q = useQuasar()
 const {table, dialog, form} = useCashStore()
@@ -72,6 +74,14 @@ const setForm = (id) => {
   }
 }
 
+const openUrl = (id) => {
+  console.log(id)
+  if(can('admin.management.cash.cashDetails')){
+    router().push({name: 'admin.management.cash.cashDetails', params: {id: id}});
+  }
+
+}
+
 </script>
 
 <template>
@@ -114,7 +124,7 @@ const setForm = (id) => {
               <q-card-section>
                 <q-list>
                   <q-item-label header>{{ props.row.name }}</q-item-label>
-                  <q-item v-ripple class="q-mb-sm">
+                  <q-item v-ripple class="q-mb-sm" :to="can('admin.management.cash.cashDetails') ? {name:'admin.management.cash.cashDetails', params: {id:props.row.id}} : {name: 'admin.management.cash.index'}">
                     <q-item-section avatar>
                       <q-avatar>
                         <q-img :src="props.row.photo"/>

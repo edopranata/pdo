@@ -85,9 +85,11 @@ const onPrint = () => {
 
           <template v-if="data.count_order > 0">
             <div v-for="(item, index) in data.orders" :key="index" class="tw-grid tw-grid-cols-5">
-              <span class="tw-px-4 tw-border-gray-800 tw-border-l tw-col-span-2">{{
-                  date.formatDate(item.trade_date.split('T')[0], 'DD MMMM YYYY')
-                }}</span>
+              <span class="tw-px-4 tw-border-gray-800 tw-border-l tw-col-span-2">
+                  {{
+                    `${date.formatDate(item.trade_date.split('T')[0], 'DD MMMM YYYY')} ${item.hasOwnProperty('factory') ? '- ' + item.factory.name : ''}`
+                  }}
+              </span>
               <span class="tw-px-4 tw-border-gray-800 tw-border-l tw-text-right">{{
                   Intl.NumberFormat('id-ID', {
                     style: 'unit',

@@ -57,6 +57,14 @@ export default [
         },
       },
       {
+        path: 'cash/:id/details',
+        name: 'admin.management.cash.cashDetails',
+        component: () => import('pages/admin/management/cash/CashDetail.vue'),
+        meta: {
+          auth: true,
+        },
+      },
+      {
         path: 'price',
         name: 'admin.management.price.index',
         component: () => import('pages/admin/management/price/PriceIndex.vue'),

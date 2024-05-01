@@ -83,6 +83,16 @@ const onSubmit = async () => {
             filled
             label="Amount (Rp)"
           />
+          <q-input
+            v-model="form.description"
+            :dense="$q.screen.lt.md"
+            :error="errors.hasOwnProperty('description')"
+            :error-message="errors.description"
+            class="tw-w-full"
+            filled
+            type="textarea"
+            label="Description"
+          />
           <q-field
             bg-color="blue-grey"
             color="blue-grey-2"
