@@ -123,7 +123,7 @@ const setForm = (id) => {
                     </q-item-section>
                     <q-item-section>
                       <q-item-label>{{ props.row.name }}</q-item-label>
-                      <q-item-label caption lines="1">{{ props.row.phone }}</q-item-label>
+                      <q-item-label caption lines="1">{{ props.row.address }}</q-item-label>
                     </q-item-section>
                   </q-item>
                 </q-list>

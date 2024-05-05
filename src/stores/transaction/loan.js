@@ -27,6 +27,13 @@ export const useLoanStore = defineStore('loan', {
         rowsPerPage: 6,
         rowsNumber: 0
       },
+      paginationDetails: {
+        sortBy: '',
+        descending: false,
+        page: 1,
+        rowsPerPage: 5,
+        rowsNumber: 0
+      },
       search: '',
       filter: '',
       loading: false,
@@ -139,26 +146,26 @@ export const useLoanStore = defineStore('loan', {
       // fetch data from "server"
       const returnedData = await this.getLoanDataFromApi(path, page, fetchCount, filter, sortBy, descending)
       if(path.endsWith('details')){
-        this.table.data = returnedData.hasOwnProperty('details') ? returnedData.details.data : []
-        this.table.pagination.rowsNumber = returnedData.hasOwnProperty('details') ? returnedData.details.hasOwnProperty('meta') ? returnedData.details.meta.total : 0 :0
+        if(returnedData.hasOwnProperty('details')){
+          this.table.data = returnedData.details.data ?? []
+          this.table.paginationDetails.rowsNumber = returnedData.details.meta.total
+        }
         this.table.customer = returnedData.hasOwnProperty('customer') ? returnedData.customer : {}
         this.table.loan = returnedData.hasOwnProperty('loan') ? returnedData.loan : {}
+        this.table.paginationDetails.page = page
+        this.table.paginationDetails.rowsPerPage = rowsPerPage
+        this.table.paginationDetails.sortBy = sortBy
+        this.table.paginationDetails.descending = descending
       }else{
         this.table.data = returnedData.hasOwnProperty('data') ? returnedData.data : []
         this.table.pagination.rowsNumber = returnedData.hasOwnProperty('meta') ? returnedData.meta.total : 0
+        this.table.pagination.page = page
+        this.table.pagination.rowsPerPage = rowsPerPage
+        this.table.pagination.sortBy = sortBy
+        this.table.pagination.descending = descending
       }
       // clear out existing data and add new
-      // this.table.data = returnedData.data
-      // this.table.roles = returnedData.roles
 
-      // update only rowsNumber = total rows
-      // this.table.pagination.rowsNumber = returnedData.meta.total
-
-      // don't forget to update local pagination object
-      this.table.pagination.page = page
-      this.table.pagination.rowsPerPage = rowsPerPage
-      this.table.pagination.sortBy = sortBy
-      this.table.pagination.descending = descending
 
       // ...and turn of loading indicator
       this.table.loading = false

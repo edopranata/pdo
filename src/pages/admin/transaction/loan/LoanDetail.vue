@@ -41,7 +41,7 @@ const onReset = () => {
     <q-card>
       <q-table
         ref="tableRef"
-        v-model:pagination="table.pagination"
+        v-model:pagination="table.paginationDetails"
         :columns="table.details ?? []"
         :rows-per-page-options="[5,10,20,30,50,80,100,0]"
         :dense="$q.screen.lt.md"
@@ -57,7 +57,6 @@ const onReset = () => {
           <div class="tw-w-full tw-flex tw-flex-col tw-justify-between md:tw-items-center md:tw-flex-row">
             <div>
               <q-list>
-                <q-item-label header>{{ table.customer?.name }}</q-item-label>
                 <q-item v-ripple class="q-mb-sm">
                   <q-item-section avatar>
                     <q-avatar>
@@ -65,7 +64,7 @@ const onReset = () => {
                     </q-avatar>
                   </q-item-section>
                   <q-item-section>
-                    <q-item-label>{{ table.customer?.phone }}</q-item-label>
+                    <q-item-label>{{ table.customer?.name }}</q-item-label>
                     <q-item-label caption lines="1">{{ table.customer?.address }}</q-item-label>
                   </q-item-section>
                 </q-item>
