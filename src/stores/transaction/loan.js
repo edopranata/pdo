@@ -37,6 +37,17 @@ export const useLoanStore = defineStore('loan', {
         {name: "address", label: "Address", field: "address", sortable: true, align: 'left'},
         {name: "balance", label: "Loan", field: "loan", sortable: true, align: 'left'},
       ]),
+      details: reactive([
+        {name: "no", label: "No", field: "id", sortable: true, align: 'left'},
+        {name: "trade_date", label: "Tanggal Transaksi", field: "trade_date", sortable: false, align: 'left'},
+        {name: "description", label: "Keterangan", field: "description", sortable: false, align: 'left'},
+        {name: "opening_balance", label: "Pinjaman Awal", field: "opening_balance", sortable: false, align: 'right'},
+        {name: "balance_in", label: "Angsunran", field: "balance_in", sortable: false, align: 'right'},
+        {name: "balance_out", label: "Pinjaman", field: "balance_out", sortable: false, align: 'right'},
+        {name: "ending_balance", label: "Sisa Pinjaman", field: "ending_balance", sortable: false, align: 'right'},
+      ]),
+      customer: {},
+      loan: {},
       data: [],
     },
     errors: {},
@@ -127,13 +138,21 @@ export const useLoanStore = defineStore('loan', {
       // calculate starting row of data
       // fetch data from "server"
       const returnedData = await this.getLoanDataFromApi(path, page, fetchCount, filter, sortBy, descending)
-
+      if(path.endsWith('details')){
+        this.table.data = returnedData.hasOwnProperty('details') ? returnedData.details.data : []
+        this.table.pagination.rowsNumber = returnedData.hasOwnProperty('details') ? returnedData.details.hasOwnProperty('meta') ? returnedData.details.meta.total : 0 :0
+        this.table.customer = returnedData.hasOwnProperty('customer') ? returnedData.customer : {}
+        this.table.loan = returnedData.hasOwnProperty('loan') ? returnedData.loan : {}
+      }else{
+        this.table.data = returnedData.hasOwnProperty('data') ? returnedData.data : []
+        this.table.pagination.rowsNumber = returnedData.hasOwnProperty('meta') ? returnedData.meta.total : 0
+      }
       // clear out existing data and add new
-      this.table.data = returnedData.data
-      this.table.roles = returnedData.roles
+      // this.table.data = returnedData.data
+      // this.table.roles = returnedData.roles
 
       // update only rowsNumber = total rows
-      this.table.pagination.rowsNumber = returnedData.meta.total
+      // this.table.pagination.rowsNumber = returnedData.meta.total
 
       // don't forget to update local pagination object
       this.table.pagination.page = page

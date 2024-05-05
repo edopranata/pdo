@@ -115,7 +115,7 @@ const setForm = (id) => {
             <q-card bordered flat>
               <q-card-section>
                 <q-list>
-                  <q-item v-ripple class="q-mb-sm">
+                  <q-item v-ripple class="q-mb-sm" :to="can('admin.transaction.loan.loanDetails') ? {name:'admin.transaction.loan.loanDetails', params: {id:props.row.id}} : {name: 'admin.transaction.loan.index'}">
                     <q-item-section avatar>
                       <q-avatar>
                         <q-img :src="props.row.initial"/>

@@ -21,6 +21,14 @@ export default [
         },
       },
       {
+        path: 'loan/:id/details',
+        name: 'admin.transaction.loan.loanDetails',
+        component: () => import('pages/admin/transaction/loan/LoanDetail.vue'),
+        meta: {
+          auth: true,
+        },
+      },
+      {
         path: 'order',
         name: 'admin.transaction.order.index',
         component: () => import('pages/admin/transaction/order/OrderIndex.vue'),
