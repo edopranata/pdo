@@ -53,7 +53,7 @@ const onPrint = () => {
             <q-img alt="logo" class="tw-w-28" fit="fill" src="/img/logo.png"/>
             <div class="tw-flex tw-flex-col text-left tw-mt-4">
               <div class="tw-text-4xl tw-font-bold tw-underline tw-font-sans">TUNAS MUDA</div>
-              <div class="tw-text-xs tw-font-bold">HP: 0853-5661-5016</div>
+              <div class="tw-text-xs tw-font-bold">HP: 0811-7600-208</div>
             </div>
             <q-space></q-space>
             <div class="tw-flex tw-flex-col tw-w-64 tw-mt-6">

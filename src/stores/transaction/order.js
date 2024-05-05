@@ -65,7 +65,6 @@ export const useOrderStore = defineStore('order', {
         {name: "gross_total", label: "Gross Total", field: "gross_total", sortable: true},
         {name: "net_customer", label: "Net Customer", sortable: false},
         {name: "net_total", label: "Net Income", field: "net_total", sortable: true},
-        {name: "income_status", label: "Income", field: "income_status", sortable: false, align: 'left'},
       ]),
       data: [],
     },

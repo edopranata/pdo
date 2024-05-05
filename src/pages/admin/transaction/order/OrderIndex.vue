@@ -375,17 +375,32 @@ const onUpdate = () => {
           </div>
           <!-- PPN -->
           <div class="tw-grid lg:tw-gap-4 tw-gap-2 lg:tw-grid-cols-5 md:tw-grid-cols-4 tw-grid-cols-3">
-            <q-number
-              v-model="form.ppn_tax"
-              :bg-color="!!form.id ? 'yellow-2' : ''"
+            <q-field
               :dense="$q.screen.lt.md"
-              :error="errors.hasOwnProperty('ppn_tax')"
-              :error-message="errors.ppn_tax"
-              :options="page.percentFormat"
-              class="tw-w-full"
+              bg-color="blue-grey"
+              color="blue-grey-2"
               filled
               label="PPN (%)"
-            />
+              stack-label
+              hint=""
+              tabindex="-1">
+              <template v-slot:control>
+                <div class="self-center full-width no-outline" tabindex="-1">
+                  {{ new Intl.NumberFormat('id-ID', {style: 'percent', currency: "IDR", maximumFractionDigits: 2}).format(form.ppn_tax > 0 ? form.ppn_tax / 100 : 0) }}
+                </div>
+              </template>
+            </q-field>
+<!--            <q-number-->
+<!--              v-model="form.ppn_tax"-->
+<!--              :bg-color="!!form.id ? 'yellow-2' : ''"-->
+<!--              :dense="$q.screen.lt.md"-->
+<!--              :error="errors.hasOwnProperty('ppn_tax')"-->
+<!--              :error-message="errors.ppn_tax"-->
+<!--              :options="page.percentFormat"-->
+<!--              class="tw-w-full"-->
+<!--              filled-->
+<!--              label="PPN (%)"-->
+<!--            />-->
 
 
             <q-field
@@ -407,17 +422,32 @@ const onUpdate = () => {
 
           <!-- PPH 22 -->
           <div class="tw-grid lg:tw-gap-4 tw-gap-2 lg:tw-grid-cols-5 md:tw-grid-cols-4 tw-grid-cols-3">
-            <q-number
-              v-model="form.pph22_tax"
-              :bg-color="!!form.id ? 'yellow-2' : ''"
+            <q-field
+              hint=""
               :dense="$q.screen.lt.md"
-              :error="errors.hasOwnProperty('pph22_tax')"
-              :error-message="errors.pph22_tax"
-              :options="page.percentFormat"
-              class="tw-w-full"
+              bg-color="blue-grey"
+              color="blue-grey-2"
               filled
-              label="PPh 22 (%)"
-            />
+              label="PPN (%)"
+              stack-label
+              tabindex="-1">
+              <template v-slot:control>
+                <div class="self-center full-width no-outline" tabindex="-1">
+                  {{ new Intl.NumberFormat('id-ID', {style: 'percent', currency: "IDR", maximumFractionDigits: 2}).format(form.pph22_tax > 0 ? form.pph22_tax / 100 : 0) }}
+                </div>
+              </template>
+            </q-field>
+<!--            <q-number-->
+<!--              v-model="form.pph22_tax"-->
+<!--              :bg-color="!!form.id ? 'yellow-2' : ''"-->
+<!--              :dense="$q.screen.lt.md"-->
+<!--              :error="errors.hasOwnProperty('pph22_tax')"-->
+<!--              :error-message="errors.pph22_tax"-->
+<!--              :options="page.percentFormat"-->
+<!--              class="tw-w-full"-->
+<!--              filled-->
+<!--              label="PPh 22 (%)"-->
+<!--            />-->
 
             <q-field
               :dense="$q.screen.lt.md"
