@@ -102,10 +102,12 @@ export const useInvoiceDataStore = defineStore('invoiceData', {
       try {
         const params = new URLSearchParams(data);
         const response = await api.get(path, {params})
-        this.table.data = response.data.data
+
+        return response.data
+        // this.table.data = response.data.data
 
         // update only rowsNumber = total rows
-        this.table.pagination.rowsNumber = response.data.details.total
+        // this.table.pagination.rowsNumber = response.data.details.total
       } catch (e) {
         // this.setError(e)
       }

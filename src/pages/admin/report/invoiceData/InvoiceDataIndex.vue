@@ -25,7 +25,7 @@ const toPrint = async (invoice, id) => {
       cancel: true,
       persistent: true
     }).onOk(async () => {
-      await router.replace({name: 'admin.report.invoiceData.print', params: {id: id}})
+      await router.replace({name: 'admin.report.invoiceReport.print', params: {id: id}})
     })
 }
 
@@ -79,7 +79,7 @@ const onRequest = async (props) => {
           <template v-slot:body-cell-invoice_number="props">
             <q-td :props="props">
               <q-chip
-                v-if="can('admin.report.invoiceData.print')"
+                v-if="can('admin.report.invoiceReport.print')"
                 clickable
                 :color="props.row.type === 'LN' ? 'warning' : 'primary'"
                 icon="print"

@@ -39,18 +39,20 @@ const onPrint = () => {
 </script>
 
 <template>
-  <q-page class="print:tw-mt-0">
-    <div class="tw-flex">
+  <q-page class="print:tw-mt-0 print:tw-py-0 print:tw-text-[12px]">
+    <q-card v-if="data" class="md:tw-w-3/6 print:tw-w-full print-hide" flat>
+      <q-card-section>
+        <q-toolbar class="text-primary">
+          <q-space></q-space>
+          <q-btn v-if="!$q.platform.is.mobile" dense flat icon="print" round @click="onPrint"/>
+        </q-toolbar>
+      </q-card-section>
+    </q-card>
+    <div class="tw-flex tw-m-0 tw-p-0">
       <q-card v-if="data" class="md:tw-w-3/6 print:tw-w-full" flat>
-        <q-card-section class="print-hide">
-          <q-toolbar class="text-primary">
-            <q-space></q-space>
-            <q-btn v-if="!$q.platform.is.mobile" dense flat icon="print" round @click="onPrint"/>
-          </q-toolbar>
-        </q-card-section>
-        <q-card-section>
+        <q-card-section class="print:tw-my-0 print:tw-py-0">
           <div class="tw-flex">
-            <q-img alt="logo" class="tw-w-28" fit="fill" src="/img/logo.png"/>
+            <q-img alt="logo" class="tw-w-20" fit="fill" src="/img/logo.png"/>
             <div class="tw-flex tw-flex-col text-left tw-mt-4">
               <div class="tw-text-4xl tw-font-bold tw-underline tw-font-sans">TUNAS MUDA</div>
               <div class="tw-text-xs tw-font-bold">HP: 0811-7600-208</div>
@@ -62,7 +64,7 @@ const onPrint = () => {
             </div>
           </div>
         </q-card-section>
-        <q-card-section>
+        <q-card-section class="print:tw-my-0 print:tw-py-0">
           <div class="flex justify-between">
             <div class="tw-font-bold">No Nota: {{ data.invoice_number }}</div>
             <div class="tw-font-bold">Tanggal Nota: {{ data.invoice_date }}</div>

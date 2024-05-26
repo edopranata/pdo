@@ -278,13 +278,13 @@ const onUpdate = () => {
           <div :class="$q.screen.lt.md ? 'tw-font-bold' : 'text-h6'" class="q-mt-sm q-mb-xs">Customer</div>
           <div class="tw-grid lg:tw-gap-4 tw-gap-2 lg:tw-grid-cols-5 md:tw-grid-cols-4 tw-grid-cols-2">
             <q-select
+              class="lg:tw-grid-cols-3 md:tw-col-span-2 tw-col-span-2"
               v-model="deliveries.selected_customer"
               :bg-color="!!form.id ? 'yellow-2' : ''"
               :dense="$q.screen.lt.md"
               :error="errors.hasOwnProperty('customer_id')"
               :error-message="errors.customer_id"
               :options="customers_option"
-              class="tw-w-full"
               clearable
               fill-input
               filled
@@ -326,8 +326,10 @@ const onUpdate = () => {
                 />
               </template>
             </q-select>
-
-            <q-field
+          </div>
+          <div class="tw-grid lg:tw-gap-4 tw-gap-2 lg:tw-grid-cols-5 md:tw-grid-cols-4 tw-grid-cols-2">
+          <q-field
+              class="lg:tw-grid-cols-3 md:tw-col-span-2 tw-col-span-2"
               v-if="form.loan > 0"
               :dense="$q.screen.lt.md"
               bg-color="blue-grey"

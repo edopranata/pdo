@@ -2,6 +2,7 @@ import {defineStore} from 'pinia'
 import {reactive} from "vue";
 import {api} from "boot/axios";
 import {LocalStorage, Notify} from "quasar";
+import { date } from 'quasar'
 
 export const useCustomerInvoiceStore = defineStore('customerInvoice', {
   state: () => ({
@@ -126,6 +127,9 @@ export const useCustomerInvoiceStore = defineStore('customerInvoice', {
       this.table.selected = []
       for (let property in this.form) {
         this.form[property] = null
+        if(property === 'trade_date'){
+          this.form[property] = date.formatDate(Date.now(), 'YYYY/MM/DD')
+        }
       }
 
       this.dialog.open = false

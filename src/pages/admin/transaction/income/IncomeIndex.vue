@@ -256,7 +256,7 @@ const onReset = () => {
                       Intl.NumberFormat('id-ID', {
                         style: 'currency',
                         currency: 'IDR',
-                        minimumFractionDigits: 0
+                        maximumFractionDigits: 2,
                       }).format(table.orders ? table.orders.hasOwnProperty('gross_total') ? table.orders.gross_total : 0 : 0)
                     }}
                   </div>
@@ -275,8 +275,9 @@ const onReset = () => {
                   <div class="self-center full-width no-outline" tabindex="-1">
                     {{
                       Intl.NumberFormat('id-ID', {
-                        style: 'unit',
-                        unit: 'kilogram'
+                        style: 'currency',
+                        currency: 'IDR',
+                        maximumFractionDigits: 2,
                       }).format(table.orders ? table.orders.hasOwnProperty('ppn_total') ? table.orders.ppn_total : 0 : 0)
                     }}
                   </div>
@@ -297,7 +298,7 @@ const onReset = () => {
                       Intl.NumberFormat('id-ID', {
                         style: 'currency',
                         currency: 'IDR',
-                        minimumFractionDigits: 0
+                        maximumFractionDigits: 2,
                       }).format(table.orders ? table.orders.hasOwnProperty('pph22_total') ? table.orders.pph22_total : 0 : 0)
                     }}
                   </div>
@@ -320,7 +321,7 @@ const onReset = () => {
                       Intl.NumberFormat('id-ID', {
                         style: 'currency',
                         currency: 'IDR',
-                        minimumFractionDigits: 0
+                        maximumFractionDigits: 2,
                       }).format(table.orders ? table.orders.hasOwnProperty('total') ? table.orders.total : 0 : 0)
                     }}
                   </div>

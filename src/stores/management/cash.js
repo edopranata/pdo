@@ -2,9 +2,6 @@ import {defineStore} from 'pinia'
 import {reactive} from "vue";
 import {LocalStorage, Notify} from "quasar";
 import {api} from "boot/axios";
-import {useRoute} from "vue-router";
-import router from "src/router";
-const route = useRoute()
 export const useCashStore = defineStore('cash', {
   state: () => ({
     form:{
@@ -42,7 +39,7 @@ export const useCashStore = defineStore('cash', {
         {name: "balance", label: "Cash", field: "balance", sortable: true, align: 'left'},
       ]),
       details: reactive([
-        {name: "no", label: "Id", field: "id", sortable: true, align: 'left'},
+        {name: "no", label: "No", field: "id", sortable: true, align: 'left'},
         {name: "trade_date", label: "Tanggal Transaksi", field: "trade_date", sortable: false, align: 'left'},
         {name: "description", label: "Keterangan", field: "description", sortable: false, align: 'left'},
         {name: "opening_balance", label: "Saldo Awal", field: "opening_balance", sortable: false, align: 'right'},
