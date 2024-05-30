@@ -265,7 +265,14 @@ const onEdit = () => {
             {{ props.rowIndex + 1 }}
           </q-td>
         </template>
-
+        <template v-slot:body-cell-loan="props">
+          <q-td :props="props">
+            {{ new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR'
+          }).format(props.value ?? 0) }}
+          </q-td>
+        </template>
       </q-table>
     </q-card>
   </q-page>
