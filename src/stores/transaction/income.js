@@ -8,6 +8,8 @@ export const useIncomeStore = defineStore('income', {
     form: {
       factory_id: null,
       trade_date: null,
+      period: null,
+      income_period: null,
       period_start: null,
       period_end: null,
     },

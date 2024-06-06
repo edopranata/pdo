@@ -51,6 +51,39 @@ export default [
           },
         ]
       },
+
+      {
+        path: 'transactionReport',
+        name: 'admin.report.transactionReport',
+        redirect: {name: 'admin.report.transactionReport.index'},
+        children: [
+          {
+            path: '',
+            name: 'admin.report.transactionReport.index',
+            component: () => import('pages/admin/report/transactionReport/TransactionReportIndex.vue'),
+            meta: {
+              auth: true,
+            },
+          },
+          {
+            path: 'todayTransaction',
+            name: 'admin.report.transactionReport.todayTransaction',
+            component: () => import('pages/admin/report/transactionReport/TodayTransactionReport.vue'),
+            meta: {
+              auth: true,
+            },
+          },
+          {
+            path: 'dailyTransaction',
+            name: 'admin.report.transactionReport.dailyTransaction',
+            component: () => import('pages/admin/report/transactionReport/DailyTransactionReport.vue'),
+            meta: {
+              auth: true,
+            },
+          },
+        ]
+      },
+
       {
         path: 'DOReport',
         name: 'admin.report.DOReport.index',

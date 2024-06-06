@@ -16,7 +16,6 @@ const {
   errors,
   factories_option,
   selected_factory,
-  date: datePicker,
   getTradeDate
 } = storeToRefs(usePriceStore())
 

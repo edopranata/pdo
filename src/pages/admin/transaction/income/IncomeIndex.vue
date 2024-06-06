@@ -24,9 +24,13 @@ watch([selected_factory], ([selectedF]) => {
   if (selectedF) {
     if (selectedF.hasOwnProperty('id')) {
       form.factory_id = selectedF.id
+      form.period = selectedF.order.period
+      form.income_period = selectedF.order.income_period
     }
   } else {
     form.factory_id = selectedF
+    form.period = selectedF
+    form.income_period = selectedF
   }
 })
 
@@ -59,6 +63,7 @@ const searchFactory = (val, update) => {
 
 const onSubmit = async () => {
   await income.submitForm(path)
+  await income.getIncomeData(path)
 }
 
 const onReset = () => {
@@ -151,6 +156,7 @@ const onReset = () => {
                 </template>
               </q-select>
               <q-field
+                :disable="!form.income_period || !form.period"
                 :dense="$q.screen.lt.md"
                 :error="errors.hasOwnProperty('period_start')"
                 :error-message="errors.period_start"
@@ -166,7 +172,9 @@ const onReset = () => {
                 <template v-slot:append>
                   <q-icon class="cursor-pointer" name="calendar_month" tabindex="0">
                     <q-popup-proxy cover transition-hide="scale" transition-show="scale">
-                      <q-date v-model="form.period_start">
+                      <q-date
+                        :options="form.period"
+                        v-model="form.period_start">
                         <div class="row items-center justify-end">
                           <q-btn v-close-popup color="primary" flat label="Close"/>
                         </div>
@@ -177,6 +185,7 @@ const onReset = () => {
               </q-field>
 
               <q-field
+                :disable="!form.income_period || !form.period"
                 :dense="$q.screen.lt.md"
                 :error="errors.hasOwnProperty('period_end')"
                 :error-message="errors.period_end"
@@ -192,7 +201,9 @@ const onReset = () => {
                 <template v-slot:append>
                   <q-icon class="cursor-pointer" name="calendar_month" tabindex="0">
                     <q-popup-proxy cover transition-hide="scale" transition-show="scale">
-                      <q-date v-model="form.period_end">
+                      <q-date
+                        :options="form.period"
+                        v-model="form.period_end">
                         <div class="row items-center justify-end">
                           <q-btn v-close-popup color="primary" flat label="Close"/>
                         </div>
@@ -203,6 +214,7 @@ const onReset = () => {
               </q-field>
 
               <q-field
+                :disable="!form.income_period || !form.period"
                 :dense="$q.screen.lt.md"
                 :error="errors.hasOwnProperty('trade_date')"
                 :error-message="errors.trade_date"
@@ -218,7 +230,10 @@ const onReset = () => {
                 <template v-slot:append>
                   <q-icon class="cursor-pointer" name="calendar_month" tabindex="0">
                     <q-popup-proxy cover transition-hide="scale" transition-show="scale">
-                      <q-date v-model="form.trade_date">
+                      <q-date
+                        :options="form.income_period"
+                        v-model="form.trade_date"
+                      >
                         <div class="row items-center justify-end">
                           <q-btn v-close-popup color="primary" flat label="Close"/>
                         </div>
