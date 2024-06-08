@@ -4,11 +4,13 @@ import {useRoute} from "vue-router";
 import {onMounted, watch} from "vue";
 import {storeToRefs} from "pinia";
 import {date} from "quasar";
+import {useQuasar} from "quasar";
 
 const {path} = useRoute()
 const {selected_factory, factories_option, errors, form_empty} = storeToRefs(useDeliveryOrderDataStore())
 const {table, form} = useDeliveryOrderDataStore()
 const order = useDeliveryOrderDataStore();
+const $q = useQuasar()
 
 onMounted( async () => {
   order.onReset()
@@ -40,13 +42,21 @@ const searchFactory = (val, update) => {
   })
 }
 
-const onSubmit = () => {
-  order.getDeliveryFactoryID(path)
+const onSubmit = async () => {
+  await order.getDeliveryFactoryID(path)
 }
 
-const onReset = () => {
-  order.onReset()
+const exportExcel = async () => {
+  $q.dialog({
+    title: 'Simpan pengaturan',
+    message: 'Anda yakin akan merubah pengaturan default?',
+    cancel: true,
+    persistent: true
+  }).onOk( async () => {
+    await order.exportDataToExcel(path)
+  })
 }
+
 </script>
 
 <template>
@@ -58,7 +68,6 @@ const onReset = () => {
         </q-toolbar-title>
       </q-toolbar>
       <q-form
-        @reset="onReset"
         @submit="onSubmit"
       >
         <q-card-section class="tw-space-y-4">
@@ -161,12 +170,12 @@ const onReset = () => {
               />
               <q-btn
                 :disable="form_empty"
-                label="Print Data"
+                label="Export Data"
                 :loading="table.loading"
                 color="warning"
                 glossy
-                icon="add_circle"
-                type="submit"
+                icon="download"
+                @click="exportExcel"
               />
             </div>
           </div>
@@ -184,10 +193,24 @@ const onReset = () => {
               <th class="text-right">Net Customer</th>
               <th class="text-right">Margin</th>
               <th class="text-right">Gross Total</th>
+              <th class="text-right">PPN (Rp)</th>
+              <th class="text-right">PPh 22 (Rp)</th>
               <th class="text-right">Net Income</th>
             </tr>
             </thead>
             <tbody v-if="table.data.length > 0">
+            <tr class="text-bold bg-primary text-white">
+              <td class="text-left"></td>
+              <td class="text-left" colspan="2">Total</td>
+              <td class="text-right">{{ new Intl.NumberFormat('id-ID', {style: 'currency', currency: "IDR", maximumFractionDigits: 0}).format(table.summaries.customer_price) }}</td>
+              <td class="text-right">{{ new Intl.NumberFormat('id-ID', {style: 'unit', unit: "kilogram"}).format(table.summaries.total_weight) }}</td>
+              <td class="text-right">{{ new Intl.NumberFormat('id-ID', {style: 'currency', currency: "IDR", maximumFractionDigits: 2}).format(table.summaries.customer_total) }}</td>
+              <td class="text-right">{{ new Intl.NumberFormat('id-ID', {style: 'currency', currency: "IDR", maximumFractionDigits: 0}).format(table.summaries.margin) }}</td>
+              <td class="text-right">{{ new Intl.NumberFormat('id-ID', {style: 'currency', currency: "IDR", maximumFractionDigits: 2}).format(table.summaries.gross_total) }}</td>
+              <td class="text-right">{{ new Intl.NumberFormat('id-ID', {style: 'currency', currency: "IDR", maximumFractionDigits: 2}).format(table.summaries.ppn_total) }}</td>
+              <td class="text-right">{{ new Intl.NumberFormat('id-ID', {style: 'currency', currency: "IDR", maximumFractionDigits: 2}).format(table.summaries.pph22_total) }}</td>
+              <td class="text-right">{{ new Intl.NumberFormat('id-ID', {style: 'currency', currency: "IDR", maximumFractionDigits: 2}).format(table.summaries.margin_income) }}</td>
+            </tr>
             <tr v-for="(item, index) in table.data" :key="item.id">
               <td class="text-left">{{ index + 1 }}</td>
               <td class="text-left">{{ item.customer.hasOwnProperty('name') ? item.customer.name : '' }}</td>
@@ -197,6 +220,8 @@ const onReset = () => {
               <td class="text-right">{{ new Intl.NumberFormat('id-ID', {style: 'currency', currency: "IDR", maximumFractionDigits: 2}).format(item.customer_total) }}</td>
               <td class="text-right">{{ new Intl.NumberFormat('id-ID', {style: 'currency', currency: "IDR", maximumFractionDigits: 0}).format(item.margin) }}</td>
               <td class="text-right">{{ new Intl.NumberFormat('id-ID', {style: 'currency', currency: "IDR", maximumFractionDigits: 2}).format(item.gross_total) }}</td>
+              <td class="text-right">{{ new Intl.NumberFormat('id-ID', {style: 'currency', currency: "IDR", maximumFractionDigits: 2}).format(item.ppn_total) }}</td>
+              <td class="text-right">{{ new Intl.NumberFormat('id-ID', {style: 'currency', currency: "IDR", maximumFractionDigits: 2}).format(item.pph22_total) }}</td>
               <td class="text-right">{{ new Intl.NumberFormat('id-ID', {style: 'currency', currency: "IDR", maximumFractionDigits: 2}).format(parseFloat(item.gross_total) - parseFloat(item.customer_total)) }}</td>
             </tr>
 

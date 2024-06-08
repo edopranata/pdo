@@ -16,6 +16,7 @@
     "@coders-tm/vue-number-format": "^3.34.1",
     "@quasar/extras": "^1.16.11",
     "axios": "^1.6.8",
+    "file-saver": "^2.0.5",
     "pinia": "^2.1.7",
     "quasar": "^2.15.4",
     "vue": "^3.4.25",

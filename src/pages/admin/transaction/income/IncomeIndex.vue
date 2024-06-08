@@ -262,6 +262,26 @@ const onReset = () => {
                 color="blue-grey-2"
                 filled
                 hint=""
+                label="Weight Total (Kg)"
+                stack-label
+                tabindex="-1">
+                <template v-slot:control>
+                  <div class="self-center full-width no-outline" tabindex="-1">
+                    {{
+                      Intl.NumberFormat('id-ID', {
+                        style: 'unit',
+                        unit:'kilogram',
+                      }).format(table.orders ? table.orders.hasOwnProperty('total_weight') ? table.orders.total_weight : 0 : 0)
+                    }}
+                  </div>
+                </template>
+              </q-field>
+              <q-field
+                :dense="$q.screen.lt.md"
+                bg-color="blue-grey"
+                color="blue-grey-2"
+                filled
+                hint=""
                 label="Gross Total (Rp)"
                 stack-label
                 tabindex="-1">

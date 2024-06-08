@@ -4,6 +4,8 @@ import {usePageStore} from "stores/pages";
 import {reactive} from "vue";
 import {storeToRefs} from "pinia";
 import {useQuasar} from "quasar";
+import {api} from "boot/axios";
+import { saveAs } from 'file-saver';
 
 const $q = useQuasar()
 const page = usePageStore()
@@ -45,7 +47,14 @@ const saveSetting = async () => {
     cancel: true,
     persistent: true
   }).onOk( async () => {
-    await page.saveSetting()
+    const fileName = 'excel.xlsx'
+    await api.post('/admin/test', {
+      file_name: fileName
+    }, {
+      responseType: 'blob'
+    }).then((response) => {
+      saveAs(response.data, fileName);
+    });
   })
 }
 
@@ -94,23 +103,6 @@ const saveSetting = async () => {
     <q-separator spaced/>
     <q-item-label header>Default Price</q-item-label>
 
-    <q-item>
-      <q-item-section>
-        <q-number
-          v-for="(property, prop) in page.setting" :key="`${prop}`"
-          v-model="page.setting[prop]"
-          :dense="$q.screen.lt.md"
-          :error="errors.hasOwnProperty(prop)"
-          :error-message="errors[prop]"
-          :options="page.currencyFormat"
-          class="tw-w-full"
-          filled
-          stack-label
-          :data-value="property"
-          :label="String(prop).replace('_', ' ').toLocaleUpperCase('id-ID')"
-        />
-      </q-item-section>
-    </q-item>
     <q-item>
       <q-item-section>
         <q-btn color="primary" glossy label="Save as default" @click="saveSetting" />

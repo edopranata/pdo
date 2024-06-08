@@ -108,7 +108,6 @@ export const useDeliveryOrderDataStore = defineStore('deliveryOrderData', {
       return true
     },
 
-
     async getFactoryDeliveryOrderDataFromApi(path) {
       const data = {
         start_date: this.form.start_date,
@@ -121,7 +120,25 @@ export const useDeliveryOrderDataStore = defineStore('deliveryOrderData', {
       } catch (e) {
         this.setError(e)
       }
+    },
 
+    async exportDataToExcel(path){
+      const factory = this.selected_factory.name.toLowerCase().replaceAll(" ", "_").replaceAll('.', '')
+      const start = this.form.start_date.replaceAll("/", "")
+      const end = this.form.end_date.replaceAll("/", "")
+      const fileName = `${factory}_${start}_${end}.xlsx`
+
+      console.log(fileName)
+      await api.post(`${path}/${this.form.factory_id}`, {
+        file_name: fileName,
+        start_date: this.form.start_date,
+        end_date: this.form.end_date
+      }, {
+        responseType: 'blob'
+      }).then((response) => {
+        // console.log(response)
+        saveAs(response.data, fileName);
+      });
     }
   }
 })
