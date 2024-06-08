@@ -192,6 +192,7 @@ const exportExcel = async () => {
               <th class="text-right">Weight</th>
               <th class="text-right">Net Customer</th>
               <th class="text-right">Margin</th>
+              <th class="text-right">Factory Price</th>
               <th class="text-right">Gross Total</th>
               <th class="text-right">PPN (Rp)</th>
               <th class="text-right">PPh 22 (Rp)</th>
@@ -206,10 +207,11 @@ const exportExcel = async () => {
               <td class="text-right">{{ new Intl.NumberFormat('id-ID', {style: 'unit', unit: "kilogram"}).format(table.summaries.total_weight) }}</td>
               <td class="text-right">{{ new Intl.NumberFormat('id-ID', {style: 'currency', currency: "IDR", maximumFractionDigits: 2}).format(table.summaries.customer_total) }}</td>
               <td class="text-right">{{ new Intl.NumberFormat('id-ID', {style: 'currency', currency: "IDR", maximumFractionDigits: 0}).format(table.summaries.margin) }}</td>
+              <td class="text-right">{{ new Intl.NumberFormat('id-ID', {style: 'currency', currency: "IDR", maximumFractionDigits: 0}).format(table.summaries.factory_price) }}</td>
               <td class="text-right">{{ new Intl.NumberFormat('id-ID', {style: 'currency', currency: "IDR", maximumFractionDigits: 2}).format(table.summaries.gross_total) }}</td>
               <td class="text-right">{{ new Intl.NumberFormat('id-ID', {style: 'currency', currency: "IDR", maximumFractionDigits: 2}).format(table.summaries.ppn_total) }}</td>
               <td class="text-right">{{ new Intl.NumberFormat('id-ID', {style: 'currency', currency: "IDR", maximumFractionDigits: 2}).format(table.summaries.pph22_total) }}</td>
-              <td class="text-right">{{ new Intl.NumberFormat('id-ID', {style: 'currency', currency: "IDR", maximumFractionDigits: 2}).format(table.summaries.margin_income) }}</td>
+              <td class="text-right">{{ new Intl.NumberFormat('id-ID', {style: 'currency', currency: "IDR", maximumFractionDigits: 2}).format(table.summaries.total) }}</td>
             </tr>
             <tr v-for="(item, index) in table.data" :key="item.id">
               <td class="text-left">{{ index + 1 }}</td>
@@ -219,10 +221,11 @@ const exportExcel = async () => {
               <td class="text-right">{{ new Intl.NumberFormat('id-ID', {style: 'unit', unit: "kilogram"}).format(item.net_weight) }}</td>
               <td class="text-right">{{ new Intl.NumberFormat('id-ID', {style: 'currency', currency: "IDR", maximumFractionDigits: 2}).format(item.customer_total) }}</td>
               <td class="text-right">{{ new Intl.NumberFormat('id-ID', {style: 'currency', currency: "IDR", maximumFractionDigits: 0}).format(item.margin) }}</td>
+              <td class="text-right">{{ new Intl.NumberFormat('id-ID', {style: 'currency', currency: "IDR", maximumFractionDigits: 0}).format(item.net_price) }}</td>
               <td class="text-right">{{ new Intl.NumberFormat('id-ID', {style: 'currency', currency: "IDR", maximumFractionDigits: 2}).format(item.gross_total) }}</td>
               <td class="text-right">{{ new Intl.NumberFormat('id-ID', {style: 'currency', currency: "IDR", maximumFractionDigits: 2}).format(item.ppn_total) }}</td>
               <td class="text-right">{{ new Intl.NumberFormat('id-ID', {style: 'currency', currency: "IDR", maximumFractionDigits: 2}).format(item.pph22_total) }}</td>
-              <td class="text-right">{{ new Intl.NumberFormat('id-ID', {style: 'currency', currency: "IDR", maximumFractionDigits: 2}).format(parseFloat(item.gross_total) - parseFloat(item.customer_total)) }}</td>
+              <td class="text-right">{{ new Intl.NumberFormat('id-ID', {style: 'currency', currency: "IDR", maximumFractionDigits: 2}).format((parseFloat(item.gross_total) + parseFloat(item.ppn_total)) - parseFloat(item.pph22_total)) }}</td>
             </tr>
 
             </tbody>
