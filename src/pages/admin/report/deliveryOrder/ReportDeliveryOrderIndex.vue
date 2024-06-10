@@ -48,8 +48,8 @@ const onSubmit = async () => {
 
 const exportExcel = async () => {
   $q.dialog({
-    title: 'Simpan pengaturan',
-    message: 'Anda yakin akan merubah pengaturan default?',
+    title: 'Export Data',
+    message: 'Export dan download data pada periode terpilih?',
     cancel: true,
     persistent: true
   }).onOk( async () => {

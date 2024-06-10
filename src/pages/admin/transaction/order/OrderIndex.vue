@@ -12,6 +12,7 @@ import NewCustomer from "pages/admin/transaction/order/NewCustomer.vue";
 const page = usePageStore()
 const {path} = useRoute()
 const {can} = useAuthStore()
+const {role} = storeToRefs(useAuthStore())
 const {form, table, dialog} = useOrderStore()
 const deliveries = useOrderStore()
 const {
@@ -376,7 +377,7 @@ const onUpdate = () => {
             />
           </div>
           <!-- PPN -->
-          <div class="tw-grid lg:tw-gap-4 tw-gap-2 lg:tw-grid-cols-5 md:tw-grid-cols-4 tw-grid-cols-3">
+          <div v-if="role !== 'cashier'" class="tw-grid lg:tw-gap-4 tw-gap-2 lg:tw-grid-cols-5 md:tw-grid-cols-4 tw-grid-cols-3">
             <q-field
               :dense="$q.screen.lt.md"
               bg-color="blue-grey"
@@ -392,19 +393,6 @@ const onUpdate = () => {
                 </div>
               </template>
             </q-field>
-<!--            <q-number-->
-<!--              v-model="form.ppn_tax"-->
-<!--              :bg-color="!!form.id ? 'yellow-2' : ''"-->
-<!--              :dense="$q.screen.lt.md"-->
-<!--              :error="errors.hasOwnProperty('ppn_tax')"-->
-<!--              :error-message="errors.ppn_tax"-->
-<!--              :options="page.percentFormat"-->
-<!--              class="tw-w-full"-->
-<!--              filled-->
-<!--              label="PPN (%)"-->
-<!--            />-->
-
-
             <q-field
               :dense="$q.screen.lt.md"
               bg-color="blue-grey"
@@ -423,7 +411,7 @@ const onUpdate = () => {
           </div>
 
           <!-- PPH 22 -->
-          <div class="tw-grid lg:tw-gap-4 tw-gap-2 lg:tw-grid-cols-5 md:tw-grid-cols-4 tw-grid-cols-3">
+          <div v-if="role !== 'cashier'" class="tw-grid lg:tw-gap-4 tw-gap-2 lg:tw-grid-cols-5 md:tw-grid-cols-4 tw-grid-cols-3">
             <q-field
               hint=""
               :dense="$q.screen.lt.md"
@@ -467,7 +455,7 @@ const onUpdate = () => {
             </q-field>
           </div>
 
-          <div class="tw-grid lg:tw-gap-4 tw-gap-2 lg:tw-grid-cols-5 md:tw-grid-cols-4 tw-grid-cols-3">
+          <div v-if="role !== 'cashier'" class="tw-grid lg:tw-gap-4 tw-gap-2 lg:tw-grid-cols-5 md:tw-grid-cols-4 tw-grid-cols-3">
             <q-field
               :dense="$q.screen.lt.md"
               :error="errors.hasOwnProperty('net_price')"
@@ -503,7 +491,7 @@ const onUpdate = () => {
             </q-field>
           </div>
 
-          <div class="tw-grid lg:tw-gap-4 tw-gap-2 lg:tw-grid-cols-5 md:tw-grid-cols-4 tw-grid-cols-3">
+          <div v-if="role !== 'cashier'" class="tw-grid lg:tw-gap-4 tw-gap-2 lg:tw-grid-cols-5 md:tw-grid-cols-4 tw-grid-cols-3">
             <q-field
               :dense="$q.screen.lt.md"
               bg-color="blue-grey"
@@ -686,7 +674,7 @@ const onUpdate = () => {
         ref="tableRef"
         v-model:pagination="table.pagination"
         v-model:selected="table.selected"
-        :columns="table.headers ?? []"
+        :columns="role === 'cashier' ? table.header_cashier : table.headers"
         :dense="$q.screen.lt.md"
         :filter="table.filter"
         :loading="table.loading"
@@ -728,6 +716,18 @@ const onUpdate = () => {
         </template>
 
         <template v-slot:body-cell-net_price="props">
+          <q-td :props="props" class="tw-max-w-44">
+            {{
+              Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+              }).format(props.value)
+            }}
+          </q-td>
+        </template>
+
+        <template v-slot:body-cell-customer_price="props">
           <q-td :props="props" class="tw-max-w-44">
             {{
               Intl.NumberFormat('id-ID', {

@@ -15,6 +15,9 @@ export const useAuthStore = defineStore('auth', {
     authenticated() {
       return !!this.token
     },
+    role(state){
+      return state.user.roles[0].toLowerCase()
+    }
   },
 
   actions: {
