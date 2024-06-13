@@ -16,7 +16,7 @@ defineProps({
     <span class="tw-px-4 tw-border-gray-800 tw-border-x"></span>
   </div>
 
-  <div class="tw-grid tw-grid-cols-5">
+  <div class="tw-grid tw-grid-cols-5" v-if="loan.credit || loan.debit">
     <span class="tw-px-4 tw-border-gray-800 tw-border-l tw-col-span-2">Pinjaman terakhir:</span>
     <span class="tw-px-4 tw-border-gray-800 tw-border-l"></span>
     <span class="tw-px-4 tw-border-gray-800 tw-border-l"></span>

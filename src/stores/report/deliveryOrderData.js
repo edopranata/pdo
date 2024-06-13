@@ -128,7 +128,6 @@ export const useDeliveryOrderDataStore = defineStore('deliveryOrderData', {
       const end = this.form.end_date.replaceAll("/", "")
       const fileName = `${factory}_${start}_${end}.xlsx`
 
-      console.log(fileName)
       await api.post(`${path}/${this.form.factory_id}`, {
         file_name: fileName,
         start_date: this.form.start_date,

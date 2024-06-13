@@ -83,6 +83,37 @@ export default [
           },
         ]
       },
+      {
+        path: 'customerReport',
+        name: 'admin.report.customerReport',
+        redirect: {name: 'admin.report.customerReport.index'},
+        children: [
+          {
+            path: '',
+            name: 'admin.report.customerReport.index',
+            component: () => import('pages/admin/report/customerReport/CustomerReportIndex.vue'),
+            meta: {
+              auth: true,
+            },
+          },
+          {
+            path: 'loanReport',
+            name: 'admin.report.customerReport.loanReport',
+            component: () => import('pages/admin/report/customerReport/LoanReport.vue'),
+            meta: {
+              auth: true,
+            },
+          },
+          {
+            path: 'orderReport',
+            name: 'admin.report.customerReport.orderReport',
+            component: () => import('pages/admin/report/customerReport/OrderReport.vue'),
+            meta: {
+              auth: true,
+            },
+          },
+        ]
+      },
 
       {
         path: 'DOReport',
