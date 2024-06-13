@@ -104,9 +104,9 @@ const exportExcel = async () => {
             <th class="text-left">{{ summaries.orders_count }} DO</th>
             <th class="text-right">{{
                 new Intl.NumberFormat('id-ID', {
-                  style: 'currency',
-                  currency: "IDR",
-                  maximumFractionDigits: 2
+                  style: 'unit',
+                  unit: "kilogram",
+                  maximumFractionDigits: 0
                 }).format(summaries.total_weight)
               }}
             </th>
@@ -144,9 +144,9 @@ const exportExcel = async () => {
             <td class="text-left">{{ item.orders_count }} DO</td>
             <td class="text-right">{{
                 new Intl.NumberFormat('id-ID', {
-                  style: 'currency',
-                  currency: "IDR",
-                  maximumFractionDigits: 2
+                  style: 'unit',
+                  unit: "kilogram",
+                  maximumFractionDigits: 0
                 }).format(item.total_weight)
               }}
             </td>
