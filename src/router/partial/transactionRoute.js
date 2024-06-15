@@ -70,6 +70,23 @@ export default [
           auth: true,
         },
       },
+
+      {
+        path: 'invoiceCanceling',
+        name: 'admin.transaction.invoiceCanceling.index',
+        component: () => import('pages/admin/transaction/invoiceCanceling/InvoiceCancelingDataIndex.vue'),
+        meta: {
+          auth: true,
+        },
+      },
+      {
+        path: 'invoiceCanceling/:id',
+        name: 'admin.transaction.invoiceCanceling.showInvoiceCanceling',
+        component: () => import('pages/admin/transaction/invoiceCanceling/InvoiceCancelingView.vue'),
+        meta: {
+          auth: true,
+        },
+      },
     ]
   },
 ]

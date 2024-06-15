@@ -3,7 +3,6 @@ import {useUsersStore} from "stores/management/user";
 import {useAuthStore} from "stores/auth";
 import {onMounted, ref, watch} from 'vue'
 import {useRoute} from "vue-router";
-import {storeToRefs} from "pinia";
 import DialogCreate from "pages/admin/management/users/Dialog/DialogCreate.vue";
 import DialogEdit from "pages/admin/management/users/Dialog/DialogEdit.vue";
 import DialogDelete from "pages/admin/management/users/Dialog/DialogDelete.vue";
@@ -12,7 +11,6 @@ import DialogChange from "pages/admin/management/users/Dialog/DialogChange.vue";
 const {table, openDialog, dialog, form} = useUsersStore()
 const users = useUsersStore()
 const {can} = useAuthStore()
-const {getSelected: selected} = storeToRefs(useUsersStore())
 const {path} = useRoute()
 const tableRef = ref()
 
@@ -48,7 +46,6 @@ watch(dialog, (newDialog) => {
   }
   if (newDialog.delete) {
     if (table.selected.length > 0) {
-      console.log(dialog.delete)
       form.delete.user_id = table.selected.map(i => i['id'])
       form.delete_data = table.selected.map(i => i['name'])
     }

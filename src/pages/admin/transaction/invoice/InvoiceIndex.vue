@@ -101,13 +101,13 @@ const formattedNUmber = (calcItem, format = 'currency') => {
 
         <template v-slot:body-cell-count="props">
           <q-td :props="props">
-            {{ `${props.row.order?.count} DO` }}
+            {{ `${props.row.orders?.count} DO` }}
           </q-td>
         </template>
 
         <template v-slot:body-cell-weight_total="props">
           <q-td :props="props">
-            {{ Intl.NumberFormat('id-ID', {style: 'unit', unit: 'kilogram'}).format(props.row.order?.weight_total) }}
+            {{ Intl.NumberFormat('id-ID', {style: 'unit', unit: 'kilogram'}).format(props.row.orders?.weight_total) }}
           </q-td>
         </template>
 
@@ -118,7 +118,7 @@ const formattedNUmber = (calcItem, format = 'currency') => {
                 style: 'currency',
                 currency: 'IDR',
                 minimumFractionDigits: 0
-              }).format(props.row.order?.customer_average_price)
+              }).format(props.row.orders?.customer_average_price)
             }}
           </q-td>
         </template>
@@ -130,7 +130,7 @@ const formattedNUmber = (calcItem, format = 'currency') => {
                 style: 'currency',
                 currency: 'IDR',
                 minimumFractionDigits: 0
-              }).format(props.row.order?.customer_total)
+              }).format(props.row.orders?.customer_total)
             }}
           </q-td>
         </template>
