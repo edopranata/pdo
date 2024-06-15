@@ -68,7 +68,15 @@ const onRequest = async (props) => {
                 Invoice Data
               </q-toolbar-title>
               <q-space></q-space>
-              <q-input filled v-model="table.search" debounce="500" label="Search" />
+              <q-input
+                class="tw-w-80"
+                debounce="500"
+                v-model="table.search"
+                placeholder="Search">
+                <template v-slot:append>
+                  <q-icon name="search" />
+                </template>
+              </q-input>
             </q-toolbar>
           </template>
 

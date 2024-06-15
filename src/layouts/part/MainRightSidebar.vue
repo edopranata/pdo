@@ -100,15 +100,5 @@ const saveSetting = async () => {
       </q-item-section>
     </q-item>
 
-    <q-separator spaced/>
-    <q-item-label header>Default Price</q-item-label>
-
-    <q-item>
-      <q-item-section>
-        <q-btn color="primary" glossy label="Save as default" @click="saveSetting" />
-      </q-item-section>
-    </q-item>
-
-
   </q-list>
 </template>

@@ -687,8 +687,6 @@ const onUpdate = () => {
       >
 
         <template v-slot:body-selection="scope">
-<!--          <q-checkbox v-model="scope.selected"-->
-<!--                      />-->
           <q-checkbox v-model="scope.selected"
                       :disable="!!scope.row.invoice_status"/>
         </template>

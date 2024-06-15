@@ -13,6 +13,7 @@ export const useInvoiceDataStore = defineStore('invoiceData', {
         rowsPerPage: 10,
         rowsNumber: 0
       },
+      search: "",
       filter: null,
       selected: ref([]),
       loading: false,
@@ -32,6 +33,9 @@ export const useInvoiceDataStore = defineStore('invoiceData', {
   }),
 
   getters: {
+    getSearch(state) {
+      return state.table.search
+    },
     getSelected(state) {
       return state.table.selected
     },
@@ -86,6 +90,7 @@ export const useInvoiceDataStore = defineStore('invoiceData', {
       const data = {
         page: startRow,
         limit: count,
+        search: this.table.search
       }
 
       // Sort by field descending or ascending

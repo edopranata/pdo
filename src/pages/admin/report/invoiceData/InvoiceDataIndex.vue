@@ -1,15 +1,15 @@
 <script setup>
 import {useInvoiceDataStore} from "stores/report/invoiceData";
-import {usePageStore} from "stores/pages";
 import {useAuthStore} from "stores/auth";
 import {useRoute, useRouter} from "vue-router";
-import {onMounted, ref} from "vue";
+import {onMounted, ref, watch} from "vue";
 import {useQuasar} from "quasar";
+import {storeToRefs} from "pinia";
 
 const $q = useQuasar()
 
 const router = useRouter()
-const page = usePageStore()
+const {getSearch: searching} = storeToRefs(useInvoiceDataStore())
 const invoice = useInvoiceDataStore()
 const {can} = useAuthStore()
 const {table} = useInvoiceDataStore()
@@ -33,6 +33,10 @@ onMounted(async () => {
   tableRef.value.requestServerInteraction()
 })
 
+watch(searching, () => {
+  table.filter = String(Date.now())
+})
+
 
 const onRequest = async (props) => {
   await invoice.getInvoiceData(path, props)
@@ -52,6 +56,7 @@ const onRequest = async (props) => {
           :grid="$q.screen.lt.md"
           :loading="table.loading"
           :rows="table.data ?? []"
+          :filter="table.filter"
           bordered
           row-key="id"
           @request="onRequest"
@@ -61,6 +66,16 @@ const onRequest = async (props) => {
               <q-toolbar-title>
                 Invoice Data
               </q-toolbar-title>
+              <q-space></q-space>
+              <q-input
+                class="tw-w-80"
+                debounce="300"
+                v-model="table.search"
+                placeholder="Search">
+                <template v-slot:append>
+                  <q-icon name="search" />
+                </template>
+              </q-input>
             </q-toolbar>
           </template>
 

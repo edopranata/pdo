@@ -126,59 +126,71 @@ const onSubmit = () => {
       </q-card-actions>
     </q-card>
   </div>
-  <div v-if="!table.loading"
-       class="tw-grid xl:tw-grid-cols-4 lg:tw-grid-cols-3 md:tw-grid-cols-2 tw-grid-cols-1 tw-gap-4">
-    <q-card>
-      <q-card-section class="row items-center">
-        <q-avatar color="primary" icon="payments" text-color="white"/>
-        <q-space></q-space>
-        <div>
-          <div class="q-ml-sm tw-text-sm text-right">{{ user.name }}</div>
-          <div class="q-ml-sm text-h5 text-right">{{
-              new Intl.NumberFormat('id-ID', {
-                style: 'currency',
-                currency: 'IDR'
-              }).format(user.hasOwnProperty('cash') ? user.cash ? user.cash?.balance : 0 : 0)
-            }}
+  <div class="tw-grid tw-gap-4">
+    <q-toolbar>
+      <q-toolbar-title>User Information</q-toolbar-title>
+    </q-toolbar>
+    <div v-if="!table.loading"
+         class="tw-grid xl:tw-grid-cols-4 lg:tw-grid-cols-3 md:tw-grid-cols-2 tw-grid-cols-1 tw-gap-4">
+      <q-card>
+        <q-card-section class="row items-center">
+          <q-avatar color="primary" icon="payments" text-color="white"/>
+          <q-space></q-space>
+          <div>
+            <div class="q-ml-sm tw-text-sm text-right">{{ user.name }}</div>
+            <div class="q-ml-sm text-h5 text-right">{{
+                new Intl.NumberFormat('id-ID', {
+                  style: 'currency',
+                  currency: 'IDR'
+                }).format(user.hasOwnProperty('cash') ? user.cash ? user.cash?.balance : 0 : 0)
+              }}
+            </div>
           </div>
-        </div>
-      </q-card-section>
-      <q-card-actions>
-        <q-chip color="secondary" icon="person" text-color="white">
-          {{ user.hasOwnProperty('username') ? user.username : '' }}
-        </q-chip>
-      </q-card-actions>
-    </q-card>
+        </q-card-section>
+        <q-card-actions>
+          <q-chip color="secondary" icon="person" text-color="white">
+            {{ user.hasOwnProperty('username') ? user.username : '' }}
+          </q-chip>
+        </q-card-actions>
+      </q-card>
+    </div>
 
-    <q-card v-for="(factory, index) in factories" :key="index">
-      <q-card-section class="row items-center">
-        <q-avatar color="primary" icon="money" text-color="white"/>
-        <q-space></q-space>
-        <div>
-          <div class="q-ml-sm tw-text-sm text-right">{{ factory.name }}</div>
-          <div class="q-ml-sm text-h5 text-right">{{
-              new Intl.NumberFormat('id-ID', {
-                style: 'currency',
-                currency: 'IDR'
-              }).format(factory.price?.hasOwnProperty('price') ? factory.price.price : 0)
-            }}
+    <q-toolbar>
+      <q-toolbar-title>Factory Price</q-toolbar-title>
+    </q-toolbar>
+    <div v-if="!table.loading"
+         class="tw-grid xl:tw-grid-cols-4 lg:tw-grid-cols-3 md:tw-grid-cols-2 tw-grid-cols-1 tw-gap-4">
+      <q-card v-for="(factory, index) in factories" :key="index">
+        <q-card-section class="row items-center">
+          <q-avatar color="primary" icon="money" text-color="white"/>
+          <q-space></q-space>
+          <div>
+            <div class="q-ml-sm tw-text-sm text-right">{{ factory.name }}</div>
+            <div class="q-ml-sm text-h5 text-right">{{
+                new Intl.NumberFormat('id-ID', {
+                  style: 'currency',
+                  currency: 'IDR'
+                }).format(factory.price?.hasOwnProperty('price') ? factory.price.price : 0)
+              }}
+            </div>
           </div>
-        </div>
-      </q-card-section>
-      <q-card-actions>
-        <q-chip color="secondary" icon="event" text-color="white">
-          {{
-            factory.price?.hasOwnProperty('date') ? date.formatDate(factory.price.date, 'DD MMMM YYYY') : date.formatDate(new Date(), 'DD MMMM YYYY')
-          }}
-        </q-chip>
-        <q-space></q-space>
-        <q-btn v-if="!factory.price?.hasOwnProperty('date') && can('admin.management.price.savePrice')" color="accent"
-               flat
-               @click="openDialog(index)">
-          Set Price
-        </q-btn>
-      </q-card-actions>
-    </q-card>
+        </q-card-section>
+        <q-card-actions>
+          <q-chip color="secondary" icon="event" text-color="white">
+            {{
+              factory.price?.hasOwnProperty('date') ? date.formatDate(factory.price.date, 'DD MMMM YYYY') : date.formatDate(new Date(), 'DD MMMM YYYY')
+            }}
+          </q-chip>
+          <q-space></q-space>
+          <q-btn v-if="!factory.price?.hasOwnProperty('date') && can('admin.management.price.savePrice')" color="accent"
+                 flat
+                 @click="openDialog(index)">
+            Set Price
+          </q-btn>
+        </q-card-actions>
+      </q-card>
+    </div>
   </div>
+
 </template>
 
