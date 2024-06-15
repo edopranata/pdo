@@ -15,19 +15,19 @@
   "dependencies": {
     "@coders-tm/vue-number-format": "^3.34.1",
     "@quasar/extras": "^1.16.11",
-    "axios": "^1.6.8",
+    "axios": "^1.7.2",
     "file-saver": "^2.0.5",
     "pinia": "^2.1.7",
-    "quasar": "^2.15.4",
-    "vue": "^3.4.25",
-    "vue-router": "^4.3.2"
+    "quasar": "^2.16.4",
+    "vue": "^3.4.29",
+    "vue-router": "^4.3.3"
   },
   "devDependencies": {
-    "@quasar/app-vite": "^1.8.4",
+    "@quasar/app-vite": "^1.9.3",
     "autoprefixer": "^10.4.19",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-vue": "^9.25.0",
+    "eslint-plugin-vue": "^9.26.0",
     "postcss": "^8.4.38",
     "prettier": "^3.2.5",
     "tailwindcss": "^3.4.3",
