@@ -2,14 +2,10 @@ import {defineStore} from 'pinia'
 import {LocalStorage, Notify} from "quasar";
 import {api} from "boot/axios";
 
-export const useDeliveryOrderDataStore = defineStore('deliveryOrderData', {
+export const useDeliveryOrderAllFactoryDataStore = defineStore('deliveryOrderAllFactoryData', {
   state: () => ({
-    factories: [],
-    factories_option: [],
-    selected_factory: null,
     request_type: 'period',
     form: {
-      factory_id: null,
       start_date: null,
       end_date: null,
       monthly: null,
@@ -24,7 +20,7 @@ export const useDeliveryOrderDataStore = defineStore('deliveryOrderData', {
 
   getters: {
     form_empty(state) {
-      return !state.form.factory_id || !state.form.start_date || !state.form.end_date
+      return !state.form.start_date || !state.form.end_date
     },
     form_monthly(state) {
       return state.form.monthly ? state.form.monthly.length === 7 : false
@@ -37,18 +33,12 @@ export const useDeliveryOrderDataStore = defineStore('deliveryOrderData', {
         for (let property in this.form) {
           this.form[property] = null
           this.errors = {}
-          if (property === 'factory_id') {
-            this.selected_factory = null
-          }
         }
         this.table.selected = []
       } else {
         this.form[name] = null
         if (this.errors.hasOwnProperty(name)) {
           this.errors[name] = ''
-        }
-        if (name === 'factory_id') {
-          this.selected_factory = null
         }
       }
     },
@@ -86,23 +76,6 @@ export const useDeliveryOrderDataStore = defineStore('deliveryOrderData', {
         })
       }
     },
-    async getFactoryFromApi(path) {
-
-      try {
-        const response = await api.get(path)
-        return response.data
-      } catch (e) {
-        this.setError(e)
-      }
-    },
-
-    async getDeliveryOrderData(path){
-      this.table.loading = true
-      const response = await this.getFactoryFromApi(path)
-      this.factories = response.factories
-      this.table.loading = false
-      return true
-    },
 
     async getDeliveryFactoryID(path) {
       this.table.loading = true
@@ -125,7 +98,7 @@ export const useDeliveryOrderDataStore = defineStore('deliveryOrderData', {
 
       const params = new URLSearchParams(data);
       try {
-        const response = await api.get(`${path}/${this.form.factory_id}`, {params})
+        const response = await api.get(`${path}`, {params})
         return response.data
       } catch (e) {
         this.setError(e)
@@ -133,7 +106,6 @@ export const useDeliveryOrderDataStore = defineStore('deliveryOrderData', {
     },
 
     async exportDataToExcel(path){
-      const factory = this.selected_factory.name.toLowerCase().replaceAll(" ", "_").replaceAll('.', '')
       const start = this.form.start_date ? this.form.start_date.replaceAll("/", "") : ""
       const end = this.form.end_date ? this.form.end_date.replaceAll("/", "") : ""
       const monthly = this.form.monthly ? this.form.monthly.replaceAll("/", "") : ""
@@ -142,15 +114,15 @@ export const useDeliveryOrderDataStore = defineStore('deliveryOrderData', {
 
       if(this.request_type === 'period') {
         delete data.monthly
-        data.file_name = `${factory}_${start}_${end}.xlsx`
+        data.file_name = `DELIVERY_ORDER_${start}_${end}.xlsx`
 
       }else{
         delete data.end_date
         delete data.start_date
-        data.file_name = `${factory}_${monthly}.xlsx`
+        data.file_name = `DELIVERY_ORDER_${monthly}.xlsx`
       }
 
-      await api.post(`${path}/${this.form.factory_id}`, data, {
+      await api.post(`${path}`, data, {
         responseType: 'blob'
       }).then((response) => {
         saveAs(response.data, data.file_name);

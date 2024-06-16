@@ -131,6 +131,56 @@ export default [
           auth: true,
         },
       },
+      {
+        path: 'orderReport',
+        name: 'admin.report.orderReport',
+        redirect: {name: 'admin.report.orderReport.index'},
+        children: [
+          {
+            path: '',
+            name: 'admin.report.orderReport.index',
+            component: () => import('pages/admin/report/orderReport/OrderReportIndex.vue'),
+            meta: {
+              auth: true,
+            },
+          },
+          {
+            path: 'factory',
+            name: 'admin.report.orderReport.factoryReport',
+            component: () => import('pages/admin/report/orderReport/FactoryOrderReportIndex.vue'),
+            meta: {
+              auth: true,
+            },
+          },
+          {
+            path: 'monthlyFactory',
+            name: 'admin.report.orderReport.monthlyFactoryReport',
+            component: () => import('pages/admin/report/orderReport/FactoryOrderMonthlyReportIndex.vue'),
+            meta: {
+              auth: true,
+            },
+          },
+
+
+          {
+            path: 'allFactory',
+            name: 'admin.report.orderReport.allFactoryReportShow',
+            component: () => import('pages/admin/report/orderReport/AllFactoryOrderReportIndex.vue'),
+            meta: {
+              auth: true,
+            },
+          },
+          {
+            path: 'monthlyAllFactory',
+            name: 'admin.report.orderReport.monthlyAllFactoryReportShow',
+            component: () => import('pages/admin/report/orderReport/AllFactoryOrderMonthlyReportIndex.vue'),
+            meta: {
+              auth: true,
+            },
+          },
+        ]
+      },
+
     ]
   },
 ]
