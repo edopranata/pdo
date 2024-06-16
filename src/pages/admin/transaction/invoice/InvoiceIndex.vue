@@ -2,7 +2,7 @@
 import {useInvoiceStore} from "stores/transaction/invoice";
 import {useAuthStore} from "stores/auth";
 import {useRoute} from "vue-router";
-import {onMounted, reactive, ref} from "vue";
+import {onBeforeMount, onMounted, reactive, ref} from "vue";
 import {useQuasar} from "quasar";
 
 const {path} = useRoute()
@@ -20,6 +20,12 @@ const calc = reactive({
   customer_price: {type: Number, default: 0},
   customer_total_price: {type: Number, default: 0},
 })
+onBeforeMount(() => {
+  table.filter = ''
+  table.search = ''
+  table.data = []
+})
+
 onMounted(async () => {
   deliveries.onReset()
   tableRef.value.requestServerInteraction()
@@ -44,17 +50,17 @@ const formattedNUmber = (calcItem, format = 'currency') => {
   <q-page class="tw-space-y-4" padding>
     <q-card>
       <q-table
-          ref="tableRef"
-          v-model:pagination="table.pagination"
-          :columns="table.headers ?? []"
-          :dense="$q.screen.lt.md"
-          :filter="table.filter"
-          :loading="table.loading"
-          :rows="table.data ?? []"
-          binary-state-sort
-          bordered
-          row-key="id"
-          @request="onRequest"
+        ref="tableRef"
+        v-model:pagination="table.pagination"
+        :columns="table.headers ?? []"
+        :dense="$q.screen.lt.md"
+        :filter="table.filter"
+        :loading="table.loading"
+        :rows="table.data ?? []"
+        binary-state-sort
+        bordered
+        row-key="id"
+        @request="onRequest"
       >
 
         <template v-slot:body-selection="scope">
@@ -71,17 +77,19 @@ const formattedNUmber = (calcItem, format = 'currency') => {
           <q-td :props="props">
             <q-btn
               :dense="$q.screen.lt.lg"
+              :disable="!can('admin.transaction.invoice.showInvoice')"
               :label="!$q.screen.lt.md ? 'Buat Invoice' : ''"
               :loading="table.loading"
               :round="$q.screen.lt.md"
-              :disable="!can('admin.transaction.invoice.showInvoice')"
+              :to="{name: 'admin.transaction.invoice.showInvoice', params: {id: props.value}}"
               glossy
               icon="print"
               size="sm"
-              :to="{name: 'admin.transaction.invoice.showInvoice', params: {id: props.value}}"
             >
               <q-tooltip>
-                {{ can('admin.transaction.invoice.showInvoice') ? 'Create invoice' : 'User is not authorized to create invoice' }}
+                {{
+                  can('admin.transaction.invoice.showInvoice') ? 'Create invoice' : 'User is not authorized to create invoice'
+                }}
               </q-tooltip>
             </q-btn>
           </q-td>

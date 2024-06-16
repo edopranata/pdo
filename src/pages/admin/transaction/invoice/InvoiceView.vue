@@ -77,7 +77,8 @@ const onRequest = async (props) => {
             </div>
           </div>
         </q-card-section>
-        <q-checkbox v-if="can('admin.transaction.invoice.print')" v-model="dialog.print" :val="dialog.print" label="Simpan dan print" size="lg"/>
+        <q-checkbox v-if="can('admin.transaction.invoice.print')" v-model="dialog.print" :val="dialog.print"
+                    label="Simpan dan print" size="lg"/>
         <q-card-actions>
           <q-btn
             v-close-popup
@@ -105,7 +106,7 @@ const onRequest = async (props) => {
         @reset="onReset"
         @submit="dialog.open = true"
       >
-        <q-card-section class="tw-space-y-4" v-if="can('admin.transaction.invoice.createInvoice')">
+        <q-card-section v-if="can('admin.transaction.invoice.createInvoice')" class="tw-space-y-4">
           <div class="md:tw-grid md:tw-grid-cols-3 md:tw-gap-4">
             <div class="lg:tw-col-span-1 tw-col-span-2">
               <q-field
@@ -128,24 +129,15 @@ const onRequest = async (props) => {
                 :error="errors.hasOwnProperty('trade_date')"
                 :error-message="errors.trade_date"
                 :stack-label="!!form.trade_date"
+                bg-color="blue-grey"
                 class="tw-w-full"
+                color="blue-grey-2"
                 filled
                 label="Invoice Date">
                 <template v-slot:control>
                   <div class="self-center full-width no-outline" tabindex="0">
                     {{ date.formatDate(form.trade_date, 'DD MMMM YYYY') }}
                   </div>
-                </template>
-                <template v-slot:append>
-                  <q-icon class="cursor-pointer" name="calendar_month" tabindex="0">
-                    <q-popup-proxy cover transition-hide="scale" transition-show="scale">
-                      <q-date v-model="form.trade_date">
-                        <div class="row items-center justify-end">
-                          <q-btn v-close-popup color="primary" flat label="Close"/>
-                        </div>
-                      </q-date>
-                    </q-popup-proxy>
-                  </q-icon>
                 </template>
               </q-field>
               <div class="tw-grid tw-grid-cols-2 tw-gap-x-4">
@@ -285,10 +277,10 @@ const onRequest = async (props) => {
               </q-field>
               <q-field
                 :dense="$q.screen.lt.md"
-                bg-color="blue-grey"
-                color="blue-grey-2"
                 :error="errors.hasOwnProperty('total')"
                 :error-message="errors.total"
+                bg-color="blue-grey"
+                color="blue-grey-2"
                 filled
                 hint=""
                 label="Yang diterima petani (Rp)"

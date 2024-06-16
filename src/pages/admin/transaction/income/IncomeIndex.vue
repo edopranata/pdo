@@ -120,6 +120,7 @@ const onReset = () => {
           <div class="md:tw-grid md:tw-grid-cols-3 md:tw-gap-4">
             <div class="lg:tw-col-span-1 tw-col-span-2">
               <q-select
+                :disable="table.loading"
                 v-model="income.selected_factory"
                 :bg-color="!!form.id ? 'yellow-2' : ''"
                 :dense="$q.screen.lt.md"

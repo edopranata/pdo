@@ -120,6 +120,7 @@ const onEdit = () => {
                   v-model="form.name"
                   :bg-color="!!form.id ? 'yellow-2' : ''"
                   :dense="$q.screen.lt.md"
+                  :disable="table.loading"
                   :error="errors.hasOwnProperty('name')"
                   :error-message="errors.name"
                   :rules="[ val => val && val.length > 4 || 'Customer name must be greater than 3 characters.']"
@@ -130,6 +131,7 @@ const onEdit = () => {
                   v-model="form.phone"
                   :bg-color="!!form.id ? 'yellow-2' : ''"
                   :dense="$q.screen.lt.md"
+                  :disable="table.loading"
                   :error="errors.hasOwnProperty('phone')"
                   :error-message="errors.phone"
                   :rules="[ val => val && val.length <= 20 || 'Phone number must be lower than 20 characters.']"
@@ -142,15 +144,17 @@ const onEdit = () => {
                   v-model="form.loan"
                   :bg-color="!!form.id ? 'yellow-2' : ''"
                   :dense="$q.screen.lt.md"
+                  :disable="table.loading"
                   :options="page.currencyFormat"
-                  hint=""
                   filled
+                  hint=""
                   label="First Loan"
                 />
                 <q-input
                   v-model="form.address"
                   :bg-color="!!form.id ? 'yellow-2' : ''"
                   :dense="$q.screen.lt.md"
+                  :disable="table.loading"
                   filled
                   label="Address"
                   type="textarea"
@@ -164,6 +168,7 @@ const onEdit = () => {
           <q-btn
             v-if="can('admin.masterData.customer.[createCustomer,updateCustomer,deleteCustomer]')"
             :dense="$q.screen.lt.md"
+            :disable="table.loading"
             :label="!$q.screen.lt.md ? 'Batalkan' : ''"
             :loading="table.loading"
             :round="$q.screen.lt.md"
@@ -173,6 +178,7 @@ const onEdit = () => {
           <q-btn
             v-if="can('admin.masterData.customer.createCustomer')"
             :dense="$q.screen.lt.md"
+            :disable="table.loading"
             :label="!$q.screen.lt.md ? form.id ? 'Update' : 'Save' : ''"
             :loading="table.loading"
             :round="$q.screen.lt.md"
@@ -267,10 +273,12 @@ const onEdit = () => {
         </template>
         <template v-slot:body-cell-loan="props">
           <q-td :props="props">
-            {{ new Intl.NumberFormat('id-ID', {
-            style: 'currency',
-            currency: 'IDR'
-          }).format(props.value ?? 0) }}
+            {{
+              new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR'
+              }).format(props.value ?? 0)
+            }}
           </q-td>
         </template>
       </q-table>

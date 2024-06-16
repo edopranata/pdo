@@ -3,7 +3,7 @@ import {useOrderStore} from "stores/transaction/order";
 import {useAuthStore} from "stores/auth";
 import {usePageStore} from "stores/pages";
 import {useRoute} from "vue-router";
-import {onMounted, ref, watch} from "vue";
+import {onBeforeMount, onMounted, ref, watch} from "vue";
 import {storeToRefs} from "pinia";
 import {date, useQuasar} from "quasar";
 import QNumber from "components/Input/QNumber.vue";
@@ -32,10 +32,15 @@ const $q = useQuasar()
 const onRequest = async (props) => {
   await deliveries.getDeliveriesData(path, props)
 }
+onBeforeMount(() => {
+  table.filter = ''
+  table.search.customer_id = ''
+  table.search.factory_id = ''
+  table.data = []
+})
 
 onMounted(async () => {
   deliveries.onReset()
-
   tableRef.value.requestServerInteraction()
   await deliveries.getCustomerAndFactoryData(path)
 })
@@ -205,6 +210,7 @@ const onUpdate = () => {
           <div :class="$q.screen.lt.md ? 'tw-font-bold' : 'text-h6'" class="q-mt-sm q-mb-xs">Delivery Order</div>
           <div class="tw-grid lg:tw-gap-4 tw-gap-2 lg:tw-grid-cols-5 md:tw-grid-cols-4 tw-grid-cols-2">
             <q-select
+              :disable="table.loading"
               v-model="deliveries.selected_factory"
               :bg-color="!!form.id ? 'yellow-2' : ''"
               :dense="$q.screen.lt.md"
@@ -242,6 +248,7 @@ const onUpdate = () => {
             </q-select>
 
             <q-field
+              :disable="table.loading"
               :bg-color="!!form.id ? 'yellow-2' : ''"
               :dense="$q.screen.lt.md"
               :error="errors.hasOwnProperty('trade_date')"
@@ -256,7 +263,8 @@ const onUpdate = () => {
                 </div>
               </template>
               <template v-slot:append>
-                <q-icon class="cursor-pointer" name="event" tabindex="0">
+                <q-icon
+                  :disable="table.loading" class="cursor-pointer" name="event" tabindex="0">
                   <q-popup-proxy cover transition-hide="scale" transition-show="scale">
                     <q-date
                       v-model="form.trade_date"
@@ -279,6 +287,7 @@ const onUpdate = () => {
           <div :class="$q.screen.lt.md ? 'tw-font-bold' : 'text-h6'" class="q-mt-sm q-mb-xs">Customer</div>
           <div class="tw-grid lg:tw-gap-4 tw-gap-2 lg:tw-grid-cols-5 md:tw-grid-cols-4 tw-grid-cols-2">
             <q-select
+              :disable="table.loading"
               class="lg:tw-grid-cols-3 md:tw-col-span-2 tw-col-span-2"
               v-model="deliveries.selected_customer"
               :bg-color="!!form.id ? 'yellow-2' : ''"
@@ -319,6 +328,7 @@ const onUpdate = () => {
               </template>
               <template v-slot:after v-if="can('admin.masterData.customer.createCustomer')">
                 <q-btn
+                  :disable="table.loading"
                   round
                   dense
                   flat
@@ -353,6 +363,7 @@ const onUpdate = () => {
           </div>
           <div class="tw-grid lg:tw-gap-4 tw-gap-2 lg:tw-grid-cols-5 md:tw-grid-cols-4 tw-grid-cols-3">
             <q-number
+              :disable="table.loading"
               v-model="form.net_weight"
               :bg-color="!!form.id ? 'yellow-2' : ''"
               :dense="$q.screen.lt.md"
@@ -365,6 +376,8 @@ const onUpdate = () => {
             />
 
             <q-number
+
+              :disable="table.loading"
               v-model="form.customer_price"
               :bg-color="!!form.id ? 'yellow-2' : ''"
               :dense="$q.screen.lt.md"
