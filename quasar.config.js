@@ -23,6 +23,7 @@ module.exports = configure(function (/* ctx */) {
       'attempt',
       'qnumber',
       'axios',
+      'apexchart',
     ],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css

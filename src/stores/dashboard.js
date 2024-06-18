@@ -14,7 +14,16 @@ export const useDashboardStore = defineStore('dashboard', {
       price: null
     },
     user: {},
-    factories: {},
+    factories: [],
+    best_customers: {
+      options: {},
+      series: []
+    },
+    annual_factory_chart:{
+      options: {},
+      series: []
+
+    },
     errors: {},
     table: {
       loading: false
@@ -63,27 +72,40 @@ export const useDashboardStore = defineStore('dashboard', {
         })
       }
     },
-    async getUserFactoryInfoFromApi(path) {
+    async getUserFactoryInfoFromApi(path, type) {
 
+      const data = {
+        type: type
+      }
       try {
-        const response = await api.post(path)
+        const response = await api.post(path, data )
         return response.data
       } catch (e) {
         this.setError(e)
       }
     },
 
-    async getUserFactoryInfo(path) {
+    async getUserFactoryInfo(path, type) {
 
       this.table.loading = true
 
       // fetch data from "server"
-      const returnedData = await this.getUserFactoryInfoFromApi(path)
+      const returnedData = await this.getUserFactoryInfoFromApi(path, type)
 
-      this.factories = returnedData.factories
+      if(returnedData.hasOwnProperty('factories')) {
+        this.factories = returnedData.factories
+      }
 
-      this.user = returnedData.user
+      if(returnedData.hasOwnProperty('user')) {
+        this.user = returnedData.user
+      }
+      if(returnedData.hasOwnProperty('annual_factory_chart')) {
+        this.annual_factory_chart = returnedData.annual_factory_chart
+      }
 
+      if(returnedData.hasOwnProperty('best_customers')) {
+        this.best_customers = returnedData.best_customers
+      }
       this.table.loading = false
       return true
     },
