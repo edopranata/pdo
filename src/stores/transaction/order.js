@@ -280,6 +280,7 @@ export const useOrderStore = defineStore('order', {
         this.table.selected = []
         this.onReset()
         Notify.create({
+          progress: true,
           timeout: 1000,
           position: "top",
           type: 'positive',
