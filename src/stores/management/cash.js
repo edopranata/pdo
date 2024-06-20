@@ -2,6 +2,9 @@ import {defineStore} from 'pinia'
 import {reactive} from "vue";
 import {LocalStorage, Notify} from "quasar";
 import {api} from "boot/axios";
+import {useDashboardStore} from "stores/dashboard";
+
+const dashboard = useDashboardStore()
 export const useCashStore = defineStore('cash', {
   state: () => ({
     form:{
@@ -59,7 +62,7 @@ export const useCashStore = defineStore('cash', {
   },
 
   actions: {
-    onReset(form = null) {
+    async onReset(form = null) {
       if(form === null){
         for (let property in this.form) {
           this.form[property] = '';
@@ -67,7 +70,10 @@ export const useCashStore = defineStore('cash', {
 
         this.errors = {}
         this.table.selected = []
+
+        await dashboard.getUserFactoryInfo('/admin', 'user')
       }
+
     },
 
     setError(e) {

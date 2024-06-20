@@ -2,7 +2,9 @@ import {defineStore} from 'pinia'
 import {reactive} from "vue";
 import {LocalStorage, Notify} from "quasar";
 import {api} from "boot/axios";
+import {useDashboardStore} from "stores/dashboard";
 
+const dashboard = useDashboardStore()
 export const useLoanStore = defineStore('loan', {
   state: () => ({
     form:{
@@ -67,7 +69,7 @@ export const useLoanStore = defineStore('loan', {
   },
 
   actions: {
-    onReset(form = null) {
+    async onReset(form = null) {
       if(form === null){
         for (let property in this.form) {
           this.form[property] = '';
@@ -75,7 +77,11 @@ export const useLoanStore = defineStore('loan', {
 
         this.errors = {}
         this.table.selected = []
+
+        await dashboard.getUserFactoryInfo('/admin', 'user')
       }
+
+
     },
 
     setError(e) {

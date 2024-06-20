@@ -4,11 +4,16 @@ import {onBeforeMount} from "vue";
 import {storeToRefs} from "pinia";
 import {LocalStorage} from "quasar";
 import {useRoute} from "vue-router";
+import {useDashboardStore} from "stores/dashboard";
+import {useAuthStore} from "stores/auth";
 
+const {role} = storeToRefs(useAuthStore())
 const {name: currentName} = useRoute()
 const {menus, setActive} = usePageStore()
 const page = usePageStore()
 const {activeMenu} = storeToRefs(usePageStore())
+const {user} = storeToRefs(useDashboardStore())
+const {table} = useDashboardStore()
 
 onBeforeMount(async () => {
   let current = currentName.split('.')
@@ -25,9 +30,7 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-
-  <q-card flat square>
-    <q-img alt="Img" src="/img/sawit.jpeg"/>
+  <q-scroll-area style="height: calc(100% - 150px); margin-top: 200px; border-right: 1px solid #ddd">
     <q-list bordered class="rounded-borders">
       <q-item
         v-ripple
@@ -71,6 +74,42 @@ onBeforeMount(async () => {
         </q-expansion-item>
       </template>
     </q-list>
-  </q-card>
+  </q-scroll-area>
 
+  <q-img class="absolute-top" src="/img/sawit.jpeg" style="height: 200px">
+
+    <q-list class="absolute-bottom">
+      <q-item class="no-padding" v-if="table.loading">
+        <q-item-section side>
+          <q-skeleton type="QAvatar" size="48px" />
+        </q-item-section>
+        <q-item-section>
+          <q-skeleton type="rect" />
+          <q-skeleton type="text" />
+        </q-item-section>
+        <q-item-section v-if="role === 'cashier'">
+          <q-skeleton type="text" width="60px" />
+        </q-item-section>
+      </q-item>
+      <q-item class="no-padding" v-if="!table.loading">
+        <q-item-section side>
+          <q-avatar rounded size="48px">
+            <q-img :src="user.photo"/>
+          </q-avatar>
+        </q-item-section>
+        <q-item-section>
+          <q-item-label>{{ user.name }}</q-item-label>
+          <q-item-label caption class="text-white">{{ user.username }}</q-item-label>
+        </q-item-section>
+        <q-item-section side class="text-white" v-if="role === 'cashier'">
+          {{
+            new Intl.NumberFormat('id-ID', {
+              style: 'currency',
+              currency: 'IDR'
+            }).format(user.hasOwnProperty('cash') ? user.cash ? user.cash?.balance : 0 : 0)
+          }}
+        </q-item-section>
+      </q-item>
+    </q-list>
+  </q-img>
 </template>

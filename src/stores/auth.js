@@ -16,7 +16,7 @@ export const useAuthStore = defineStore('auth', {
       return !!this.token
     },
     role(state){
-      return state.user.roles[0].toLowerCase()
+      return state.user ? state.user.roles[0].toLowerCase() : null
     }
   },
 
@@ -103,7 +103,7 @@ export const useAuthStore = defineStore('auth', {
       // set user to pinia and local storage
       // LocalStorage.set('user', user)
       this.user = null
-
+      this.token = null
       // set permissions to pinia and local storage
       // LocalStorage.set('permissions', permissions)
       this.permissions = null
@@ -112,6 +112,7 @@ export const useAuthStore = defineStore('auth', {
       // LocalStorage.set('menu', menu)
       usePage.menus = null
       usePage.setting = {}
+
 
     },
     async attempt(token) {

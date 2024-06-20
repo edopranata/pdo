@@ -4,7 +4,7 @@
       <MainHeader/>
     </q-header>
 
-    <q-drawer v-if="!print" v-model="leftDrawer" bordered class="print-hide" side="left">
+    <q-drawer v-if="!print" v-model="leftDrawer" bordered class="print-hide" side="left" :breakpoint="400">
       <MainLeftSidebar/>
     </q-drawer>
 
@@ -33,7 +33,13 @@ import {storeToRefs} from "pinia";
 import MainHeader from "layouts/part/MainHeader.vue";
 import MainLeftSidebar from "layouts/part/MainLeftSidebar.vue";
 import MainRightSidebar from "layouts/part/MainRightSidebar.vue";
+import {useDashboardStore} from "stores/dashboard";
+import {onMounted} from "vue";
 
 const {leftDrawer, rightDrawer, print} = storeToRefs(usePageStore())
+const dashboard = useDashboardStore()
 
+onMounted( async () => {
+  await dashboard.getUserFactoryInfo('/admin', 'user')
+})
 </script>

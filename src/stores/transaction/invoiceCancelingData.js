@@ -2,7 +2,9 @@ import {defineStore} from 'pinia'
 import {reactive, ref} from "vue";
 import {LocalStorage, Notify} from "quasar";
 import {api} from "boot/axios";
+import {useDashboardStore} from "stores/dashboard";
 
+const dashboard = useDashboardStore()
 export const useInvoiceCancelingDataStore = defineStore('invoiceCancelingData', {
   state: () => ({
     form:{
@@ -176,8 +178,11 @@ export const useInvoiceCancelingDataStore = defineStore('invoiceCancelingData', 
         method: 'delete',
         url: path,
         data: params
-      }).then(() => {
+      }).then(async () => {
         this.table.search = ""
+
+        await dashboard.getUserFactoryInfo('/admin', 'user')
+
         this.router.replace({name: 'admin.transaction.invoiceCanceling.index'})
         Notify.create({
           position: "top",

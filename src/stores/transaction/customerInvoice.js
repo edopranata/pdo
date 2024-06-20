@@ -3,6 +3,9 @@ import {reactive} from "vue";
 import {api} from "boot/axios";
 import {LocalStorage, Notify} from "quasar";
 import { date } from 'quasar'
+import {useDashboardStore} from "stores/dashboard";
+
+const dashboard = useDashboardStore()
 
 export const useCustomerInvoiceStore = defineStore('customerInvoice', {
   state: () => ({
@@ -212,13 +215,16 @@ export const useCustomerInvoiceStore = defineStore('customerInvoice', {
         method: 'post',
         url: path,
         data: params
-      }).then((response) => {
+      }).then(async (response) => {
         this.table.selected = []
         Notify.create({
           position: "top",
           type: 'positive',
           message: 'Data transaksi berhasil disimpan'
         })
+
+        await dashboard.getUserFactoryInfo('/admin', 'user')
+
         const id = response.data.data?.id
         if (this.dialog.print && id) {
           this.router.replace({

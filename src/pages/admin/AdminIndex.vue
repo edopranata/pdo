@@ -28,9 +28,9 @@ onMounted(async () => {
 <template>
   <q-page class="" padding>
     <div class="tw-grid tw-gap-4">
-      <UserInformationWidget :loading="table.loading" :user="dashboard.user"/>
+<!--      <UserInformationWidget :loading="table.loading" :user="dashboard.user"/>-->
 
-      <q-separator/>
+<!--      <q-separator/>-->
       <FactoriesPriceWidget :factories="dashboard.factories" :loading="table.loading"/>
     </div>
     <div v-if="role !== 'cashier'" class="tw-grid tw-gap-4 tw-mt-4">

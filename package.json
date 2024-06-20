@@ -41,6 +41,6 @@
     "yarn": ">= 1.21.1"
   },
   "resolutions": {
-    "string-width": "5.1.2"
+    "string-width": "4.2.3"
   }
 }
