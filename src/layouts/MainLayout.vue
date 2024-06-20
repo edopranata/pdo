@@ -1,10 +1,10 @@
 <template>
-  <q-layout view="hHh LpR lfr">
+  <q-layout view="lHh Lpr lff" class="full-height">
     <q-header v-if="!print" class="bg-primary text-white print-hide" elevated height-hint="98">
       <MainHeader/>
     </q-header>
 
-    <q-drawer v-if="!print" v-model="leftDrawer" bordered class="print-hide" side="left" :breakpoint="400">
+    <q-drawer v-if="!print" v-model="leftDrawer" bordered class="print-hide" side="left">
       <MainLeftSidebar/>
     </q-drawer>
 

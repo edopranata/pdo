@@ -12,7 +12,7 @@ const $q = useQuasar()
 const {table, dialog, form} = useLoanStore()
 const loan = useLoanStore()
 const {can} = useAuthStore()
-const {errors, getSearch} = storeToRefs(useLoanStore())
+const {getSearch} = storeToRefs(useLoanStore())
 const {path} = useRoute()
 
 const tableRef = ref()

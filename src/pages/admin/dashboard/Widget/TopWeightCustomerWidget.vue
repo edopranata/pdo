@@ -14,17 +14,8 @@ defineProps({
 
 <template>
     <q-card v-if="loading">
-      <q-card-section class="row items-center">
-        <q-skeleton type="QAvatar"/>
-        <q-space></q-space>
-        <div class="tw-w-[75%]">
-          <q-skeleton class="q-ml-sm tw-text-sm text-right" type="text"/>
-          <q-skeleton class="q-ml-sm text-h5 text-right" type="rect"/>
-          <q-skeleton class="q-ml-sm tw-text-sm text-right" type="text"/>
-        </div>
-      </q-card-section>
       <q-card-actions>
-        <q-skeleton type="QChip"/>
+        <q-skeleton height="350px" class="full-width" square />
       </q-card-actions>
     </q-card>
 

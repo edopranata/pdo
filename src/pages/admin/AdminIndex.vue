@@ -2,7 +2,6 @@
 import {useDashboardStore} from "stores/dashboard";
 import {onMounted} from "vue";
 import {useRoute} from "vue-router";
-import UserInformationWidget from "pages/admin/dashboard/Widget/UserInformationWidget.vue";
 import {storeToRefs} from "pinia";
 import FactoriesPriceWidget from "pages/admin/dashboard/Widget/FactoriesPriceWidget.vue";
 import TopWeightCustomerWidget from "pages/admin/dashboard/Widget/TopWeightCustomerWidget.vue";
@@ -28,9 +27,6 @@ onMounted(async () => {
 <template>
   <q-page class="" padding>
     <div class="tw-grid tw-gap-4">
-<!--      <UserInformationWidget :loading="table.loading" :user="dashboard.user"/>-->
-
-<!--      <q-separator/>-->
       <FactoriesPriceWidget :factories="dashboard.factories" :loading="table.loading"/>
     </div>
     <div v-if="role !== 'cashier'" class="tw-grid tw-gap-4 tw-mt-4">

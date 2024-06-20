@@ -30,7 +30,7 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <q-scroll-area style="height: calc(100% - 150px); margin-top: 200px; border-right: 1px solid #ddd">
+  <q-scroll-area style="height: calc(100% - 200px); margin-top: 200px;">
     <q-list bordered class="rounded-borders">
       <q-item
         v-ripple
@@ -76,7 +76,7 @@ onBeforeMount(async () => {
     </q-list>
   </q-scroll-area>
 
-  <q-img class="absolute-top" src="/img/sawit.jpeg" style="height: 200px">
+  <q-img class="absolute-top overflow-hidden" src="/img/sawit.jpeg" style="height: 200px">
 
     <q-list class="absolute-bottom">
       <q-item class="no-padding" v-if="table.loading">

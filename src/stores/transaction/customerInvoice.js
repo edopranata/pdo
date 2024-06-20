@@ -218,6 +218,7 @@ export const useCustomerInvoiceStore = defineStore('customerInvoice', {
       }).then(async (response) => {
         this.table.selected = []
         Notify.create({
+          timeout: 1000,
           position: "top",
           type: 'positive',
           message: 'Data transaksi berhasil disimpan'

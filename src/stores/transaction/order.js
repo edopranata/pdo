@@ -280,6 +280,7 @@ export const useOrderStore = defineStore('order', {
         this.table.selected = []
         this.onReset()
         Notify.create({
+          timeout: 1000,
           position: "top",
           type: 'positive',
           message: params.hasOwnProperty('id') ? 'Data transaksi DO berhasil diubah' : 'Data transaksi DO berhasil disimpan'
