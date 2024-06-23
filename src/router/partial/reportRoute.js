@@ -181,6 +181,31 @@ export default [
         ]
       },
 
+      {
+        path: 'incomeReport',
+        name: 'admin.report.incomeReport',
+        redirect: {name: 'admin.report.incomeReport.index'},
+        children: [
+          {
+            path: '',
+            name: 'admin.report.incomeReport.index',
+            component: () => import('pages/admin/report/incomeReport/IncomeReportIndex.vue'),
+            meta: {
+              auth: true,
+            },
+          },
+          {
+            path: 'monthlyAllFactoryIncome',
+            name: 'admin.report.incomeReport.monthlyAllFactoryIncomeReport',
+            component: () => import('pages/admin/report/incomeReport/AllFactoryIncomeReportIndex.vue'),
+            meta: {
+              auth: true,
+            },
+          },
+
+        ]
+      }
+
     ]
   },
 ]

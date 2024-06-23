@@ -9,7 +9,7 @@ const {can} = useAuthStore();
       <q-card>
         <q-card-section class="no-padding">
           <q-list>
-            <q-item-label header>Delivery Order Report`</q-item-label>
+            <q-item-label header>Delivery Order Report</q-item-label>
             <q-separator inset spaced/>
             <q-item clickable v-if="can('admin.report.orderReport.factoryReport')" :to="{name: 'admin.report.orderReport.factoryReport'}">
               <q-item-section>
