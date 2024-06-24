@@ -122,7 +122,7 @@ export const useDashboardStore = defineStore('dashboard', {
           message: `Harga tanggal ${params.price_date} untuk ${params.name} berhasil disimpan`
         })
         this.onReset()
-        this.getUserFactoryInfo('/admin')
+        this.getUserFactoryInfo('/admin', 'factories')
         this.dialog.open = false
       }).catch(e => {
         this.setError(e);
