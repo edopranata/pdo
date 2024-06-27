@@ -14,7 +14,14 @@ const {can} = useAuthStore();
             <q-item clickable v-if="can('admin.report.incomeReport.monthlyAllFactoryIncomeReport')" :to="{name: 'admin.report.incomeReport.monthlyAllFactoryIncomeReport'}">
               <q-item-section>
                 <q-item-label>All Factory</q-item-label>
-                <q-item-label caption lines="2">Laporan uang masuk dari pabrik</q-item-label>
+                <q-item-label caption lines="2">Laporan uang masuk dari pabrik </q-item-label>
+              </q-item-section>
+            </q-item>
+
+            <q-item clickable v-if="can('admin.report.incomeReport.detailFactoryIncome')" :to="{name: 'admin.report.incomeReport.detailFactoryIncome'}">
+              <q-item-section>
+                <q-item-label>Detail Factory Income</q-item-label>
+                <q-item-label caption lines="2">Laporan detail uang masuk dari pabrik</q-item-label>
               </q-item-section>
             </q-item>
           </q-list>

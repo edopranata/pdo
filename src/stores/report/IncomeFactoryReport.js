@@ -1,6 +1,7 @@
 import {defineStore} from 'pinia'
 import {LocalStorage, Notify} from "quasar";
 import {api} from "boot/axios";
+import {reactive} from "vue";
 
 export const useIncomeFactoryDataStore = defineStore('incomeFactoryData', {
   state: () => ({
@@ -11,9 +12,36 @@ export const useIncomeFactoryDataStore = defineStore('incomeFactoryData', {
     factories_option: [],
     selected_factory: null,
     table: {
+      pagination: {
+        sortBy: '',
+        descending: false,
+        page: 1,
+        rowsPerPage: 10,
+        rowsNumber: 0
+      },
+      search: {
+        factory_id: null,
+      },
       loading: false,
       data: [],
       summaries: {},
+      headers: reactive([
+        {name: "no", label: "No", field: "id", sortable: false, align: 'left'},
+        {name: "action", label: "Action", sortable: false, align: 'left'},
+        {name: "factory_name", label: "Factory", field: "factory", sortable: false, align: 'left'},
+        {name: "trade_date", label: "Transfer Date", field: "trade_date", sortable: true, align: 'left'},
+        {name: "period_start", label: "Start Date", field: "period_start", sortable: true, align: 'left'},
+        {name: "period_end", label: "End Date", field: "period_end", sortable: true, align: 'left'},
+        {name: "net_weight", label: "Weight", field: "orders", sortable: true},
+        {name: "net_price", label: "Price (avg)", field: "orders", sortable: true},
+        {name: "margin", label: "Margin (avg)", field: 'orders', sortable: false},
+        {name: "ppn", label: "PPN (Rp)", field: "orders", sortable: true},
+        {name: "pph22", label: "PPh 22 (Rp)", field: "orders", sortable: true},
+        {name: "gross_total", label: "Gross Total", field: "orders", sortable: true},
+        {name: "customer_total", label: "Customer Total", field: "orders", sortable: true},
+        {name: "bank_transfer", label: "Bank Transfer", field: "orders", sortable: true},
+        {name: "net_total", label: "Net Income", field: "orders", sortable: true},
+      ]),
     },
     errors: {},
   }),
@@ -77,6 +105,64 @@ export const useIncomeFactoryDataStore = defineStore('incomeFactoryData', {
       }
     },
 
+    async getDeliveriesDataFromApi(path, startRow, count, filter, sortBy, descending) {
+      const data = {
+        page: startRow,
+        limit: count,
+      }
+
+      // Sort by field descending or ascending
+      if (sortBy) {
+        const orderBy = descending ? 'desc' : 'asc'
+        data.sortBy = JSON.stringify({
+          key: sortBy,
+          order: orderBy
+        })
+      }
+      // search
+      data.factory_id = this.table.search.factory_id ?? ''
+      try {
+        const params = new URLSearchParams(data);
+        const response = await api.get(path, {params})
+        return response.data
+      } catch (e) {
+        this.setError(e)
+      }
+    },
+
+    async getDeliveriesData(path, props) {
+      const {page, rowsPerPage, sortBy, descending} = props.pagination
+      const filter = props.filter
+
+      this.table.loading = true
+
+      // emulate server
+      // update rowsCount with appropriate value
+
+      // get all rows if "All" (0) is selected
+      const fetchCount = rowsPerPage === 0 ? this.table.pagination.rowsNumber : rowsPerPage
+
+      // calculate starting row of data
+      // fetch data from "server"
+      const returnedData = await this.getDeliveriesDataFromApi(path, page, fetchCount, filter, sortBy, descending)
+
+      // clear out existing data and add new
+      this.table.data = returnedData.data
+      // update only rowsNumber = total rows
+      this.table.pagination.rowsNumber = returnedData.meta?.total ?? 0
+
+      // don't forget to update local pagination object
+      this.table.pagination.page = page
+      this.table.pagination.rowsPerPage = rowsPerPage
+      this.table.pagination.sortBy = sortBy
+      this.table.pagination.descending = descending
+
+      // ...and turn of loading indicator
+      this.table.loading = false
+      return true
+    },
+
+
     async getDeliveryFactoryID(path) {
       this.table.loading = true
       const response = await this.getFactoryDeliveryOrderDataFromApi(path)
@@ -88,7 +174,7 @@ export const useIncomeFactoryDataStore = defineStore('incomeFactoryData', {
 
     async getFactoryData(path) {
       this.table.loading = true
-      const response = await this.getFactoryData(path)
+      const response = await this.getFactoryDataFromApi(path)
       this.factories = response.factories
       this.table.loading = false
     },

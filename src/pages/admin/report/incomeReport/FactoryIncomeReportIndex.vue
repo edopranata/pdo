@@ -1,15 +1,16 @@
 <script setup>
 import {useIncomeFactoryDataStore} from "stores/report/IncomeFactoryReport";
 import {useRoute} from "vue-router";
-import {onBeforeMount, onMounted} from "vue";
+import {onBeforeMount, onMounted, ref, watch} from "vue";
 import {storeToRefs} from "pinia";
 import {useQuasar} from "quasar";
 
 const {path} = useRoute()
-const {errors, form_monthly} = storeToRefs(useIncomeFactoryDataStore())
+const {errors, form_monthly, factories_option, selected_factory} = storeToRefs(useIncomeFactoryDataStore())
 const {table, form} = useIncomeFactoryDataStore()
 const income = useIncomeFactoryDataStore();
 const $q = useQuasar()
+const tableRef = ref()
 
 onBeforeMount(() => {
   income.table.data = []
@@ -24,17 +25,54 @@ const onSubmit = async () => {
   await income.getDeliveryFactoryID(path)
 }
 
-const exportExcel = async () => {
+watch([selected_factory], ([selectedF]) => {
+
+  if (selectedF) {
+    if (selectedF.hasOwnProperty('id')) {
+      form.factory_id = selectedF.id
+      table.search.factory_id = selectedF.id
+    }
+
+  } else {
+    form.factory_id = selectedF
+    table.search.factory_id = selectedF
+
+  }
+
+  tableRef.value.requestServerInteraction()
+
+})
+
+
+const searchFactory = (val, update) => {
+  update(() => {
+    if (val === '') {
+      income.factories_option = income.factories.slice(0, 10)
+    } else {
+      const needle = val.toLowerCase()
+      income.factories_option = income.factories.filter(({name}) => name.toLowerCase().indexOf(needle) > -1).slice(0, 10)
+    }
+  })
+}
+
+const onRequest = async (props) => {
+  await income.getDeliveriesData(path, props)
+}
+
+const viewDetails = async (id) => {
+  console.log(id)
+}
+
+const exportExcel = async (id) => {
   $q.dialog({
     title: 'Export Data',
     message: 'Export dan download data pada periode terpilih?',
     cancel: true,
     persistent: true
   }).onOk(async () => {
-    await income.exportDataToExcel(path)
+    console.log(id)
   })
 }
-
 </script>
 
 <template>
@@ -42,7 +80,7 @@ const exportExcel = async () => {
     <q-card bordered>
       <q-toolbar class="text-primary">
         <q-toolbar-title>
-          Laporan bank transfer dari Semua Pabrik
+          Laporan detail bank transfer dari Pabrik
         </q-toolbar-title>
       </q-toolbar>
       <q-form
@@ -50,144 +88,207 @@ const exportExcel = async () => {
       >
         <q-card-section class="tw-space-y-4">
           <div class="md:tw-grid md:tw-grid-cols-3 md:tw-gap-4">
-            <q-input
-              v-model="form.monthly"
-              :error="errors.hasOwnProperty('monthly')"
-              :error-message="errors.monthly"
-              :loading="table.loading"
+            <q-select
+              v-model="income.selected_factory"
+              :bg-color="!!form.id ? 'yellow-2' : ''"
+              :dense="$q.screen.lt.md"
+              :disable="table.loading"
+              :error="errors.hasOwnProperty('factory_id')"
+              :error-message="errors.factory_id"
+              :options="factories_option"
+              class="tw-w-full"
+              clearable
+              fill-input
               filled
-              hint="Contoh: 2024/01"
-              label="Periode bulan"
-              mask="####/##"
-              @change="income.unsetError('monthly')"
-            />
-          </div>
-          <div class="md:tw-grid md:tw-grid-cols-3 md:tw-gap-4">
-            <div class="tw-flex tw-space-x-4">
-              <q-btn
-                :disable="form_monthly"
-                :loading="table.loading"
-                color="secondary"
-                glossy
-                icon="add_circle"
-                label="Lihat Data"
-                type="submit"
-              />
-              <q-btn
-                :disable="form_monthly"
-                :loading="table.loading"
-                color="warning"
-                glossy
-                icon="download"
-                label="Export Data"
-                @click="exportExcel"
-              />
-            </div>
+              hide-selected
+              label="Pilih Pabrik"
+              option-label="name"
+              option-value="id"
+              use-input
+              @change="income.unsetError('factory_id')"
+              @filter="searchFactory">
+              <template v-slot:option="scope">
+                <q-item v-bind="scope.itemProps">
+                  <q-item-section avatar>
+                    <q-icon name="factory"/>
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>{{ scope.opt.name }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </template>
+              <template v-slot:no-option>
+                <q-item>
+                  <q-item-section class="text-grey">
+                    No results
+                  </q-item-section>
+                </q-item>
+              </template>
+            </q-select>
           </div>
         </q-card-section>
       </q-form>
       <q-card-section class="no-padding">
-        <q-markup-table bordered flat>
-          <thead>
-          <tr>
-            <th class="text-left">No</th>
-            <th class="text-left">Factory</th>
-            <th class="text-left">Transfer Date</th>
-            <th class="text-left">Period Start</th>
-            <th class="text-left">Period End</th>
-            <th class="text-right">Weight</th>
-            <th class="text-right">Margin (avg)</th>
-            <th class="text-right">Factory Price (avg)</th>
-            <th class="text-right">PPN (Rp)</th>
-            <th class="text-right">PPh 22 (Rp)</th>
-            <th class="text-right">Gross Total</th>
-            <th class="text-right">Customer Total</th>
-            <th class="text-right">Bank Transfer</th>
-            <th class="text-right">Income</th>
-          </tr>
-          </thead>
-          <tbody v-if="table.data.length > 0">
-          <tr v-for="(item, index) in table.data" :key="item.id">
-            <td class="text-left">{{ index + 1 }}</td>
-            <td class="text-left">{{ item.factory.hasOwnProperty('name') ? item.factory.name : '' }}</td>
-            <td class="text-left">{{ item.trade_date }}</td>
-            <td class="text-left">{{ item.period_start }}</td>
-            <td class="text-left">{{ item.period_end }}</td>
+        <q-table
+          ref="tableRef"
+          v-model:pagination="table.pagination"
+          :columns="table.headers"
+          :dense="$q.screen.lt.md"
+          :filter="table.filter"
+          :loading="table.loading"
+          :rows="table.data ?? []"
+          binary-state-sort
+          bordered
+          row-key="id"
+          @request="onRequest"
+        >
+          <template v-slot:body-cell-no="props">
+            <q-td :props="props">
+              {{ props.rowIndex + 1 }}
+            </q-td>
+          </template>
 
-            <td class="text-right">{{
+          <template v-slot:body-cell-action="props">
+            <q-td :props="props">
+              <q-btn-dropdown size="sm" color="primary" label="Action">
+                <q-list>
+                  <q-item clickable v-close-popup @click="viewDetails(`${props.row.id}`)">
+                    <q-item-section avatar>
+                      <q-avatar size="sm" icon="print" color="primary" text-color="white" />
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label>View and Print</q-item-label>
+                    </q-item-section>
+                  </q-item>
+
+                  <q-item clickable v-close-popup @click="exportExcel(`${props.row.id}`)">
+                    <q-item-section avatar>
+                      <q-avatar size="sm" icon="download" color="secondary" text-color="white" />
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label>Export to Excel</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+              </q-btn-dropdown>
+            </q-td>
+          </template>
+
+          <template v-slot:body-cell-factory_name="props">
+            <q-td :props="props">
+              {{ props.row.factory?.name }}
+            </q-td>
+          </template>
+
+          <template v-slot:body-cell-net_weight="props">
+            <q-td :props="props">
+              {{
                 new Intl.NumberFormat('id-ID', {
                   style: 'unit',
-                  unit: "kilogram"
-                }).format(item.hasOwnProperty('orders') ? item.orders.total_weight : 0)
+                  unit: 'kilogram'
+
+                }).format(props.row.orders?.total_weight ?? 0)
               }}
-            </td>
-            <td class="text-right">{{
+            </q-td>
+          </template>
+
+          <template v-slot:body-cell-net_price="props">
+            <q-td :props="props">
+              {{
                 new Intl.NumberFormat('id-ID', {
                   style: 'currency',
-                  currency: "IDR",
-                  maximumFractionDigits: 2
-                }).format(item.hasOwnProperty('orders') ? item.orders.margin : 0)
+                  currency: 'IDR',
+                  minimumFractionDigits: 2,
+                }).format(props.row.orders?.factory_price ?? 0)
               }}
-            </td>
-            <td class="text-right">{{
+            </q-td>
+          </template>
+
+          <template v-slot:body-cell-margin="props">
+            <q-td :props="props">
+              {{
                 new Intl.NumberFormat('id-ID', {
                   style: 'currency',
-                  currency: "IDR",
-                  maximumFractionDigits: 2
-                }).format(item.hasOwnProperty('orders') ? item.orders.factory_price : 0)
+                  currency: 'IDR',
+                  minimumFractionDigits: 2,
+                }).format(props.row.orders?.margin ?? 0)
               }}
-            </td>
-            <td class="text-right">{{
+            </q-td>
+          </template>
+
+          <template v-slot:body-cell-ppn="props">
+            <q-td :props="props">
+              {{
                 new Intl.NumberFormat('id-ID', {
                   style: 'currency',
-                  currency: "IDR",
-                  maximumFractionDigits: 2
-                }).format(item.hasOwnProperty('orders') ? item.orders.ppn_total : 0)
+                  currency: 'IDR',
+                  minimumFractionDigits: 2,
+                }).format(props.row.orders?.ppn_total ?? 0)
               }}
-            </td>
-            <td class="text-right">{{
+            </q-td>
+          </template>
+
+          <template v-slot:body-cell-pph22="props">
+            <q-td :props="props">
+              {{
                 new Intl.NumberFormat('id-ID', {
                   style: 'currency',
-                  currency: "IDR",
-                  maximumFractionDigits: 2
-                }).format(item.hasOwnProperty('orders') ? item.orders.pph22_total : 0)
+                  currency: 'IDR',
+                  minimumFractionDigits: 2,
+                }).format(props.row.orders?.pph22_total ?? 0)
               }}
-            </td>
-            <td class="text-right">{{
+            </q-td>
+          </template>
+
+          <template v-slot:body-cell-gross_total="props">
+            <q-td :props="props">
+              {{
                 new Intl.NumberFormat('id-ID', {
                   style: 'currency',
-                  currency: "IDR",
-                  maximumFractionDigits: 2
-                }).format(item.hasOwnProperty('orders') ? item.orders.gross_total : 0)
+                  currency: 'IDR',
+                  minimumFractionDigits: 2,
+                }).format(props.row.orders?.gross_total ?? 0)
               }}
-            </td>
-            <td class="text-right">{{
+            </q-td>
+          </template>
+
+          <template v-slot:body-cell-customer_total="props">
+            <q-td :props="props">
+              {{
                 new Intl.NumberFormat('id-ID', {
                   style: 'currency',
-                  currency: "IDR",
-                  maximumFractionDigits: 2
-                }).format(item.hasOwnProperty('orders') ? item.orders.customer_total : 0)
+                  currency: 'IDR',
+                  minimumFractionDigits: 2,
+                }).format(props.row.orders?.customer_total ?? 0)
               }}
-            </td>
-            <td class="text-right">{{
+            </q-td>
+          </template>
+
+          <template v-slot:body-cell-bank_transfer="props">
+            <q-td :props="props">
+              {{
                 new Intl.NumberFormat('id-ID', {
                   style: 'currency',
-                  currency: "IDR",
-                  maximumFractionDigits: 2
-                }).format(item.hasOwnProperty('orders') ? item.orders.total : 0)
+                  currency: 'IDR',
+                  minimumFractionDigits: 2,
+                }).format(props.row.orders?.total ?? 0)
               }}
-            </td>
-            <td class="text-right">{{
+            </q-td>
+          </template>
+
+          <template v-slot:body-cell-net_total="props">
+            <q-td :props="props">
+              {{
                 new Intl.NumberFormat('id-ID', {
                   style: 'currency',
-                  currency: "IDR",
-                  maximumFractionDigits: 2
-                }).format(item.hasOwnProperty('orders') ? item.orders.net_income : 0)
+                  currency: 'IDR',
+                  minimumFractionDigits: 2,
+                }).format(props.row.orders?.net_income ?? 0)
               }}
-            </td>
-          </tr>
-          </tbody>
-        </q-markup-table>
+            </q-td>
+          </template>
+
+        </q-table>
       </q-card-section>
     </q-card>
   </q-page>

@@ -107,7 +107,6 @@ const searchFactory = (val, update) => {
 }
 
 watch(getTradeDate, async (update) => {
-  console.log(update)
   if (update) {
     let date = form.trade_date
     let prices = deliveries.selected_factory.hasOwnProperty('prices') ? deliveries.selected_factory.prices : []
