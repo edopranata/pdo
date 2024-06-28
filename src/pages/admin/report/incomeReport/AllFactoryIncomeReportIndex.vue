@@ -118,7 +118,7 @@ const exportExcel = async () => {
                 new Intl.NumberFormat('id-ID', {
                   style: 'unit',
                   unit: "kilogram"
-                }).format(item.hasOwnProperty('orders') ? item.orders.total_weight : 0)
+                }).format(item.hasOwnProperty('summaries') ? item.summaries.total_weight : 0)
               }}
             </td>
             <td class="text-right">{{
@@ -126,7 +126,7 @@ const exportExcel = async () => {
                   style: 'currency',
                   currency: "IDR",
                   maximumFractionDigits: 2
-                }).format(item.hasOwnProperty('orders') ? item.orders.margin : 0)
+                }).format(item.hasOwnProperty('summaries') ? item.summaries.margin : 0)
               }}
             </td>
             <td class="text-right">{{
@@ -134,7 +134,7 @@ const exportExcel = async () => {
                   style: 'currency',
                   currency: "IDR",
                   maximumFractionDigits: 2
-                }).format(item.hasOwnProperty('orders') ? item.orders.factory_price : 0)
+                }).format(item.hasOwnProperty('summaries') ? item.summaries.factory_price : 0)
               }}
             </td>
             <td class="text-right">{{
@@ -142,7 +142,7 @@ const exportExcel = async () => {
                   style: 'currency',
                   currency: "IDR",
                   maximumFractionDigits: 2
-                }).format(item.hasOwnProperty('orders') ? item.orders.ppn_total : 0)
+                }).format(item.hasOwnProperty('summaries') ? item.summaries.ppn_total : 0)
               }}
             </td>
             <td class="text-right">{{
@@ -150,7 +150,7 @@ const exportExcel = async () => {
                   style: 'currency',
                   currency: "IDR",
                   maximumFractionDigits: 2
-                }).format(item.hasOwnProperty('orders') ? item.orders.pph22_total : 0)
+                }).format(item.hasOwnProperty('summaries') ? item.summaries.pph22_total : 0)
               }}
             </td>
             <td class="text-right">{{
@@ -158,7 +158,7 @@ const exportExcel = async () => {
                   style: 'currency',
                   currency: "IDR",
                   maximumFractionDigits: 2
-                }).format(item.hasOwnProperty('orders') ? item.orders.gross_total : 0)
+                }).format(item.hasOwnProperty('summaries') ? item.summaries.gross_total : 0)
               }}
             </td>
             <td class="text-right">{{
@@ -166,7 +166,7 @@ const exportExcel = async () => {
                   style: 'currency',
                   currency: "IDR",
                   maximumFractionDigits: 2
-                }).format(item.hasOwnProperty('orders') ? item.orders.customer_total : 0)
+                }).format(item.hasOwnProperty('summaries') ? item.summaries.customer_total : 0)
               }}
             </td>
             <td class="text-right">{{
@@ -174,7 +174,7 @@ const exportExcel = async () => {
                   style: 'currency',
                   currency: "IDR",
                   maximumFractionDigits: 2
-                }).format(item.hasOwnProperty('orders') ? item.orders.total : 0)
+                }).format(item.hasOwnProperty('summaries') ? item.summaries.total : 0)
               }}
             </td>
             <td class="text-right">{{
@@ -182,7 +182,7 @@ const exportExcel = async () => {
                   style: 'currency',
                   currency: "IDR",
                   maximumFractionDigits: 2
-                }).format(item.hasOwnProperty('orders') ? item.orders.net_income : 0)
+                }).format(item.hasOwnProperty('summaries') ? item.summaries.net_income : 0)
               }}
             </td>
           </tr>

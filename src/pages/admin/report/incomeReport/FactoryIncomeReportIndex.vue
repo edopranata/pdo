@@ -1,14 +1,17 @@
 <script setup>
 import {useIncomeFactoryDataStore} from "stores/report/IncomeFactoryReport";
-import {useRoute} from "vue-router";
+import {useAuthStore} from "stores/auth";
+import {useRoute, useRouter} from "vue-router";
 import {onBeforeMount, onMounted, ref, watch} from "vue";
 import {storeToRefs} from "pinia";
 import {useQuasar} from "quasar";
 
+const {can} = useAuthStore()
 const {path} = useRoute()
-const {errors, form_monthly, factories_option, selected_factory} = storeToRefs(useIncomeFactoryDataStore())
+const {errors, factories_option, selected_factory} = storeToRefs(useIncomeFactoryDataStore())
 const {table, form} = useIncomeFactoryDataStore()
 const income = useIncomeFactoryDataStore();
+const router = useRouter();
 const $q = useQuasar()
 const tableRef = ref()
 
@@ -19,6 +22,8 @@ onBeforeMount(() => {
 onMounted(async () => {
   income.onReset()
   await income.getFactoryData(path)
+  tableRef.value.requestServerInteraction()
+
 })
 
 const onSubmit = async () => {
@@ -60,7 +65,7 @@ const onRequest = async (props) => {
 }
 
 const viewDetails = async (id) => {
-  console.log(id)
+  await router.replace({name: 'admin.report.incomeReport.detailFactoryIncomeShow', params: {id: id}})
 }
 
 const exportExcel = async (id) => {
@@ -70,7 +75,7 @@ const exportExcel = async (id) => {
     cancel: true,
     persistent: true
   }).onOk(async () => {
-    console.log(id)
+    await income.exportDataToExcel(path, id)
   })
 }
 </script>
@@ -150,9 +155,9 @@ const exportExcel = async (id) => {
 
           <template v-slot:body-cell-action="props">
             <q-td :props="props">
-              <q-btn-dropdown size="sm" color="primary" label="Action">
+              <q-btn-dropdown size="sm" color="primary" label="Action" :disable="!can('admin.report.incomeReport.detailFactoryIncomeShow') || !can('admin.report.incomeReport.detailFactoryIncomeExport')">
                 <q-list>
-                  <q-item clickable v-close-popup @click="viewDetails(`${props.row.id}`)">
+                  <q-item :disable="!can('admin.report.incomeReport.detailFactoryIncomeShow')" clickable v-close-popup @click="viewDetails(`${props.row.id}`)">
                     <q-item-section avatar>
                       <q-avatar size="sm" icon="print" color="primary" text-color="white" />
                     </q-item-section>
@@ -161,7 +166,7 @@ const exportExcel = async (id) => {
                     </q-item-section>
                   </q-item>
 
-                  <q-item clickable v-close-popup @click="exportExcel(`${props.row.id}`)">
+                  <q-item :disable="!can('admin.report.incomeReport.detailFactoryIncomeExport')" clickable v-close-popup @click="exportExcel(`${props.rowIndex}`)">
                     <q-item-section avatar>
                       <q-avatar size="sm" icon="download" color="secondary" text-color="white" />
                     </q-item-section>

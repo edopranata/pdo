@@ -206,28 +206,24 @@ export const useIncomeFactoryDataStore = defineStore('incomeFactoryData', {
       }
     },
 
-    async exportDataToExcel(path){
-      const start = this.form.start_date ? this.form.start_date.replaceAll("/", "") : ""
-      const end = this.form.end_date ? this.form.end_date.replaceAll("/", "") : ""
-      const monthly = this.form.monthly ? this.form.monthly.replaceAll("/", "") : ""
+    async exportDataToExcel(path, id){
+      this.table.loading = true
+      const table = this.table.data[id]
 
-      const data = this.form
+      const data = {}
+      const trade_date = table.trade_date ? table.trade_date.replaceAll("/", "") : ""
+      const factory_name = table.factory.name.toUpperCase() ?? ""
 
-      if(this.request_type === 'period') {
-        delete data.monthly
-        data.file_name = `FACTORY_INCOME_${start}_${end}.xlsx`
-
-      }else{
-        delete data.end_date
-        delete data.start_date
-        data.file_name = `FACTORY_INCOME_${monthly}.xlsx`
-      }
-
-      await api.post(`${path}`, data, {
+      data.file_name = `${factory_name.replaceAll(' ', '_')}_${trade_date}.xlsx`
+      data.start_date = table.period_start
+      data.end_date = table.period_end
+      await api.post(`${path}/${table.id}`, data, {
         responseType: 'blob'
       }).then((response) => {
         saveAs(response.data, data.file_name);
       });
+
+      this.table.loading = false
     }
   }
 })

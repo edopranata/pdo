@@ -208,8 +208,16 @@ export default [
             component: () => import('pages/admin/report/incomeReport/FactoryIncomeReportIndex.vue'),
             meta: {
               auth: true,
-            }
-          }
+            },
+          },
+          {
+            path: 'detailFactoryIncome/:id',
+            name: 'admin.report.incomeReport.detailFactoryIncomeShow',
+            component: () => import('pages/admin/report/incomeReport/FactoryIncomeReportShow.vue'),
+            meta: {
+              auth: true,
+            },
+          },
 
         ]
       }
