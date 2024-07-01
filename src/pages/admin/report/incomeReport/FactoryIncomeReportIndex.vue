@@ -192,7 +192,7 @@ const exportExcel = async (id) => {
                   style: 'unit',
                   unit: 'kilogram'
 
-                }).format(props.row.orders?.total_weight ?? 0)
+                }).format(props.row.summaries?.total_weight ?? 0)
               }}
             </q-td>
           </template>
@@ -204,7 +204,7 @@ const exportExcel = async (id) => {
                   style: 'currency',
                   currency: 'IDR',
                   minimumFractionDigits: 2,
-                }).format(props.row.orders?.factory_price ?? 0)
+                }).format(props.row.summaries?.factory_price ?? 0)
               }}
             </q-td>
           </template>
@@ -216,7 +216,7 @@ const exportExcel = async (id) => {
                   style: 'currency',
                   currency: 'IDR',
                   minimumFractionDigits: 2,
-                }).format(props.row.orders?.margin ?? 0)
+                }).format(props.row.summaries?.margin ?? 0)
               }}
             </q-td>
           </template>
@@ -228,7 +228,7 @@ const exportExcel = async (id) => {
                   style: 'currency',
                   currency: 'IDR',
                   minimumFractionDigits: 2,
-                }).format(props.row.orders?.ppn_total ?? 0)
+                }).format(props.row.summaries?.ppn_total ?? 0)
               }}
             </q-td>
           </template>
@@ -240,7 +240,7 @@ const exportExcel = async (id) => {
                   style: 'currency',
                   currency: 'IDR',
                   minimumFractionDigits: 2,
-                }).format(props.row.orders?.pph22_total ?? 0)
+                }).format(props.row.summaries?.pph22_total ?? 0)
               }}
             </q-td>
           </template>
@@ -252,7 +252,7 @@ const exportExcel = async (id) => {
                   style: 'currency',
                   currency: 'IDR',
                   minimumFractionDigits: 2,
-                }).format(props.row.orders?.gross_total ?? 0)
+                }).format(props.row.summaries?.gross_total ?? 0)
               }}
             </q-td>
           </template>
@@ -264,7 +264,7 @@ const exportExcel = async (id) => {
                   style: 'currency',
                   currency: 'IDR',
                   minimumFractionDigits: 2,
-                }).format(props.row.orders?.customer_total ?? 0)
+                }).format(props.row.summaries?.customer_total ?? 0)
               }}
             </q-td>
           </template>
@@ -276,7 +276,7 @@ const exportExcel = async (id) => {
                   style: 'currency',
                   currency: 'IDR',
                   minimumFractionDigits: 2,
-                }).format(props.row.orders?.total ?? 0)
+                }).format(props.row.summaries?.total ?? 0)
               }}
             </q-td>
           </template>
@@ -288,7 +288,7 @@ const exportExcel = async (id) => {
                   style: 'currency',
                   currency: 'IDR',
                   minimumFractionDigits: 2,
-                }).format(props.row.orders?.net_income ?? 0)
+                }).format(props.row.summaries?.net_income ?? 0)
               }}
             </q-td>
           </template>
