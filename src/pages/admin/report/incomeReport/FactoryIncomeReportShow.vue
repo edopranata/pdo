@@ -137,14 +137,14 @@ const exportExcel = () => {
                   style: 'currency',
                   currency: "IDR",
                   maximumFractionDigits: 0
-                }).format(table.data.summaries.customer_price)
+                }).format(parseFloat(table.data.summaries.customer_price))
               }}
             </td>
             <td class="text-right">{{
                 new Intl.NumberFormat('id-ID', {
                   style: 'unit',
                   unit: "kilogram"
-                }).format(table.data.summaries.total_weight)
+                }).format(parseFloat(table.data.summaries.total_weight))
               }}
             </td>
             <td class="text-right">{{
@@ -152,7 +152,7 @@ const exportExcel = () => {
                   style: 'currency',
                   currency: "IDR",
                   maximumFractionDigits: 2
-                }).format(table.data.summaries.customer_total)
+                }).format(parseFloat(table.data.summaries.customer_total))
               }}
             </td>
             <td class="text-right">{{
@@ -160,7 +160,7 @@ const exportExcel = () => {
                   style: 'currency',
                   currency: "IDR",
                   maximumFractionDigits: 0
-                }).format(table.data.summaries.margin)
+                }).format(parseFloat(table.data.summaries.margin))
               }}
             </td>
             <td class="text-right">{{
@@ -168,7 +168,7 @@ const exportExcel = () => {
                   style: 'currency',
                   currency: "IDR",
                   maximumFractionDigits: 0
-                }).format(table.data.summaries.factory_price)
+                }).format(parseFloat(table.data.summaries.factory_price))
               }}
             </td>
             <td class="text-right">{{
@@ -176,7 +176,7 @@ const exportExcel = () => {
                   style: 'currency',
                   currency: "IDR",
                   maximumFractionDigits: 2
-                }).format(table.data.summaries.gross_total)
+                }).format(parseFloat(table.data.summaries.gross_total))
               }}
             </td>
             <td class="text-right">{{
@@ -184,7 +184,7 @@ const exportExcel = () => {
                   style: 'currency',
                   currency: "IDR",
                   maximumFractionDigits: 2
-                }).format(table.data.summaries.ppn_total)
+                }).format(parseFloat(table.data.summaries.ppn_total))
               }}
             </td>
             <td class="text-right">{{
@@ -192,7 +192,7 @@ const exportExcel = () => {
                   style: 'currency',
                   currency: "IDR",
                   maximumFractionDigits: 2
-                }).format(table.data.summaries.pph22_total)
+                }).format(parseFloat(table.data.summaries.pph22_total))
               }}
             </td>
             <td class="text-right">{{
@@ -200,7 +200,7 @@ const exportExcel = () => {
                   style: 'currency',
                   currency: "IDR",
                   maximumFractionDigits: 2
-                }).format(table.data.summaries.total)
+                }).format(parseFloat(table.data.summaries.total))
               }}
             </td>
             <td class="text-right">{{
@@ -208,7 +208,7 @@ const exportExcel = () => {
                   style: 'currency',
                   currency: "IDR",
                   maximumFractionDigits: 2
-                }).format(parseFloat(table.data.summaries.gross_total) - (table.data.summaries.customer_total + table.data.summaries.pph22_total))
+                }).format(parseFloat(table.data.summaries.gross_total) - (parseFloat(table.data.summaries.customer_total) + parseFloat(table.data.summaries.pph22_total)))
               }}
             </td>
           </tr>
@@ -222,14 +222,14 @@ const exportExcel = () => {
                     style: 'currency',
                     currency: "IDR",
                     maximumFractionDigits: 0
-                  }).format(item.customer_price)
+                  }).format(parseFloat(item.customer_price))
                 }}
               </td>
               <td class="text-right">{{
                   new Intl.NumberFormat('id-ID', {
                     style: 'unit',
                     unit: "kilogram"
-                  }).format(item.net_weight)
+                  }).format(parseFloat(item.net_weight))
                 }}
               </td>
               <td class="text-right">{{
@@ -237,7 +237,7 @@ const exportExcel = () => {
                     style: 'currency',
                     currency: "IDR",
                     maximumFractionDigits: 2
-                  }).format(item.customer_total)
+                  }).format(parseFloat(item.customer_total))
                 }}
               </td>
               <td class="text-right">{{
@@ -245,7 +245,7 @@ const exportExcel = () => {
                     style: 'currency',
                     currency: "IDR",
                     maximumFractionDigits: 0
-                  }).format(item.margin)
+                  }).format(parseFloat(item.margin))
                 }}
               </td>
               <td class="text-right">{{
@@ -253,7 +253,7 @@ const exportExcel = () => {
                     style: 'currency',
                     currency: "IDR",
                     maximumFractionDigits: 0
-                  }).format(item.net_price)
+                  }).format(parseFloat(item.net_price))
                 }}
               </td>
               <td class="text-right">{{
@@ -261,7 +261,7 @@ const exportExcel = () => {
                     style: 'currency',
                     currency: "IDR",
                     maximumFractionDigits: 2
-                  }).format(item.gross_total)
+                  }).format(parseFloat(item.gross_total))
                 }}
               </td>
               <td class="text-right">{{
@@ -269,7 +269,7 @@ const exportExcel = () => {
                     style: 'currency',
                     currency: "IDR",
                     maximumFractionDigits: 2
-                  }).format(item.ppn_total)
+                  }).format(parseFloat(item.ppn_total))
                 }}
               </td>
               <td class="text-right">{{
@@ -277,7 +277,7 @@ const exportExcel = () => {
                     style: 'currency',
                     currency: "IDR",
                     maximumFractionDigits: 2
-                  }).format(item.pph22_total)
+                  }).format(parseFloat(item.pph22_total))
                 }}
               </td>
               <td class="text-right">{{
