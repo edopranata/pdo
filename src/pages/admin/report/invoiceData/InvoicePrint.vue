@@ -116,7 +116,12 @@ const onPrint = () => {
 
             <div v-if="data.type !== 'LN'" class="tw-grid tw-grid-cols-5">
               <span class="tw-px-4 tw-border-gray-800 tw-border-l tw-col-span-2"></span>
-              <span class="tw-px-4 tw-border-gray-800 tw-border-l"></span>
+              <span class="tw-px-4 tw-border-gray-800 tw-border-l tw-text-right tw-font-bold">{{
+                  Intl.NumberFormat('id-ID', {
+                    style: 'unit',
+                    unit: 'kilogram'
+                  }).format(data.total_net_weight)
+                }}</span>
               <span class="tw-px-4 tw-border-gray-800 tw-border-l"></span>
               <span class="tw-px-4 tw-border-gray-800 tw-border-x tw-font-bold text-right">{{
                   Intl.NumberFormat('id-ID', {
