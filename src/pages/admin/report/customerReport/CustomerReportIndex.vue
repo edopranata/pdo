@@ -24,6 +24,13 @@ const {can} = useAuthStore();
                 <q-item-label caption lines="2">Laporan transaksi delivery order seluruh customer</q-item-label>
               </q-item-section>
             </q-item>
+
+            <q-item clickable v-if="can('admin.report.customerReport.customerOrderReport')" :to="{name: 'admin.report.customerReport.customerOrderReport'}">
+              <q-item-section>
+                <q-item-label>Delivery Order by Customer</q-item-label>
+                <q-item-label caption lines="2">Laporan transaksi delivery order berdasarkan customer</q-item-label>
+              </q-item-section>
+            </q-item>
           </q-list>
         </q-card-section>
       </q-card>

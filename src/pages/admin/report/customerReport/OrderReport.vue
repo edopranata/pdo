@@ -1,5 +1,5 @@
 <script setup>
-import {onMounted} from "vue";
+import { onUnmounted } from 'vue'
 import {useRoute} from "vue-router";
 import {useCustomerOrderReportStore} from "stores/report/customerOrderReport";
 import {storeToRefs} from "pinia";
@@ -12,13 +12,16 @@ const {path} = useRoute()
 const {summaries, errors, checkForm} = storeToRefs(useCustomerOrderReportStore())
 const {table, form} = useCustomerOrderReportStore();
 const $q = useQuasar()
-onMounted(async () => {
-  order.onReset()
-})
+
 
 const showReport = async () => {
-  await order.getCustomerOrderList(path)
+  await order.getAllCustomerOrders(path)
 }
+
+onUnmounted(async () => {
+  order.onReset()
+  table.data = []
+})
 
 const exportExcel = async () => {
   $q.dialog({
@@ -42,8 +45,7 @@ const exportExcel = async () => {
         </q-toolbar-title>
       </q-toolbar>
       <q-card-section>
-        <div class="tw:md:grid tw:md:grid-cols-3 tw:md:gap-4 tw:md:mb-4">
-          <div class="lg:tw:col-span-1 tw:col-span-2">
+        <div class="tw:grid tw:md:grid-cols-3 tw:md:gap-4">
             <q-input
               v-if="can('admin.report.customerReport.[orderReport,orderReportExport]')"
               v-model="form.monthly"
@@ -57,9 +59,7 @@ const exportExcel = async () => {
               @change="order.unsetError('monthly')"
             />
           </div>
-        </div>
-        <div class="tw:md:grid tw:md:grid-cols-3 tw:md:gap-4">
-          <div class="q-gutter-sm">
+          <div class="q-gutter-sm q-pt-sm">
             <q-btn
               v-if="can('admin.report.customerReport.orderReport')"
               :disable="!checkForm"
@@ -81,7 +81,6 @@ const exportExcel = async () => {
               @click="exportExcel"
             />
           </div>
-        </div>
       </q-card-section>
       <q-card-section v-if="table.data.length > 0" padding>
         <q-markup-table bordered flat>

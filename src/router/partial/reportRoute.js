@@ -112,6 +112,14 @@ export default [
               auth: true,
             },
           },
+          {
+            path: 'customerOrderReport',
+            name: 'admin.report.customerReport.customerOrderReport',
+            component: () => import('pages/admin/report/customerReport/CustomerOrderReport.vue'),
+            meta: {
+              auth: true,
+            },
+          },
         ]
       },
 
@@ -119,14 +127,6 @@ export default [
         path: 'DOReport',
         name: 'admin.report.DOReport.index',
         component: () => import('pages/admin/report/deliveryOrder/ReportDeliveryOrderIndex.vue'),
-        meta: {
-          auth: true,
-        },
-      },
-      {
-        path: 'DOReport/:id',
-        name: 'admin.report.DOReport.print',
-        component: () => import('pages/admin/report/deliveryOrder/ReportDeliveryOrderPrint.vue'),
         meta: {
           auth: true,
         },
