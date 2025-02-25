@@ -45,7 +45,7 @@ export const useDashboardStore = defineStore('dashboard', {
       }
     },
     setError(e) {
-      if(e.hasOwnProperty('response')){
+      if(Object.prototype.hasOwnProperty.call(e, 'response')){
         if (e.response.status === 422) {
           let error = e.response.data.errors;
           for (let property in error) {
@@ -92,18 +92,18 @@ export const useDashboardStore = defineStore('dashboard', {
       // fetch data from "server"
       const returnedData = await this.getUserFactoryInfoFromApi(path, type)
 
-      if(returnedData.hasOwnProperty('factories')) {
+      if(Object.prototype.hasOwnProperty.call(returnedData, 'factories')) {
         this.factories = returnedData.factories
       }
 
-      if(returnedData.hasOwnProperty('user')) {
+      if(Object.prototype.hasOwnProperty.call(returnedData, 'user')) {
         this.user = returnedData.user
       }
-      if(returnedData.hasOwnProperty('annual_factory_chart')) {
+      if(Object.prototype.hasOwnProperty.call(returnedData, 'annual_factory_chart')) {
         this.annual_factory_chart = returnedData.annual_factory_chart
       }
 
-      if(returnedData.hasOwnProperty('best_customers')) {
+      if(Object.prototype.hasOwnProperty.call(returnedData, 'best_customers')) {
         this.best_customers = returnedData.best_customers
       }
       this.table.loading = false

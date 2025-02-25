@@ -1,10 +1,10 @@
 import {defineStore} from 'pinia';
 import {LocalStorage, Notify} from "quasar";
-import {api} from "boot/axios";
 
 export const usePageStore = defineStore('page', {
   state: () => ({
-    leftDrawer: false,
+    miniState: false,
+    leftDrawerOpen: false,
     rightDrawer: false,
     activeMenu: null,
     menus: [],
@@ -46,14 +46,26 @@ export const usePageStore = defineStore('page', {
       LocalStorage.set('active', routeName)
       this.activeMenu = routeName
     },
-    unsetActive(){
-      LocalStorage.set('active', '')
-      this.activeMenu = ''
+    async toggleLeftDrawer () {
+      this.leftDrawerOpen = !this.leftDrawerOpen
+
     },
-    toggleLeftDrawer() {
-      LocalStorage.set('leftDrawer', !this.leftDrawer)
-      this.leftDrawer = !this.leftDrawer
+
+    async toggleMiniState () {
+      this.miniState = !this.miniState
+
     },
+    async drawerClick (e) {
+      if (this.miniState) {
+        this.miniState = false
+
+        // notice we have registered an event with capture flag;
+        // we need to stop further propagation as this click is
+        // intended for switching drawer to "normal" mode only
+        e.stopPropagation()
+      }
+    },
+
     toggleRightDrawer() {
       this.rightDrawer = !this.rightDrawer
     },
@@ -73,28 +85,6 @@ export const usePageStore = defineStore('page', {
         }
 
     },
-    async saveSetting() {
-      let data = this.setting
-      try {
-        await api.post('/setting', data).then(response => {
-          if(response.hasOwnProperty('settings')){
-            Notify.create({
-              position: 'top',
-              type: 'positive',
-              message: 'Pengaturan default tarif berhasil di update'
-            })
-            this.setting = data.settings
-            this.default_setting = data.settings
-            this.rightDrawer = false
-          }
-        }).catch(e => {
-          throw e
-        })
-
-      } catch (e) {
-        this.setErrors(e)
-      }
-    }
 
   }
 });

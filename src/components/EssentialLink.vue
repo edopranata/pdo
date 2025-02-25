@@ -20,10 +20,6 @@
 </template>
 
 <script setup>
-defineOptions({
-  name: 'EssentialLink'
-})
-
 const props = defineProps({
   title: {
     type: String,

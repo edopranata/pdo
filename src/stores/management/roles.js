@@ -66,7 +66,7 @@ export const useRolesStore = defineStore('roles', {
 
   actions: {
     openDialog(dialog){
-      if(this.dialog.hasOwnProperty(dialog)){
+      if(Object.prototype.hasOwnProperty.call(this.dialog, dialog)){
         this.dialog[dialog] = !this.dialog[dialog]
       }
     },
@@ -76,13 +76,13 @@ export const useRolesStore = defineStore('roles', {
       }
     },
     closeDialog(dialog){
-      if(this.dialog.hasOwnProperty(dialog)){
+      if(Object.prototype.hasOwnProperty.call(this.dialog, dialog)){
         this.dialog[dialog] = !this.dialog[dialog]
       }
     },
 
     onReset(form){
-      if(this.form.hasOwnProperty(form)){
+      if(Object.prototype.hasOwnProperty.call(this.form, form)){
         if(form === 'delete'){
           this.form.delete.roles_id = []
           this.form.delete_data = []
@@ -95,7 +95,7 @@ export const useRolesStore = defineStore('roles', {
       this.errors = {}
     },
     setError(e) {
-      if(e.hasOwnProperty('response')){
+      if(Object.prototype.hasOwnProperty.call(e, 'response')){
         if (e.response.status === 422) {
           let error = e.response.data.errors;
           for (let property in error) {

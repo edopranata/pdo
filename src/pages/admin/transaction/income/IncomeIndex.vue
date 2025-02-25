@@ -5,7 +5,9 @@ import {storeToRefs} from "pinia";
 import {useRoute} from "vue-router";
 import {onMounted, ref, watch} from "vue";
 import {date} from "quasar";
+import {useQuasar} from 'quasar'
 
+const $q = useQuasar();
 const {can} = useAuthStore()
 const income = useIncomeStore()
 const {form, dialog} = useIncomeStore()
@@ -22,7 +24,7 @@ const tableRef = ref()
 
 watch([selected_factory], ([selectedF]) => {
   if (selectedF) {
-    if (selectedF.hasOwnProperty('id')) {
+    if (Object.prototype.hasOwnProperty.call(selectedF,'id')) {
       form.factory_id = selectedF.id
       form.period = selectedF.order.period
       form.income_period = selectedF.order.income_period
@@ -72,14 +74,14 @@ const onReset = () => {
 
 </script>
 <template>
-  <q-page class="tw-space-y-4" padding>
+  <q-page class="tw:space-y-4" padding>
     <q-dialog v-model="dialog.open" persistent>
-      <q-card class="tw-w-96">
+      <q-card class="tw:w-96">
         <q-card-section class="row items-center">
           <q-avatar color="primary" icon="payments" text-color="white"/>
           <q-space></q-space>
           <div>
-            <div class="q-ml-sm tw-text-sm text-right">Total terima (Bank Transfer)</div>
+            <div class="q-ml-sm tw:text-sm text-right">Total terima (Bank Transfer)</div>
             <div class="q-ml-sm text-h5 text-right">{{
                 new Intl.NumberFormat('id-ID', {
                   style: 'currency',
@@ -116,9 +118,9 @@ const onReset = () => {
         @reset="onReset"
         @submit="dialog.open = true"
       >
-        <q-card-section v-if="can('admin.transaction.income.createIncome')" class="tw-space-y-4">
-          <div class="md:tw-grid md:tw-grid-cols-3 md:tw-gap-4">
-            <div class="lg:tw-col-span-1 tw-col-span-2">
+        <q-card-section v-if="can('admin.transaction.income.createIncome')" class="tw:space-y-4">
+          <div class="tw:md:grid tw:md:grid-cols-3 tw:md:gap-4">
+            <div class="tw:lg:col-span-1 tw:col-span-2">
               <q-select
                 :disable="table.loading"
                 v-model="income.selected_factory"
@@ -127,7 +129,7 @@ const onReset = () => {
                 :error="errors.hasOwnProperty('factory_id')"
                 :error-message="errors.factory_id"
                 :options="factories_option"
-                class="tw-w-full"
+                class="tw:w-full"
                 clearable
                 fill-input
                 filled
@@ -162,7 +164,7 @@ const onReset = () => {
                 :error="errors.hasOwnProperty('period_start')"
                 :error-message="errors.period_start"
                 :stack-label="!!form.period_start"
-                class="tw-w-full"
+                class="tw:w-full"
                 filled
                 label="Period Start">
                 <template v-slot:control>
@@ -191,7 +193,7 @@ const onReset = () => {
                 :error="errors.hasOwnProperty('period_end')"
                 :error-message="errors.period_end"
                 :stack-label="!!form.period_end"
-                class="tw-w-full"
+                class="tw:w-full"
                 filled
                 label="Period End">
                 <template v-slot:control>
@@ -220,7 +222,7 @@ const onReset = () => {
                 :error="errors.hasOwnProperty('trade_date')"
                 :error-message="errors.trade_date"
                 :stack-label="!!form.trade_date"
-                class="tw-w-full"
+                class="tw:w-full"
                 filled
                 label="Income Date">
                 <template v-slot:control>
@@ -243,7 +245,7 @@ const onReset = () => {
                   </q-icon>
                 </template>
               </q-field>
-              <div class="tw-flex tw-space-x-4">
+              <div class="tw:flex tw:space-x-4">
                 <q-btn
                   :dense="$q.screen.lt.lg"
                   :label="!$q.screen.lt.md ? 'Simpan data' : ''"

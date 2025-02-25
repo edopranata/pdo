@@ -4,14 +4,11 @@ import {usePageStore} from "stores/pages";
 import {reactive} from "vue";
 import {storeToRefs} from "pinia";
 import {useQuasar} from "quasar";
-import {api} from "boot/axios";
-import { saveAs } from 'file-saver';
 
 const $q = useQuasar()
 const page = usePageStore()
 const auth = useAuthStore()
 const {user, errors: authErrors} = storeToRefs(useAuthStore())
-const {errors} = storeToRefs(usePageStore())
 const form = reactive({
   password: '',
   password_confirmation: '',
@@ -39,25 +36,6 @@ const changePassword = async () => {
     await auth.changePassword(form)
   })
 }
-
-const saveSetting = async () => {
-  $q.dialog({
-    title: 'Simpan pengaturan',
-    message: 'Anda yakin akan merubah pengaturan default?',
-    cancel: true,
-    persistent: true
-  }).onOk( async () => {
-    const fileName = 'excel.xlsx'
-    await api.post('/admin/test', {
-      file_name: fileName
-    }, {
-      responseType: 'blob'
-    }).then((response) => {
-      saveAs(response.data, fileName);
-    });
-  })
-}
-
 </script>
 
 <template>

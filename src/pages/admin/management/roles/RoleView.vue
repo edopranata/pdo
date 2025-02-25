@@ -36,7 +36,7 @@ onMounted(async () => {
           <q-toolbar-title class="text-h5 text-primary">
             {{ `Role ${view.selected?.name}` }}
           </q-toolbar-title>
-          <div class="tw-space-x-2">
+          <div class="q-gutter-sm">
             <q-btn
               :dense="$q.screen.lt.md"
               :label="!$q.screen.lt.md ? 'Reload' : ''"
@@ -94,9 +94,9 @@ onMounted(async () => {
           </thead>
           <tbody>
           <tr v-for="(item, child) in name" :key="child">
-            <td class="text-left tw-align-text-top" style="max-width: 160px; min-width: 80px">{{ child }}</td>
+            <td class="text-left tw:align-text-top" style="max-width: 160px; min-width: 80px">{{ child }}</td>
             <td class="text-left">
-              <div class="tw-grid lg:tw-grid-cols-5 md:tw-grid-cols-3 tw-gap-1">
+              <div class="tw:grid tw:lg:grid-cols-5 tw:md:grid-cols-3 tw:gap-1">
                 <q-skeleton
                   v-for="permission in item"
                   v-show="table.loading"

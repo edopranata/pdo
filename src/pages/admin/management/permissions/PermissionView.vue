@@ -44,7 +44,7 @@ const onRequestRolesHavePermission = async (props) => {
 </script>
 
 <template>
-  <q-page class="tw-space-y-4" padding>
+  <q-page class="tw:space-y-4" padding>
     <q-card bordered class="my-card">
       <q-card-section>
         <div class="text-h6">Permission</div>
@@ -72,8 +72,8 @@ const onRequestRolesHavePermission = async (props) => {
       </q-table>
     </q-card>
 
-    <div class="tw-flex tw-flex-col justify-between md:tw-space-x-4 md:tw-flex-row">
-      <q-card class="tw-flex-none" flat>
+    <div class="tw:flex tw:flex-col justify-between tw:md:space-x-4 tw:md:flex-row">
+      <q-card class="tw:flex-none" flat>
         <q-card-section class="q-pa-none">
           <q-table
             ref="tableRefRoles"
@@ -98,7 +98,7 @@ const onRequestRolesHavePermission = async (props) => {
           </q-table>
         </q-card-section>
       </q-card>
-      <q-card class="tw-w-full" flat>
+      <q-card class="tw:w-full" flat>
         <q-card-section class="q-pa-none">
           <q-table
             ref="tableRefUsers"
@@ -152,7 +152,7 @@ const onRequestRolesHavePermission = async (props) => {
                   <q-select
                     v-model="table.users.search.role"
                     :loading="table.users.loading"
-                    class="tw-w-32"
+                    class="tw:w-32"
                     :options="roles"
                     clearable
                     dense

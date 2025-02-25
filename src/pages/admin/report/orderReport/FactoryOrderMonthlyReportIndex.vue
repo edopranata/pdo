@@ -22,7 +22,7 @@ onMounted(async () => {
 
 watch(selected_factory, (selectedF) => {
   if (selectedF) {
-    if (selectedF.hasOwnProperty('id')) {
+    if (Object.prototype.hasOwnProperty.call(selectedF,'id')) {
       form.factory_id = selectedF.id
     }
 
@@ -61,7 +61,7 @@ const exportExcel = async () => {
 </script>
 
 <template>
-  <q-page class="tw-space-y-4" padding>
+  <q-page class="tw:space-y-4" padding>
     <q-card bordered>
       <q-toolbar class="text-primary">
         <q-toolbar-title>
@@ -71,15 +71,15 @@ const exportExcel = async () => {
       <q-form
         @submit="onSubmit"
       >
-        <q-card-section class="tw-space-y-4">
-          <div class="md:tw-grid md:tw-grid-cols-3 md:tw-gap-4">
+        <q-card-section class="tw:space-y-4">
+          <div class="tw:grid tw:md:grid-cols-3 tw:md:gap-4">
             <q-select
               v-model="order.selected_factory"
               :bg-color="!!form.id ? 'yellow-2' : ''"
               :error="errors.hasOwnProperty('factory_id')"
               :error-message="errors.factory_id"
               :options="factories_option"
-              class="tw-w-full lg:tw-col-span-1 tw-col-span-3"
+              class="tw:lg:col-span-1 tw:col-span-3"
               clearable
               fill-input
               filled
@@ -109,6 +109,7 @@ const exportExcel = async () => {
               </template>
             </q-select>
             <q-input
+              class="tw:lg:col-span-1 tw:col-span-3"
               v-model="form.monthly"
               :error="errors.hasOwnProperty('monthly')"
               :error-message="errors.monthly"
@@ -120,8 +121,8 @@ const exportExcel = async () => {
               @change="order.unsetError('monthly')"
             />
           </div>
-          <div class="md:tw-grid md:tw-grid-cols-3 md:tw-gap-4">
-            <div class="tw-flex tw-space-x-4">
+          <div class="tw:grid tw:md:grid-cols-3 tw:md:gap-4">
+            <div class="q-gutter-sm">
               <q-btn
                 :disable="!form_monthly"
                 :loading="table.loading"

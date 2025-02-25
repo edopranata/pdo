@@ -2,7 +2,6 @@
 import {useLoanStore} from "stores/transaction/loan";
 import {usePageStore} from "stores/pages";
 import {useRoute} from "vue-router";
-import QNumber from "components/Input/QNumber.vue";
 import {storeToRefs} from "pinia";
 import {useAuthStore} from "stores/auth";
 
@@ -18,7 +17,7 @@ const onSubmit = async () => {
 </script>
 <template>
   <q-dialog v-model="dialog.give" persistent>
-    <q-card class="tw-w-96">
+    <q-card class="tw:w-96">
       <q-toolbar class="bg-primary text-white">
         <q-toolbar-title>
           <div>Add Loan</div>
@@ -82,7 +81,7 @@ const onSubmit = async () => {
             :error="errors.hasOwnProperty('balance')"
             :error-message="errors.balance"
             :options="page.currencyFormat"
-            class="tw-w-full"
+            class="tw:w-full"
             filled
             label="Amount (Rp)"
           />

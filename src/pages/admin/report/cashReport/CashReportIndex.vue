@@ -5,7 +5,7 @@ const {can} = useAuthStore();
 </script>
 <template>
   <q-page padding>
-    <div  class="tw-grid md:tw-grid-cols-2 tw-grid-cols-1">
+    <div  class="tw:grid md:tw:grid-cols-2 tw:grid-cols-1">
       <q-card>
         <q-card-section class="no-padding">
           <q-list>

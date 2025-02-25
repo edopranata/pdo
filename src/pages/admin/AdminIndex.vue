@@ -26,14 +26,14 @@ onMounted(async () => {
 
 <template>
   <q-page class="" padding>
-    <div class="tw-grid tw-gap-4">
+    <div class="tw:grid tw:gap-4">
       <FactoriesPriceWidget :factories="dashboard.factories" :loading="table.loading"/>
     </div>
-    <div v-if="role !== 'cashier'" class="tw-grid tw-gap-4 tw-mt-4">
+    <div v-if="role !== 'cashier'" class="tw:grid tw:gap-4 tw:mt-4">
       <q-separator/>
-      <div class="tw-grid xl:tw-grid-cols-4 lg:tw-grid-cols-3 md:tw-grid-cols-2 tw-grid-cols-1 tw-gap-4">
+      <div class="tw:grid tw:xl:grid-cols-4 tw:lg:grid-cols-3 tw:md:grid-cols-2 tw:grid-cols-1 tw:gap-4">
         <TopWeightCustomerWidget :loading="table.loading"/>
-        <AnnualFactoryChartWidget :class="'xl:tw-col-span-3 lg:tw-col-span-2'" :loading="table.loading"/>
+        <AnnualFactoryChartWidget :class="'tw:xl:col-span-3 tw:lgcol-span-2'" :loading="table.loading"/>
       </div>
     </div>
   </q-page>

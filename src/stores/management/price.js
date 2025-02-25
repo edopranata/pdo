@@ -3,6 +3,7 @@ import {api} from "boot/axios";
 import {LocalStorage, Notify} from "quasar";
 import {reactive} from "vue";
 
+
 export const usePriceStore = defineStore('price', {
   state: () => ({
     form: {
@@ -51,7 +52,7 @@ export const usePriceStore = defineStore('price', {
   actions: {
 
     setError(e) {
-      if (e.hasOwnProperty('response')) {
+      if(Object.prototype.hasOwnProperty.call(e, 'response')){
         if (e.response.status === 422) {
           let error = e.response.data.errors;
           for (let property in error) {
@@ -79,7 +80,7 @@ export const usePriceStore = defineStore('price', {
       }
     },
     unsetError(error) {
-      if (this.errors.hasOwnProperty(error)) {
+      if(Object.prototype.hasOwnProperty.call(this.errors, error)){
         delete this.errors[error]
       }
     },
@@ -95,7 +96,7 @@ export const usePriceStore = defineStore('price', {
         this.table.selected = []
       } else {
         this.form[name] = null
-        if (this.errors.hasOwnProperty(name)) {
+        if(Object.prototype.hasOwnProperty.call(this.errors, name)){
           this.errors[name] = ''
         }
         if (name === 'factory_id') {
@@ -147,7 +148,7 @@ export const usePriceStore = defineStore('price', {
         Notify.create({
           position: "top",
           type: 'positive',
-          message: params.hasOwnProperty('id') ? `Data harga tanggal ${params.price_date} berhasil diubah` : `Data harga ${params.price_date} berhasil disimpan`
+          message: Object.prototype.hasOwnProperty.call(params, 'id') ? `Data harga tanggal ${params.price_date} berhasil diubah` : `Data harga ${params.price_date} berhasil disimpan`
         })
         this.onReset()
         this.getPriceData(path)

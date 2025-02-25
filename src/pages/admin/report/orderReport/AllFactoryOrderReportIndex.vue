@@ -38,7 +38,7 @@ const exportExcel = async () => {
 </script>
 
 <template>
-  <q-page class="tw-space-y-4" padding>
+  <q-page class="tw:space-y-4" padding>
     <q-card bordered>
       <q-toolbar class="text-primary">
         <q-toolbar-title>
@@ -48,13 +48,13 @@ const exportExcel = async () => {
       <q-form
         @submit="onSubmit"
       >
-        <q-card-section class="tw-space-y-4">
-          <div class="md:tw-grid md:tw-grid-cols-3 md:tw-gap-4">
+        <q-card-section class="tw:space-y-4">
+          <div class="tw:grid tw:md:grid-cols-3 tw:md:gap-4">
               <q-field
                 :error="errors.hasOwnProperty('start_date')"
                 :error-message="errors.start_date"
                 :stack-label="!!form.start_date"
-                class="tw-w-full lg:tw-col-span-1 tw-col-span-3"
+                class="tw:lg:col-span-1 tw:col-span-3"
                 filled
                 label="Period Start">
                 <template v-slot:control>
@@ -79,7 +79,7 @@ const exportExcel = async () => {
                 :error="errors.hasOwnProperty('end_date')"
                 :error-message="errors.end_date"
                 :stack-label="!!form.end_date"
-                class="tw-w-full lg:tw-col-span-1 tw-col-span-3"
+                class="tw:lg:col-span-1 tw:col-span-3"
                 filled
                 label="Period End">
                 <template v-slot:control>
@@ -100,8 +100,8 @@ const exportExcel = async () => {
                 </template>
               </q-field>
             </div>
-          <div class="md:tw-grid md:tw-grid-cols-3 md:tw-gap-4">
-            <div class="tw-flex tw-space-x-4">
+          <div class="tw:md:grid tw:md:grid-cols-3 tw:md:gap-4">
+            <div class="q-gutter-sm">
               <q-btn
                 :disable="form_empty"
                 label="Lihat Data"

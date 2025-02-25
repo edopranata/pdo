@@ -67,7 +67,7 @@ const setForm = (id) => {
   const index = table.data.map(e => e.id).indexOf(id);
   const data = table.data[index]
   for (let property in loan.form) {
-    loan.form[property] = data.hasOwnProperty(property) ? data[property] : '';
+    loan.form[property] = Object.prototype.hasOwnProperty.call(data, property) ? data[property] : '';
     if(property === 'current'){
       loan.form.current = data.loan ?? 0
     }
@@ -152,7 +152,7 @@ const setForm = (id) => {
                   </template>
                 </q-field>
               </q-card-section>
-              <q-card-actions class="tw-px-4" v-if="can('admin.transaction.loan.[addLoan,payLoan]')">
+              <q-card-actions class="tw:px-4" v-if="can('admin.transaction.loan.[addLoan,payLoan]')">
                 <q-btn
                   v-if="can('admin.transaction.loan.addLoan')"
                   :dense="$q.screen.lt.md"

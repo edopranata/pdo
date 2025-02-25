@@ -7,7 +7,6 @@ import {useRoute} from "vue-router";
 import {storeToRefs} from "pinia";
 import {useQuasar} from "quasar";
 import DialogDelete from "pages/admin/masterData/customer/dialog/DialogDelete.vue";
-import QNumber from "components/Input/QNumber.vue";
 
 const $q = useQuasar()
 const page = usePageStore()
@@ -108,14 +107,14 @@ const onEdit = () => {
         class="q-gutter-md"
       >
         <q-card-section v-if="can('admin.masterData.customer.[createCustomer,updateCustomer]')">
-          <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2">
+          <div class="tw:grid tw:grid-cols-1 tw:md:grid-cols-2">
             <div>
               <q-toolbar class="text-primary">
                 <q-toolbar-title>
                   Customers Data
                 </q-toolbar-title>
               </q-toolbar>
-              <div class="tw-flex tw-flex-col">
+              <div class="tw:flex tw:flex-col">
                 <q-input
                   v-model="form.name"
                   :bg-color="!!form.id ? 'yellow-2' : ''"

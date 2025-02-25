@@ -1,6 +1,6 @@
 <script setup>
 import {useCashStore} from "stores/management/cash";
-import {onMounted, ref, watch} from 'vue'
+import {onMounted, ref} from 'vue'
 import {useRoute} from "vue-router";
 import {useQuasar} from "quasar";
 
@@ -14,13 +14,6 @@ const tableRef = ref()
 async function onRequest(props) {
   await cash.getCashData(path, props)
 }
-
-watch(table.search, () => {
-  table.filter = String(Date.now())
-}, {
-  deep: true,
-  immediate: true
-})
 
 onMounted(() => {
   onReset()
@@ -45,7 +38,6 @@ const onReset = () => {
         :columns="table.details ?? []"
         :dense="$q.screen.lt.md"
         :grid="$q.screen.lt.md"
-        :filter="table.filter"
         :loading="table.loading"
         :rows="table.data ?? []"
         binary-state-sort
@@ -54,7 +46,7 @@ const onReset = () => {
         @request="onRequest"
       >
         <template v-slot:top>
-          <div class="tw-w-full tw-flex tw-flex-col tw-justify-between md:tw-items-center md:tw-flex-row">
+          <div class="tw:w-full tw:flex tw:flex-col tw:justify-between tw:md:items-center tw:md:flex-row">
             <div>
               <q-list>
                 <q-item-label header>{{ table.user?.name }}</q-item-label>

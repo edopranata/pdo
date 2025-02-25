@@ -49,7 +49,7 @@ export const useIncomeStore = defineStore('income', {
   actions: {
 
     setError(e) {
-      if (e.hasOwnProperty('response')) {
+      if (Object.prototype.hasOwnProperty.call(e, 'response')) {
         if (e.response.status === 422) {
           let error = e.response.data.errors;
           for (let property in error) {
@@ -77,7 +77,7 @@ export const useIncomeStore = defineStore('income', {
       }
     },
     unsetError(error) {
-      if (this.errors.hasOwnProperty(error)) {
+      if (Object.prototype.hasOwnProperty.call(this.errors, error)) {
         delete this.errors[error]
       }
     },
@@ -92,7 +92,7 @@ export const useIncomeStore = defineStore('income', {
         }
       } else {
         this.form[name] = null
-        if (this.errors.hasOwnProperty(name)) {
+        if (Object.prototype.hasOwnProperty.call(this.errors, name)) {
           this.errors[name] = ''
         }
         if (name === 'factory_id') {
@@ -122,13 +122,13 @@ export const useIncomeStore = defineStore('income', {
       const returnedData = await this.getIncomeDataFromApi(path)
 
       // clear out existing data and add new
-      if(returnedData.hasOwnProperty('order')){
-        this.order = returnedData.order.hasOwnProperty('orders') ? returnedData.order.orders : null
-        this.table.data = returnedData.order.hasOwnProperty('data') ? returnedData.order.data : []
-        this.table.orders = returnedData.order.hasOwnProperty('orders') ? returnedData.order.orders : []
+      if(Object.prototype.hasOwnProperty.call(returnedData, 'order')){
+        this.order = Object.prototype.hasOwnProperty.call(returnedData.order, 'orders') ? returnedData.order.orders : null
+        this.table.data = Object.prototype.hasOwnProperty.call(returnedData.order, 'data') ? returnedData.order.data : []
+        this.table.orders = Object.prototype.hasOwnProperty.call(returnedData.order, 'orders') ? returnedData.order.orders : []
       }
 
-      if(returnedData.hasOwnProperty('factories')){
+      if(Object.prototype.hasOwnProperty.call(returnedData, 'factories')){
         this.factories = returnedData.factories
       }
 

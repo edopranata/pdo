@@ -6,8 +6,9 @@ import {storeToRefs} from "pinia";
 import {useRoute} from "vue-router";
 import {onMounted, ref, watch} from "vue";
 import {date} from "quasar";
-import QNumber from "components/Input/QNumber.vue";
+import {useQuasar} from 'quasar'
 
+const $q = useQuasar();
 const {can} = useAuthStore()
 const page = usePageStore()
 const invoice = useCustomerInvoiceStore()
@@ -33,7 +34,7 @@ onMounted(async () => {
 
 watch(getForm, (newForm) => {
   for (let property in newForm) {
-    if (!!newForm[property]) {
+    if (newForm[property]) {
       invoice.unsetError(property)
     }
   }
@@ -60,14 +61,14 @@ const onRequest = async (props) => {
 }
 </script>
 <template>
-  <q-page class="tw-space-y-4" padding>
+  <q-page class="tw:space-y-4" padding>
     <q-dialog v-model="dialog.open" persistent>
-      <q-card class="tw-w-96">
+      <q-card class="tw:w-96">
         <q-card-section class="row items-center">
           <q-avatar color="primary" icon="payments" text-color="white"/>
           <q-space></q-space>
           <div>
-            <div class="q-ml-sm tw-text-sm text-right">Total terima</div>
+            <div class="q-ml-sm tw:text-sm text-right">Total terima</div>
             <div class="q-ml-sm text-h5 text-right">{{
                 new Intl.NumberFormat('id-ID', {
                   style: 'currency',
@@ -106,9 +107,9 @@ const onRequest = async (props) => {
         @reset="onReset"
         @submit="dialog.open = true"
       >
-        <q-card-section v-if="can('admin.transaction.invoice.createInvoice')" class="tw-space-y-4">
-          <div class="md:tw-grid md:tw-grid-cols-3 md:tw-gap-4">
-            <div class="lg:tw-col-span-1 tw-col-span-2">
+        <q-card-section v-if="can('admin.transaction.invoice.createInvoice')" class="tw:space-y-4">
+          <div class="tw:md:grid tw:md:grid-cols-3 tw:md:gap-4">
+            <div class="tw:lg:col-span-1 tw:col-span-2">
               <q-field
                 :dense="$q.screen.lt.md"
                 bg-color="blue-grey"
@@ -130,7 +131,7 @@ const onRequest = async (props) => {
                 :error-message="errors.trade_date"
                 :stack-label="!!form.trade_date"
                 bg-color="blue-grey"
-                class="tw-w-full"
+                class="tw:w-full"
                 color="blue-grey-2"
                 filled
                 label="Invoice Date">
@@ -140,7 +141,7 @@ const onRequest = async (props) => {
                   </div>
                 </template>
               </q-field>
-              <div class="tw-grid tw-grid-cols-2 tw-gap-x-4">
+              <div class="tw:grid tw:grid-cols-2 tw:gap-x-4">
                 <q-number
                   v-if="summaries.loan"
                   v-model="form.installment"
@@ -148,7 +149,7 @@ const onRequest = async (props) => {
                   :error="errors.hasOwnProperty('installment')"
                   :error-message="errors.installment"
                   :options="page.currencyFormat"
-                  class="tw-w-full"
+                  class="tw:w-full"
                   filled
                   label="Jumlah angsuran"
                 />
@@ -178,7 +179,7 @@ const onRequest = async (props) => {
                   v-if="summaries.loan"
                   :dense="$q.screen.lt.md"
                   bg-color="blue-grey"
-                  class="tw-col-span-2"
+                  class="tw:col-span-2"
                   color="blue-grey-2"
                   filled
                   hint=""
@@ -199,7 +200,7 @@ const onRequest = async (props) => {
                 </q-field>
               </div>
 
-              <div class="tw-flex tw-space-x-4">
+              <div class="tw:flex tw:space-x-4">
                 <q-btn
                   :dense="$q.screen.lt.lg"
                   :label="!$q.screen.lt.md ? 'Simpan data' : ''"
@@ -320,7 +321,7 @@ const onRequest = async (props) => {
           <template v-slot:bottom-row>
             <q-tr v-if="errors.hasOwnProperty('order_id')">
               <q-td colspan="100%">
-                <span class="text-negative tw-text-sm">{{ errors.order_id }}</span>
+                <span class="text-negative tw:text-sm">{{ errors.order_id }}</span>
               </q-td>
             </q-tr>
           </template>
@@ -341,7 +342,7 @@ const onRequest = async (props) => {
           </template>
 
           <template v-slot:body-cell-net_price="props">
-            <q-td :props="props" class="tw-max-w-44">
+            <q-td :props="props" class="tw:max-w-44">
               {{
                 Intl.NumberFormat('id-ID', {
                   style: 'currency',

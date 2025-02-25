@@ -8,7 +8,7 @@ import {date} from "quasar";
 const cash = useTransactionReportStore();
 const {path} = useRoute()
 const {table, form} = useTransactionReportStore();
-const {errors, users_option, selected_user, users} = storeToRefs(useTransactionReportStore())
+const {errors, users_option, selected_user} = storeToRefs(useTransactionReportStore())
 onMounted(async () => {
   cash.onReset()
   await cash.getUserList(path)
@@ -39,7 +39,7 @@ const showReport = async () => {
 </script>
 
 <template>
-  <q-page class="tw-space-y-4" padding>
+  <q-page class="tw:space-y-4" padding>
     <q-card bordered>
       <q-toolbar class="text-primary">
         <q-toolbar-title>
@@ -47,15 +47,14 @@ const showReport = async () => {
         </q-toolbar-title>
       </q-toolbar>
       <q-card-section>
-        <div class="md:tw-grid md:tw-grid-cols-3 md:tw-gap-4">
-          <div class="lg:tw-col-span-1 tw-col-span-2">
+        <div class="tw:grid tw:md:grid-cols-3 tw:md:gap-4">
             <q-select
               v-model="cash.selected_user"
               :dense="$q.screen.lt.md"
               :error="errors.hasOwnProperty('user_id')"
               :error-message="errors.user_id"
               :options="users_option"
-              class="tw-w-full"
+              class="tw:lg:col-span-1 tw:col-span-3"
               clearable
               fill-input
               filled
@@ -98,7 +97,7 @@ const showReport = async () => {
               :error="errors.hasOwnProperty('date')"
               :error-message="errors.date"
               :stack-label="!!form.date"
-              class="tw-w-full lg:tw-col-span-1 tw-col-span-3"
+              class="tw:lg:col-span-1 tw:col-span-3"
               filled
               label="Tanggal Transaksi">
               <template v-slot:control>
@@ -119,9 +118,7 @@ const showReport = async () => {
               </template>
             </q-field>
           </div>
-        </div>
-        <div class="md:tw-grid md:tw-grid-cols-3 md:tw-gap-4">
-          <div class="tw-flex tw-space-x-4">
+          <div class="q-gutter-sm">
             <q-btn
               :disable="!selected_user"
               label="Lihat Data"
@@ -140,7 +137,6 @@ const showReport = async () => {
               icon="add_circle"
             />
           </div>
-        </div>
       </q-card-section>
       <q-card-section v-if="table.data.length > 0" padding>
         <q-markup-table flat bordered>

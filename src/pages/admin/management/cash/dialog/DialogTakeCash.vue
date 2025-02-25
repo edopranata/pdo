@@ -2,7 +2,6 @@
 import {useCashStore} from "stores/management/cash";
 import {usePageStore} from "stores/pages";
 import {useRoute} from "vue-router";
-import QNumber from "components/Input/QNumber.vue";
 import {storeToRefs} from "pinia";
 const {dialog, form, table} = useCashStore();
 const {errors} = storeToRefs(useCashStore())
@@ -15,7 +14,7 @@ const onSubmit = async () => {
 </script>
 <template>
   <q-dialog v-model="dialog.take" persistent>
-    <q-card class="tw-w-96">
+    <q-card class="tw:w-96">
       <q-toolbar class="bg-negative text-white">
         <q-toolbar-title>
           <div>Take Cash</div>
@@ -79,7 +78,7 @@ const onSubmit = async () => {
             :error="errors.hasOwnProperty('balance')"
             :error-message="errors.balance"
             :options="page.currencyFormat"
-            class="tw-w-full"
+            class="tw:w-full"
             filled
             label="Amount (Rp)"
           />
@@ -88,7 +87,7 @@ const onSubmit = async () => {
           :dense="$q.screen.lt.md"
           :error="errors.hasOwnProperty('description')"
           :error-message="errors.description"
-          class="tw-w-full"
+          class="tw:w-full"
           filled
           type="textarea"
           label="Description"

@@ -74,7 +74,7 @@ watch(dialog, (newDialog) => {
               Roles list
             </q-toolbar-title>
             <div
-              class="tw-space-x-2">
+              class="q-gutter-sm">
               <q-btn
                 v-if="can('admin.management.roles.deleteRole')"
                 :dense="$q.screen.lt.md"

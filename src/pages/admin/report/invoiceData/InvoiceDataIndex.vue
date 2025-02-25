@@ -44,9 +44,9 @@ const onRequest = async (props) => {
 
 </script>
 <template>
-  <q-page class="tw-space-y-4" padding>
+  <q-page class="tw:space-y-4" padding>
     <q-card bordered>
-      <q-card-section class="tw-p-0">
+      <q-card-section class="tw:p-0">
 
         <q-table
           ref="tableRef"
@@ -94,7 +94,7 @@ const onRequest = async (props) => {
               <q-input
                 v-if="!$q.screen.lt.md"
                 v-model="table.search"
-                class="tw-w-80"
+                class="tw:w-80"
                 debounce="300"
                 placeholder="Search">
                 <template v-slot:append>
@@ -105,7 +105,7 @@ const onRequest = async (props) => {
             <q-input
               v-if="$q.screen.lt.md"
               v-model="table.search"
-              class="tw-w-80"
+              class="tw:w-80"
               debounce="300"
               placeholder="Search">
               <template v-slot:append>

@@ -77,7 +77,7 @@ export const useCashStore = defineStore('cash', {
     },
 
     setError(e) {
-      if(e.hasOwnProperty('response')){
+      if(Object.prototype.hasOwnProperty.call(e, 'response')){
         if (e.response.status === 422) {
           let error = e.response.data.errors;
           for (let property in error) {
@@ -147,13 +147,13 @@ export const useCashStore = defineStore('cash', {
       // clear out existing data and add new
       // this.table.data = returnedData.data
       if(path.endsWith('details')){
-        this.table.data = returnedData.hasOwnProperty('details') ? returnedData.details.data : []
-        this.table.pagination.rowsNumber = returnedData.hasOwnProperty('details') ? returnedData.details.hasOwnProperty('meta') ? returnedData.details.meta.total : 0 :0
-        this.table.user = returnedData.hasOwnProperty('user') ? returnedData.user.hasOwnProperty('user') ? returnedData.user.user : {} : {}
-        this.table.cash = returnedData.hasOwnProperty('cash') ? returnedData.cash : {}
+        this.table.data = Object.prototype.hasOwnProperty.call(returnedData, 'details') ? returnedData.details.data : []
+        this.table.pagination.rowsNumber = Object.prototype.hasOwnProperty.call(returnedData, 'details') ? Object.prototype.hasOwnProperty.call(returnedData.details, 'meta') ? returnedData.details.meta.total : 0 :0
+        this.table.user = Object.prototype.hasOwnProperty.call(returnedData, 'user') ? Object.prototype.hasOwnProperty.call(returnedData.user, 'user') ? returnedData.user.user : {} : {}
+        this.table.cash = Object.prototype.hasOwnProperty.call(returnedData, 'cash') ? returnedData.cash : {}
       }else{
-        this.table.data = returnedData.hasOwnProperty('data') ? returnedData.data : []
-        this.table.pagination.rowsNumber = returnedData.hasOwnProperty('meta') ? returnedData.meta.total : 0
+        this.table.data = Object.prototype.hasOwnProperty.call(returnedData, 'data') ? returnedData.data : []
+        this.table.pagination.rowsNumber = Object.prototype.hasOwnProperty.call(returnedData, 'meta') ? returnedData.meta.total : 0
       }
 
       // update only rowsNumber = total rows
@@ -167,10 +167,6 @@ export const useCashStore = defineStore('cash', {
       // ...and turn of loading indicator
       this.table.loading = false
       return true
-    },
-
-    async submit() {
-
     },
 
     async giveCash(path) {

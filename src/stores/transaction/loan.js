@@ -85,7 +85,7 @@ export const useLoanStore = defineStore('loan', {
     },
 
     setError(e) {
-      if(e.hasOwnProperty('response')){
+      if(Object.prototype.hasOwnProperty.call(e, 'response')){
         if (e.response.status === 422) {
           let error = e.response.data.errors;
           for (let property in error) {
@@ -152,19 +152,19 @@ export const useLoanStore = defineStore('loan', {
       // fetch data from "server"
       const returnedData = await this.getLoanDataFromApi(path, page, fetchCount, filter, sortBy, descending)
       if(path.endsWith('details')){
-        if(returnedData.hasOwnProperty('details')){
+        if(Object.prototype.hasOwnProperty.call(returnedData, 'details')){
           this.table.data = returnedData.details.data ?? []
           this.table.paginationDetails.rowsNumber = returnedData.details.meta.total
         }
-        this.table.customer = returnedData.hasOwnProperty('customer') ? returnedData.customer : {}
-        this.table.loan = returnedData.hasOwnProperty('loan') ? returnedData.loan : {}
+        this.table.customer = Object.prototype.hasOwnProperty.call(returnedData, 'customer') ? returnedData.customer : {}
+        this.table.loan = Object.prototype.hasOwnProperty.call(returnedData, 'loan') ? returnedData.loan : {}
         this.table.paginationDetails.page = page
         this.table.paginationDetails.rowsPerPage = rowsPerPage
         this.table.paginationDetails.sortBy = sortBy
         this.table.paginationDetails.descending = descending
       }else{
-        this.table.data = returnedData.hasOwnProperty('data') ? returnedData.data : []
-        this.table.pagination.rowsNumber = returnedData.hasOwnProperty('meta') ? returnedData.meta.total : 0
+        this.table.data = Object.prototype.hasOwnProperty.call(returnedData, 'data') ? returnedData.data : []
+        this.table.pagination.rowsNumber = Object.prototype.hasOwnProperty.call(returnedData, 'meta') ? returnedData.meta.total : 0
         this.table.pagination.page = page
         this.table.pagination.rowsPerPage = rowsPerPage
         this.table.pagination.sortBy = sortBy
@@ -182,7 +182,7 @@ export const useLoanStore = defineStore('loan', {
 
       try {
         const response = await api.post(url, params)
-        if(response.hasOwnProperty('data')) {
+        if(Object.prototype.hasOwnProperty.call(response, 'data')) {
           return response.data
         }else{
           this.setError(response)
@@ -208,7 +208,7 @@ export const useLoanStore = defineStore('loan', {
         this.table.loading = false
 
         if(this.dialog.print){
-          const id = response?.data.hasOwnProperty('id') ? response.data.id : 0
+          const id = Object.prototype.hasOwnProperty.call(response.data, 'id') ? response.data.id : 0
           this.router.push({name: 'admin.transaction.loan.print', params: {id: id}})
         }
 
@@ -232,7 +232,7 @@ export const useLoanStore = defineStore('loan', {
         this.table.loading = false
 
         if(this.dialog.print){
-          const id = response?.data.hasOwnProperty('id') ? response.data.id : 0
+          const id = Object.prototype.hasOwnProperty.call(response.data, 'id') ? response.data.id : 0
           this.router.push({name: 'admin.transaction.loan.print', params: {id: id}})
         }
 

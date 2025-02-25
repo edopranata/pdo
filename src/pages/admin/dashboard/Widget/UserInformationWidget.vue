@@ -11,15 +11,15 @@ defineProps({
   <q-toolbar v-if="!loading">
     <q-toolbar-title>User Information</q-toolbar-title>
   </q-toolbar>
-  <div class="tw-grid xl:tw-grid-cols-4 lg:tw-grid-cols-3 md:tw-grid-cols-2 tw-grid-cols-1 tw-gap-4">
+  <div class="tw:grid tw:xl:grid-cols-4 tw:lg:grid-cols-3 tw:md:grid-cols-2 tw:grid-cols-1 tw:gap-4">
     <q-card v-if="loading">
       <q-card-section class="row items-center">
         <q-skeleton type="QAvatar"/>
         <q-space></q-space>
-        <div class="tw-w-[75%]">
-          <q-skeleton class="q-ml-sm tw-text-sm text-right" type="text"/>
+        <div class="tw:w-[75%]">
+          <q-skeleton class="q-ml-sm tw:text-sm text-right" type="text"/>
           <q-skeleton class="q-ml-sm text-h5 text-right" type="rect"/>
-          <q-skeleton class="q-ml-sm tw-text-sm text-right" type="text"/>
+          <q-skeleton class="q-ml-sm tw:text-sm text-right" type="text"/>
         </div>
       </q-card-section>
       <q-card-actions>
@@ -32,7 +32,7 @@ defineProps({
         <q-avatar color="primary" icon="payments" text-color="white"/>
         <q-space></q-space>
         <div>
-          <div class="q-ml-sm tw-text-sm text-right">{{ user.name }}</div>
+          <div class="q-ml-sm tw:text-sm text-right">{{ user.name }}</div>
           <div class="q-ml-sm text-h5 text-right">{{
               new Intl.NumberFormat('id-ID', {
                 style: 'currency',

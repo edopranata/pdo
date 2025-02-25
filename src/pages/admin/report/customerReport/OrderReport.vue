@@ -34,7 +34,7 @@ const exportExcel = async () => {
 </script>
 
 <template>
-  <q-page class="tw-space-y-4" padding>
+  <q-page class="tw:space-y-4" padding>
     <q-card bordered>
       <q-toolbar class="text-primary">
         <q-toolbar-title>
@@ -42,8 +42,8 @@ const exportExcel = async () => {
         </q-toolbar-title>
       </q-toolbar>
       <q-card-section>
-        <div class="md:tw-grid md:tw-grid-cols-3 md:tw-gap-4 md:tw-mb-4">
-          <div class="lg:tw-col-span-1 tw-col-span-2">
+        <div class="tw:md:grid tw:md:grid-cols-3 tw:md:gap-4 tw:md:mb-4">
+          <div class="lg:tw:col-span-1 tw:col-span-2">
             <q-input
               v-if="can('admin.report.customerReport.[orderReport,orderReportExport]')"
               v-model="form.monthly"
@@ -58,8 +58,8 @@ const exportExcel = async () => {
             />
           </div>
         </div>
-        <div class="md:tw-grid md:tw-grid-cols-3 md:tw-gap-4">
-          <div class="tw-flex tw-space-x-4">
+        <div class="tw:md:grid tw:md:grid-cols-3 tw:md:gap-4">
+          <div class="q-gutter-sm">
             <q-btn
               v-if="can('admin.report.customerReport.orderReport')"
               :disable="!checkForm"
@@ -132,7 +132,7 @@ const exportExcel = async () => {
           <tr v-for="(item, index) in table.data" :key="item.id">
             <td class="text-left">{{ index + 1 }}</td>
             <td class="text-left">
-              <div class="flex items-center tw-gap-2 ">
+              <div class="flex items-center tw:gap-2 ">
                 <q-avatar size="sm">
                   <img :alt="item.name" :src="item.initial">
                 </q-avatar>

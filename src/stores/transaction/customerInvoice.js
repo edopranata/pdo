@@ -64,9 +64,9 @@ export const useCustomerInvoiceStore = defineStore('customerInvoice', {
       data.average = state.table.selected.length > 0 ? state.table.selected.reduce((total, next) => parseFloat(total) + parseFloat(next.customer_price), 0) / parseFloat(state.table.selected.length) : 0;
       data.weight = state.table.selected.length > 0 ? state.table.selected.reduce((total, next) => parseFloat(total) + parseFloat(next.net_weight), 0) : 0
       data.total = state.table.selected.length > 0 ? state.table.selected.reduce((total, next) => parseFloat(total) + parseFloat(next.customer_total), 0) : 0
-      data.loan =  state.customer.hasOwnProperty('loan') ? parseFloat(state.customer.loan) : null
+      data.loan =  Object.prototype.hasOwnProperty.call(state.customer, 'loan') ? parseFloat(state.customer.loan) : null
       data.installment = state.form.installment
-      data.ending_balance = state.customer.hasOwnProperty('loan') ? parseFloat(state.customer?.loan) - data.installment : 0
+      data.ending_balance = Object.prototype.hasOwnProperty.call(state.customer, 'loan') ? parseFloat(state.customer?.loan) - data.installment : 0
       data.customer_total = data.total - data.installment;
       state.form.loan = data.loan ?? null
       state.form.total = data.customer_total
@@ -86,7 +86,7 @@ export const useCustomerInvoiceStore = defineStore('customerInvoice', {
 
   actions: {
     setError(e) {
-      if (e.hasOwnProperty('response')) {
+      if (Object.prototype.hasOwnProperty.call(e, 'response')) {
         if (e.response.status === 422) {
           let error = e.response.data.errors;
           for (let property in error) {
@@ -121,7 +121,7 @@ export const useCustomerInvoiceStore = defineStore('customerInvoice', {
       }
     },
     unsetError(error) {
-      if (this.errors.hasOwnProperty(error)) {
+      if (Object.prototype.hasOwnProperty.call(this.errors, error)) {
         delete this.errors[error]
       }
     },
@@ -143,7 +143,7 @@ export const useCustomerInvoiceStore = defineStore('customerInvoice', {
         const response = await api.get(path)
 
         this.customer = response.data?.customer
-        this.form.customer_id = this.customer.hasOwnProperty('id') ? this.customer.id : null
+        this.form.customer_id = Object.prototype.hasOwnProperty.call(this.customer, 'id') ? this.customer.id : null
 
       } catch (e) {
         this.setError(e)
@@ -191,7 +191,7 @@ export const useCustomerInvoiceStore = defineStore('customerInvoice', {
       const returnedData = await this.getCustomerOrderFromApi(path, page, fetchCount, filter, sortBy, descending)
 
       // clear out existing data and add new
-      this.table.data = returnedData.hasOwnProperty('orders') ? returnedData.orders.data : []
+      this.table.data = Object.prototype.hasOwnProperty.call(returnedData, 'orders') ? returnedData.orders.data : []
 
       // update only rowsNumber = total rows
       this.table.pagination.rowsNumber = returnedData.orders.meta.total

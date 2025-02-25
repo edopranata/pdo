@@ -33,7 +33,7 @@ const onSubmit = async () => {
 watch([selected_factory], ([selectedF]) => {
 
   if (selectedF) {
-    if (selectedF.hasOwnProperty('id')) {
+    if (Object.prototype.hasOwnProperty.call(selectedF,'id')) {
       form.factory_id = selectedF.id
       table.search.factory_id = selectedF.id
     }
@@ -81,7 +81,7 @@ const exportExcel = async (id) => {
 </script>
 
 <template>
-  <q-page class="tw-space-y-4" padding>
+  <q-page class="tw:space-y-4" padding>
     <q-card bordered>
       <q-toolbar class="text-primary">
         <q-toolbar-title>
@@ -91,8 +91,8 @@ const exportExcel = async (id) => {
       <q-form
         @submit="onSubmit"
       >
-        <q-card-section class="tw-space-y-4">
-          <div class="md:tw-grid md:tw-grid-cols-3 md:tw-gap-4">
+        <q-card-section class="tw:space-y-4">
+          <div class="tw:md:grid tw:md:grid-cols-3 tw:md:gap-4">
             <q-select
               v-model="income.selected_factory"
               :bg-color="!!form.id ? 'yellow-2' : ''"
@@ -101,7 +101,7 @@ const exportExcel = async (id) => {
               :error="errors.hasOwnProperty('factory_id')"
               :error-message="errors.factory_id"
               :options="factories_option"
-              class="tw-w-full"
+              class="tw:w-full"
               clearable
               fill-input
               filled

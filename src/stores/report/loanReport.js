@@ -1,7 +1,7 @@
 import {defineStore} from 'pinia'
 import {date, LocalStorage, Notify} from "quasar";
 import {api} from "boot/axios";
-
+import * as FileSaver from "file-saver";
 export const useLoanReportStore = defineStore('loanReport', {
   state: () => ({
     customers: [],
@@ -38,7 +38,7 @@ export const useLoanReportStore = defineStore('loanReport', {
         this.table.selected = []
       } else {
         this.form[name] = null
-        if (this.errors.hasOwnProperty(name)) {
+        if (Object.prototype.hasOwnProperty.call(this.errors, name)) {
           this.errors[name] = ''
         }
         if (name === 'customer_id') {
@@ -48,12 +48,12 @@ export const useLoanReportStore = defineStore('loanReport', {
     },
 
     unsetError(error) {
-      if (this.errors.hasOwnProperty(error)) {
+      if (Object.prototype.hasOwnProperty.call(this.errors, error)) {
         delete this.errors[error]
       }
     },
     setError(e) {
-      if (e.hasOwnProperty('response')) {
+      if (Object.prototype.hasOwnProperty.call(e, 'response')) {
         if (e.response.status === 422) {
           let error = e.response.data.errors;
           for (let property in error) {
@@ -107,7 +107,7 @@ export const useLoanReportStore = defineStore('loanReport', {
         responseType: 'blob'
       }).then((response) => {
         // console.log(response)
-        saveAs(response.data, fileName);
+        FileSaver.saveAs(response.data, fileName);
       });
     }
 

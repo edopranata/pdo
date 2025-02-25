@@ -1,6 +1,7 @@
 import {defineStore} from 'pinia'
 import {LocalStorage, Notify} from "quasar";
 import {api} from "boot/axios";
+import * as FileSaver from "file-saver";
 
 export const useIncomeAllFactoryDataStore = defineStore('incomeAllFactoryData', {
   state: () => ({
@@ -35,19 +36,19 @@ export const useIncomeAllFactoryDataStore = defineStore('incomeAllFactoryData', 
         this.table.selected = []
       } else {
         this.form[name] = null
-        if (this.errors.hasOwnProperty(name)) {
+        if (Object.prototype.hasOwnProperty.call(this.errors, name)) {
           this.errors[name] = ''
         }
       }
     },
 
     unsetError(error) {
-      if (this.errors.hasOwnProperty(error)) {
+      if (Object.prototype.hasOwnProperty.call(this.errors, error)) {
         delete this.errors[error]
       }
     },
     setError(e) {
-      if(e.hasOwnProperty('response')){
+      if(Object.prototype.hasOwnProperty.call(e, 'response')){
         if (e.response.status === 422) {
           let error = e.response.data.errors;
           for (let property in error) {
@@ -123,7 +124,7 @@ export const useIncomeAllFactoryDataStore = defineStore('incomeAllFactoryData', 
       await api.post(`${path}`, data, {
         responseType: 'blob'
       }).then((response) => {
-        saveAs(response.data, data.file_name);
+        FileSaver.saveAs(response.data, data.file_name);
       });
     }
   }

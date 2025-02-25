@@ -41,7 +41,7 @@ export const useInvoiceStore = defineStore('invoice', {
   actions: {
 
     setError(e) {
-      if (e.hasOwnProperty('response')) {
+      if (Object.prototype.hasOwnProperty.call(e, 'response')) {
         if (e.response.status === 422) {
           let error = e.response.data.errors;
           for (let property in error) {
@@ -69,7 +69,7 @@ export const useInvoiceStore = defineStore('invoice', {
       }
     },
     unsetError(error) {
-      if (this.errors.hasOwnProperty(error)) {
+      if (Object.prototype.hasOwnProperty.call(this.errors, error)) {
         delete this.errors[error]
       }
     },
@@ -85,7 +85,7 @@ export const useInvoiceStore = defineStore('invoice', {
         this.table.selected = []
       } else {
         this.form[name] = null
-        if (this.errors.hasOwnProperty(name)) {
+        if (Object.prototype.hasOwnProperty.call(this.errors, name)) {
           this.errors[name] = ''
         }
         if (name === 'factory_id') {

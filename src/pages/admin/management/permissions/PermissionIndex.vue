@@ -43,15 +43,15 @@ onMounted(async () => {
           <span class="q-ml-sm">Anda yakin akan melakukan sinkronisasi?</span>
         </q-card-section>
 
-        <q-card-actions class="tw-flex justify-between">
+        <q-card-actions class="tw:flex justify-between">
           <q-btn v-close-popup :disable="table.loading" :loading="table.loading" color="primary" flat label="Batalkan"/>
           <q-btn :disable="table.loading" :loading="table.loading" color="primary" flat label="Sinkron"
                  @click.prevent="permission.syncNewPermissions(path)"/>
         </q-card-actions>
       </q-card>
     </q-dialog>
-    <div class="tw-flex tw-space-y-4 tw-flex-col md:tw-space-x-4 md:tw-space-y-0 md:tw-flex-row">
-      <q-card class="md:tw-flex-none md:tw-w-80 tw-w-full">
+    <div class="tw:flex tw:space-y-4 tw:flex-col tw:md:space-x-4 tw:md:space-y-0 tw:md:flex-row">
+      <q-card class="tw:md:flex-none tw:md:w-80 tw:w-full">
         <q-card-section>
           <q-toolbar class="text-primary">
             <q-toolbar-title>
@@ -71,7 +71,7 @@ onMounted(async () => {
 
       </q-card>
 
-      <q-card class="tw-flex-grow">
+      <q-card class="tw:flex-grow">
         <q-table
           ref="tableRef"
           v-model:pagination="table.pagination"
@@ -91,7 +91,7 @@ onMounted(async () => {
                 {{ !table.filter ? 'Permission' : 'Permission ' + table.filter }}
               </q-toolbar-title>
               <div
-                class="tw-space-x-2">
+                class="tw:space-x-2">
                 <q-btn
                   v-if="can('admin.management.permissions.syncPermissions')"
                   :disable="table.loading"

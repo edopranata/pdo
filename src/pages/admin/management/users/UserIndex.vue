@@ -89,7 +89,7 @@ onMounted(() => {
               Users Data
             </q-toolbar-title>
             <div v-if="can('admin.management.users.[createUser,updateUser,deleteUser,resetPassword]')"
-                 class="tw-space-x-2">
+                 class="q-gutter-sm">
               <q-btn
                 v-if="can('admin.management.users.deleteUser')"
                 :dense="$q.screen.lt.md"

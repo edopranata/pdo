@@ -8,13 +8,12 @@ import {storeToRefs} from "pinia";
 import {useQuasar} from "quasar";
 import DialogGiveCash from "pages/admin/management/cash/dialog/DialogGiveCash.vue";
 import DialogTakeCash from "pages/admin/management/cash/dialog/DialogTakeCash.vue";
-import router from "src/router";
 
 const $q = useQuasar()
 const {table, dialog, form} = useCashStore()
 const cash = useCashStore()
 const {can} = useAuthStore()
-const {errors, getSearch} = storeToRefs(useCashStore())
+const {getSearch} = storeToRefs(useCashStore())
 const {path} = useRoute()
 
 const tableRef = ref()
@@ -67,19 +66,11 @@ const setForm = (id) => {
   const index = table.data.map(e => e.id).indexOf(id);
   const data = table.data[index]
   for (let property in cash.form) {
-    cash.form[property] = data.hasOwnProperty(property) ? data[property] : '';
+    cash.form[property] = Object.prototype.hasOwnProperty.call(data, property) ? data[property] : '';
     if(property === 'current'){
       cash.form.current = data.cash?.balance ?? 0
     }
   }
-}
-
-const openUrl = (id) => {
-  console.log(id)
-  if(can('admin.management.cash.cashDetails')){
-    router().push({name: 'admin.management.cash.cashDetails', params: {id: id}});
-  }
-
 }
 
 </script>
@@ -161,7 +152,7 @@ const openUrl = (id) => {
                   </template>
                 </q-field>
               </q-card-section>
-              <q-card-actions class="tw-px-4" v-if="can('admin.management.cash.[giveCash,takeCash]')">
+              <q-card-actions class="q-px-md" v-if="can('admin.management.cash.[giveCash,takeCash]')">
                 <q-btn
                   v-if="can('admin.management.cash.giveCash')"
                   :dense="$q.screen.lt.md"

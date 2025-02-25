@@ -31,15 +31,15 @@ const exportExcel = () => {
 </script>
 
 <template>
-  <q-page class="tw-space-y-4" padding>
+  <q-page class="tw:space-y-4" padding>
     <q-card bordered>
       <q-card-section v-if="table.loading">
-        <q-list class="tw-w-full sm:tw-w-3/12">
+        <q-list class="tw:w-full tw:sm:w-3/12">
           <q-item>
             <q-item-section>
-              <q-skeleton type="text" class="text-subtitle1 tw-w-32" />
-              <q-skeleton type="text" class="text-caption tw-w-56" />
-              <q-skeleton type="text" class="text-caption tw-w-64" />
+              <q-skeleton type="text" class="text-subtitle1 tw:w-32" />
+              <q-skeleton type="text" class="text-caption tw:w-56" />
+              <q-skeleton type="text" class="text-caption tw:w-64" />
             </q-item-section>
             <q-item-section side top>
               <q-skeleton bordered type="circle" />
@@ -49,7 +49,7 @@ const exportExcel = () => {
 
       </q-card-section>
       <q-card-section v-if="!table.loading">
-        <q-list v-if="table.data.hasOwnProperty('factory')" class="tw-w-full sm:tw-w-3/12">
+        <q-list v-if="table.data.hasOwnProperty('factory')" class="tw:w-full tw:sm:w-3/12">
           <q-item>
             <q-item-section>
               <q-item-label>{{ table.data.factory.name }}</q-item-label>

@@ -26,7 +26,7 @@ defineProps({
           height="350"
           :options="best_customers.options"
           :series="best_customers.series"
-          class="tw-w-full tw-h-auto"
+          class="tw:w-full tw:h-auto"
           type="bar"/>
       </q-card-section>
     </q-card>

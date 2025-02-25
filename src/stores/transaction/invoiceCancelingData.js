@@ -67,7 +67,7 @@ export const useInvoiceCancelingDataStore = defineStore('invoiceCancelingData', 
   actions: {
 
     setError(e) {
-      if(e.hasOwnProperty('response')){
+      if(Object.prototype.hasOwnProperty.call(e, 'response')){
         if (e.response.status === 422) {
           let error = e.response.data.errors;
           for (let property in error) {
@@ -123,6 +123,7 @@ export const useInvoiceCancelingDataStore = defineStore('invoiceCancelingData', 
         // this.table.pagination.rowsNumber = response.data.details.total
       } catch (e) {
         // this.setError(e)
+        console.log(e)
       }
 
       this.table.loading = false
@@ -190,12 +191,12 @@ export const useInvoiceCancelingDataStore = defineStore('invoiceCancelingData', 
           message: 'Cash restore'
         })
       }).catch(e => {
-        if(e.hasOwnProperty('response')){
+        if(Object.prototype.hasOwnProperty.call(e, 'response')){
           if(e.response.status === 422){
             Notify.create({
               position: "top",
               type: 'negative',
-              message: e.response.data.errors.hasOwnProperty('balance') ? e.response.data.errors.balance[0] : e.response.statusText
+              message: Object.prototype.hasOwnProperty.call(e.response.data.errors, 'balance') ? e.response.data.errors.balance[0] : e.response.statusText
             })
           }
           this.setError(e);

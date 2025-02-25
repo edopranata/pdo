@@ -93,7 +93,7 @@ export const usePermissionsStore = defineStore('permissions', {
 
   actions: {
     setError(e) {
-      if(e.hasOwnProperty('response')){
+      if(Object.prototype.hasOwnProperty.call(e, 'response')){
         if (e.response.status === 422) {
           let error = e.response.data.errors;
           for (let property in error) {

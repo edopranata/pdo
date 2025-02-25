@@ -1,20 +1,20 @@
 <script setup>
-import {usePageStore} from "stores/pages";
-import {onBeforeMount} from "vue";
-import {storeToRefs} from "pinia";
-import {LocalStorage} from "quasar";
-import {useRoute} from "vue-router";
-import {useDashboardStore} from "stores/dashboard";
-import {useAuthStore} from "stores/auth";
+import { usePageStore } from 'stores/pages'
+import { onBeforeMount } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useRoute } from 'vue-router'
+import { useDashboardStore } from 'stores/dashboard'
+import { useAuthStore } from 'stores/auth'
+import {useQuasar} from 'quasar'
 
-const {role} = storeToRefs(useAuthStore())
-const {name: currentName} = useRoute()
-const {menus, setActive} = usePageStore()
+const { role } = storeToRefs(useAuthStore())
+const { name: currentName } = useRoute()
+const { menus, setActive } = usePageStore()
 const page = usePageStore()
-const {activeMenu} = storeToRefs(usePageStore())
-const {user} = storeToRefs(useDashboardStore())
-const {table} = useDashboardStore()
-
+const { activeMenu, miniState: iconMiniState } = storeToRefs(usePageStore())
+const { user } = storeToRefs(useDashboardStore())
+const { miniState, toggleMiniState } = usePageStore()
+const $q = useQuasar()
 onBeforeMount(async () => {
   let current = currentName.split('.')
   if (current.length === 4) {
@@ -24,30 +24,27 @@ onBeforeMount(async () => {
     current = 'admin.index'
   }
 
-  page.leftDrawer = LocalStorage.getItem('leftDrawer') ?? false
   page.setActive(current)
 })
 </script>
 
 <template>
-  <q-scroll-area style="height: calc(100% - 200px); margin-top: 200px;">
-    <q-list bordered class="rounded-borders">
+  <q-scroll-area style="height: calc(100% - 150px); margin-top: 70px">
+    <q-list>
       <q-item
         v-ripple
         :active="activeMenu === 'admin.index'"
         clickable
         to="/admin"
-        @click="setActive('admin.index')">
+        @click="setActive('admin.index')"
+      >
         <q-item-section avatar>
-          <q-icon name="home"/>
+          <q-icon name="home" />
         </q-item-section>
         <q-item-section>Dashboard</q-item-section>
       </q-item>
 
-      <template
-        v-for="(menu, m) in menus"
-        :key="m">
-
+      <template v-for="(menu, m) in menus" :key="m">
         <q-expansion-item
           v-if="menu.children.length > 0"
           :content-inset-level="1"
@@ -65,7 +62,8 @@ onBeforeMount(async () => {
               :active="activeMenu === child.name"
               :to="child.path"
               clickable
-              @click="setActive(child.name)">
+              @click="setActive(child.name)"
+            >
               <q-item-section>
                 {{ child.title }}
               </q-item-section>
@@ -76,40 +74,43 @@ onBeforeMount(async () => {
     </q-list>
   </q-scroll-area>
 
-  <q-img class="absolute-top overflow-hidden" src="/img/sawit.jpeg" style="height: 200px">
+  <div class="absolute-top" style="top: 74px">
+    <div class="absolute-bottom bg-transparent">
+      <q-list>
+        <q-item class="q-my-sm">
+          <q-item-section side>
+            <q-avatar rounded size="48px">
+              <q-img :size="!miniState ? '38px' : ''" :src="user.photo" />
+            </q-avatar>
+          </q-item-section>
+          <q-item-section v-if="!miniState">
+            <q-item-label>{{ user.name }}</q-item-label>
+            <q-item-label caption lines="1">@{{ user.username }} <span v-if="role === 'cashier'">
+              <span> | </span><span class="text-orange-10"> {{
+                new Intl.NumberFormat('id-ID', {
+                  style: 'currency',
+                  currency: 'IDR',
+                }).format(user.hasOwnProperty('cash') ? (user.cash ? user.cash?.balance : 0) : 0)
+              }}</span>
+            </span>
+            </q-item-label>
+          </q-item-section>
 
-    <q-list class="absolute-bottom">
-      <q-item class="no-padding" v-if="table.loading">
-        <q-item-section side>
-          <q-skeleton type="QAvatar" size="48px" />
-        </q-item-section>
-        <q-item-section>
-          <q-skeleton type="rect" />
-          <q-skeleton type="text" />
-        </q-item-section>
-        <q-item-section v-if="role === 'cashier'">
-          <q-skeleton type="text" width="60px" />
-        </q-item-section>
-      </q-item>
-      <q-item class="no-padding" v-if="!table.loading">
-        <q-item-section side>
-          <q-avatar rounded size="48px">
-            <q-img :src="user.photo"/>
-          </q-avatar>
-        </q-item-section>
-        <q-item-section>
-          <q-item-label>{{ user.name }}</q-item-label>
-          <q-item-label caption class="text-white">{{ user.username }}</q-item-label>
-        </q-item-section>
-        <q-item-section side class="text-white" v-if="role === 'cashier'">
-          {{
-            new Intl.NumberFormat('id-ID', {
-              style: 'currency',
-              currency: 'IDR'
-            }).format(user.hasOwnProperty('cash') ? user.cash ? user.cash?.balance : 0 : 0)
-          }}
-        </q-item-section>
-      </q-item>
-    </q-list>
-  </q-img>
+        </q-item>
+      </q-list>
+    </div>
+  </div>
+
+  <div v-if="$q.screen.gt.sm" class="absolute" style="top: 60px; right: -12px">
+    <q-btn
+      :icon="!iconMiniState ? 'chevron_left' : 'chevron_right'"
+      color="accent"
+      dense
+      round
+      size="sm"
+      unelevated
+      @click="toggleMiniState"
+    />
+  </div>
+
 </template>

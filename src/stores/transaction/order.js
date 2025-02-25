@@ -25,9 +25,9 @@ export const useOrderStore = defineStore('order', {
       trade_date: '',
       customer_id: '',
       factory_id: '',
-      net_weight: '',
-      net_price: '',
-      customer_price: '',
+      net_weight: null,
+      net_price: null,
+      customer_price: null,
       customer_total_price: '',
       margin: '',
       net_total: '',
@@ -93,7 +93,7 @@ export const useOrderStore = defineStore('order', {
   actions: {
 
     setError(e) {
-      if (e.hasOwnProperty('response')) {
+      if (Object.prototype.hasOwnProperty.call(e, 'response')) {
         if (e.response.status === 422) {
           let error = e.response.data.errors;
           for (let property in error) {
@@ -121,7 +121,7 @@ export const useOrderStore = defineStore('order', {
       }
     },
     unsetError(error) {
-      if (this.errors.hasOwnProperty(error)) {
+      if (Object.prototype.hasOwnProperty.call(this.errors, error)) {
         delete this.errors[error]
       }
     },
@@ -140,7 +140,7 @@ export const useOrderStore = defineStore('order', {
         this.table.selected = []
       } else {
         this.form[name] = null
-        if (this.errors.hasOwnProperty(name)) {
+        if (Object.prototype.hasOwnProperty.call(this.errors, name)) {
           this.errors[name] = ''
         }
         if (name === 'customer_id') {
@@ -284,7 +284,7 @@ export const useOrderStore = defineStore('order', {
           timeout: 1000,
           position: "top",
           type: 'positive',
-          message: params.hasOwnProperty('id') ? 'Data transaksi DO berhasil diubah' : 'Data transaksi DO berhasil disimpan'
+          message: Object.prototype.hasOwnProperty.call(params, 'id') ? 'Data transaksi DO berhasil diubah' : 'Data transaksi DO berhasil disimpan'
         })
         this.table.filter = String(Date.now())
         this.onReset()

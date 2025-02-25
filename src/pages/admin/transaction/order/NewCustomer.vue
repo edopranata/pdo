@@ -29,7 +29,7 @@ const onSubmit = async () => {
       dialog.create = false
       customers.onReset()
     }catch(err) {
-
+      console.log(err)
     }
   }
 }

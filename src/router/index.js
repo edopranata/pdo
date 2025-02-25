@@ -1,7 +1,7 @@
-import { route } from 'quasar/wrappers'
+import { defineRouter } from '#q-app/wrappers'
 import { createRouter, createMemoryHistory, createWebHistory, createWebHashHistory } from 'vue-router'
 import routes from './routes'
-import {LocalStorage} from "quasar";
+import { LocalStorage } from 'quasar'
 
 /*
  * If not building with SSR mode, you can
@@ -12,7 +12,7 @@ import {LocalStorage} from "quasar";
  * with the Router instance.
  */
 
-export default route(function (/* { store, ssrContext } */) {
+export default defineRouter(function (/* { store, ssrContext } */) {
   const createHistory = process.env.SERVER
     ? createMemoryHistory
     : (process.env.VUE_ROUTER_MODE === 'history' ? createWebHistory : createWebHashHistory)
@@ -36,6 +36,7 @@ export default route(function (/* { store, ssrContext } */) {
       })
     } else next()
   });
+
   Router.afterEach((to, from) => {
     const toDepth = to.path.split("/").length;
     const fromDepth = from.path.split("/").length;

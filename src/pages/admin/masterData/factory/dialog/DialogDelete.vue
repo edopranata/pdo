@@ -3,7 +3,7 @@ import {useFactoriesStore} from "stores/masterData/factory";
 import {useRoute} from "vue-router";
 
 const {path} = useRoute()
-const {form, submitDelete, table, deleted} = useFactoriesStore()
+const {submitDelete, table, deleted} = useFactoriesStore()
 
 </script>
 

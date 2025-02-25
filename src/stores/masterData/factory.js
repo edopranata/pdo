@@ -66,7 +66,7 @@ export const useFactoriesStore = defineStore('factories', {
       }
     },
     setError(e) {
-      if(e.hasOwnProperty('response')){
+      if(Object.prototype.hasOwnProperty.call(e, 'response')){
         if (e.response.status === 422) {
           let error = e.response.data.errors;
           for (let property in error) {
@@ -168,7 +168,7 @@ export const useFactoriesStore = defineStore('factories', {
         Notify.create({
           position: "top",
           type: 'positive',
-          message: params.hasOwnProperty('id') ? 'Factory data change' : 'Factory data created'
+          message: Object.prototype.hasOwnProperty.call(params, 'id') ? 'Factory data change' : 'Factory data created'
         })
         this.table.filter = String(Date.now())
       }).catch(e => {

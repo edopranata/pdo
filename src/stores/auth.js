@@ -47,7 +47,7 @@ export const useAuthStore = defineStore('auth', {
       }
     },
     isError(property) {
-      return this.errors.hasOwnProperty(property)
+      return Object.prototype.hasOwnProperty.call(this.errors, property)
     },
     setErrors(e) {
       if (e.response)

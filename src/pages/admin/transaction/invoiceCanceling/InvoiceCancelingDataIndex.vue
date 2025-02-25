@@ -11,7 +11,7 @@ const $q = useQuasar()
 const router = useRouter()
 const invoice = useInvoiceCancelingDataStore()
 const {can} = useAuthStore()
-const {table, form} = useInvoiceCancelingDataStore()
+const {table} = useInvoiceCancelingDataStore()
 const {getSearch: searching} = storeToRefs(useInvoiceCancelingDataStore())
 const {path} = useRoute()
 
@@ -45,9 +45,9 @@ const onRequest = async (props) => {
 
 </script>
 <template>
-  <q-page class="tw-space-y-4" padding>
+  <q-page class="tw:space-y-4" padding>
     <q-card bordered>
-      <q-card-section class="tw-p-0">
+      <q-card-section class="tw:p-0">
         <q-table
           flat
           ref="tableRef"
@@ -69,7 +69,7 @@ const onRequest = async (props) => {
               </q-toolbar-title>
               <q-space></q-space>
               <q-input
-                class="tw-w-80"
+                class="tw:w-80"
                 debounce="500"
                 v-model="table.search"
                 placeholder="Search">

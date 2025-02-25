@@ -7,7 +7,6 @@ import {useRoute} from "vue-router";
 import {storeToRefs} from "pinia";
 import {useQuasar} from "quasar";
 import DialogDelete from "pages/admin/masterData/factory/dialog/DialogDelete.vue";
-import QNumber from "components/Input/QNumber.vue";
 
 const $q = useQuasar()
 const {table, form, deleted} = useFactoriesStore()
@@ -110,7 +109,7 @@ const onEdit = () => {
         <q-card-section
           v-if="can('admin.masterData.factory.[deleteFactory,createFactory,updateFactory]')"
         >
-          <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2">
+          <div class="tw:grid tw:grid-cols-1 tw:md:grid-cols-2">
             <div>
               <q-toolbar class="text-primary">
                 <q-toolbar-title>
@@ -128,7 +127,7 @@ const onEdit = () => {
                 filled
                 label="Nama Pabrik"
               />
-              <div class="tw-flex tw-space-x-4">
+              <div class="tw:flex tw:space-x-4">
                 <q-number
                   v-model="form.margin"
                   :bg-color="!!form.id ? 'yellow-2' : ''"
@@ -138,13 +137,13 @@ const onEdit = () => {
                   :error-message="errors.margin"
                   :options="page.currencyFormat"
 
-                  class="tw-w-full"
+                  class="tw:w-full"
                   filled
                   label="Margin (Rp)"
                 />
               </div>
 
-              <div class="tw-flex tw-space-x-4">
+              <div class="tw:flex tw:space-x-4">
                 <q-number
                   v-model="form.ppn_tax"
                   :bg-color="!!form.id ? 'yellow-2' : ''"
@@ -154,7 +153,7 @@ const onEdit = () => {
                   :error-message="errors.ppn_tax"
                   :options="page.percentFormat"
 
-                  class="tw-w-full"
+                  class="tw:w-full"
                   filled
                   label="PPN (%)"
                 />
@@ -167,7 +166,7 @@ const onEdit = () => {
                   :error-message="errors.pph22_tax"
                   :options="page.percentFormat"
 
-                  class="tw-w-full"
+                  class="tw:w-full"
                   filled
                   label="PPH 22 (%)"
                 />

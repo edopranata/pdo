@@ -1,8 +1,8 @@
-import {LocalStorage} from "quasar";
-import managementRoute from "src/router/partial/managementRoute";
-import masterDataRoute from "src/router/partial/masterDataRoute";
-import transactionRoute from "src/router/partial/transactionRoute";
-import reportRoute from "src/router/partial/reportRoute";
+import { LocalStorage } from 'quasar'
+import managementRoute from 'src/router/partial/managementRoute.js'
+import masterDataRoute from 'src/router/partial/masterDataRoute.js'
+import transactionRoute from 'src/router/partial/transactionRoute.js'
+import reportRoute from 'src/router/partial/reportRoute.js'
 
 const routes = [
   {

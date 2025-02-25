@@ -19,11 +19,12 @@ defineProps({
 
   <q-card v-else>
     <q-card-section class="row items-center">
+
       <apexchart
         v-if="!loading"
         :options="annual_factory_chart.options"
         :series="annual_factory_chart.series"
-        class="tw-w-full tw-h-auto"
+        class="tw:w-full tw:h-auto"
         height="350"
         type="bar"/>
     </q-card-section>

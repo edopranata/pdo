@@ -2,7 +2,7 @@
 import {useInvoiceStore} from "stores/transaction/invoice";
 import {useAuthStore} from "stores/auth";
 import {useRoute} from "vue-router";
-import {onBeforeMount, onMounted, reactive, ref} from "vue";
+import {onBeforeMount, onMounted, ref} from "vue";
 import {useQuasar} from "quasar";
 
 const {path} = useRoute()
@@ -15,11 +15,7 @@ const $q = useQuasar()
 const onRequest = async (props) => {
   await deliveries.getCustomerOrder(path, props)
 }
-const calc = reactive({
-  customer_weight: {type: Number, default: 0},
-  customer_price: {type: Number, default: 0},
-  customer_total_price: {type: Number, default: 0},
-})
+
 onBeforeMount(() => {
   table.filter = ''
   table.search = ''
@@ -31,23 +27,9 @@ onMounted(async () => {
   tableRef.value.requestServerInteraction()
 })
 
-const formattedNUmber = (calcItem, format = 'currency') => {
-
-  const options = {}
-  options.style = format
-
-  if (format === "currency") {
-    options.currency = "IDR"
-  } else {
-    options.unit = "kilogram"
-  }
-
-  return new Intl.NumberFormat('id-ID', options).format(calc[calcItem])
-}
-
 </script>
 <template>
-  <q-page class="tw-space-y-4" padding>
+  <q-page class="tw:space-y-4" padding>
     <q-card>
       <q-table
         ref="tableRef"

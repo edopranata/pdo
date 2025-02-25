@@ -6,7 +6,6 @@ import {storeToRefs} from "pinia";
 import {useRoute} from "vue-router";
 import {onMounted, watch} from "vue";
 import {date} from "quasar";
-import QNumber from "components/Input/QNumber.vue";
 
 const {can} = useAuthStore()
 const page = usePageStore()
@@ -23,11 +22,11 @@ const {path} = useRoute()
 
 watch([selected_factory],( [selectedF]) => {
   if (selectedF) {
-    if (selectedF.hasOwnProperty('id')) {
-      price.date.events = selectedF.hasOwnProperty('event') ? selectedF.event : []
+    if (Object.prototype.hasOwnProperty.call(selectedF, 'id')) {
+      price.date.events = Object.prototype.hasOwnProperty.call(selectedF,'event') ? selectedF.event : []
       form.factory_id = selectedF.id
-      table.data = selectedF.hasOwnProperty('price') ? selectedF.price : []
-      table.name = selectedF.hasOwnProperty('name') ? selectedF.name : null
+      table.data = Object.prototype.hasOwnProperty.call( selectedF,'price') ? selectedF.price : []
+      table.name = Object.prototype.hasOwnProperty.call( selectedF,'name') ? selectedF.name : null
     }
   } else {
     price.onReset()
@@ -37,11 +36,11 @@ watch([selected_factory],( [selectedF]) => {
 
 watch(getTradeDate,( newForm) => {
   if(newForm){
-    let prices = price.selected_factory.hasOwnProperty('price') ? price.selected_factory.price : []
+    let prices = Object.prototype.hasOwnProperty.call(price.selected_factory, 'price') ? price.selected_factory.price : []
     let selectedItem = prices.filter( (p) => p.date === newForm)
-    form.price = selectedItem.length > 0 ? selectedItem[0].hasOwnProperty('price') ? selectedItem[0].price : 0 : 0
-    table.price = selectedItem.length > 0 ? selectedItem[0].hasOwnProperty('price') ? setNumberFormat(selectedItem[0].price) : setNumberFormat(0) : setNumberFormat(0)
-    form.id = selectedItem.length > 0 ? selectedItem[0].hasOwnProperty('id') ? selectedItem[0].id : null : null
+    form.price = selectedItem.length > 0 ? Object.prototype.hasOwnProperty.call(selectedItem[0], 'price') ? selectedItem[0].price : 0 : 0
+    table.price = selectedItem.length > 0 ? Object.prototype.hasOwnProperty.call(selectedItem[0], 'price') ? setNumberFormat(selectedItem[0].price) : setNumberFormat(0) : setNumberFormat(0)
+    form.id = selectedItem.length > 0 ? Object.prototype.hasOwnProperty.call(selectedItem[0], 'id') ? selectedItem[0].id : null : null
   }
 })
 const setNumberFormat = (number) => {
@@ -73,14 +72,14 @@ const onReset = () => {
 
 </script>
 <template>
-  <q-page class="tw-space-y-4" padding>
+  <q-page class="tw:space-y-4" padding>
     <q-dialog v-model="dialog.open" persistent>
-      <q-card class="tw-w-96">
+      <q-card class="tw:w-96">
         <q-card-section class="row items-center">
           <q-avatar color="primary" icon="payments" text-color="white"/>
           <q-space></q-space>
           <div>
-            <div class="q-ml-sm tw-text-sm text-right">{{ form.price_date }}</div>
+            <div class="q-ml-sm tw:text-sm text-right">{{ form.price_date }}</div>
             <div class="q-ml-sm text-h5 text-right">{{
                 new Intl.NumberFormat('id-ID', {
                   style: 'currency',
@@ -117,16 +116,16 @@ const onReset = () => {
         @reset="onReset"
         @submit="dialog.open = true"
       >
-        <q-card-section class="tw-space-y-4" v-if="can('admin.management.price.savePrice')">
-          <div class="md:tw-grid md:tw-grid-cols-3 md:tw-gap-4">
-            <div class="lg:tw-col-span-1 tw-col-span-2">
+        <q-card-section class="tw:space-y-4" v-if="can('admin.management.price.savePrice')">
+          <div class="tw:md:grid tw:md:grid-cols-3 tw:md:gap-4">
+            <div class="tw:lg:col-span-1 tw:col-span-2">
               <q-select
                 v-model="price.selected_factory"
                 :dense="$q.screen.lt.md"
                 :error="errors.hasOwnProperty('factory_id')"
                 :error-message="errors.factory_id"
                 :options="factories_option"
-                class="tw-w-full"
+                class="tw:w-full"
                 clearable
                 fill-input
                 filled
@@ -161,7 +160,7 @@ const onReset = () => {
                 :error="errors.hasOwnProperty('price_date')"
                 :error-message="errors.price_date"
                 :stack-label="!!form.price_date"
-                class="tw-w-full"
+                class="tw:w-full"
                 filled
                 label="Price Date">
                 <template v-slot:control>
@@ -193,11 +192,11 @@ const onReset = () => {
                 :error="errors.hasOwnProperty('price')"
                 :error-message="errors.price"
                 :options="page.currencyFormat"
-                class="tw-w-full"
+                class="tw:w-full"
                 filled
                 label="Factory Price"
               />
-              <div class="tw-flex tw-space-x-4">
+              <div class="tw:flex tw:space-x-4">
                 <q-btn
                   :disable="form.price_date === null && form.price === null && form.factory_id === null"
                   :dense="$q.screen.lt.lg"
@@ -210,7 +209,7 @@ const onReset = () => {
                 />
               </div>
             </div>
-            <div class="lg:tw-col-span-1 lg:tw-pt-0 tw-pt-4 tw-col-span-2" v-if="table.data.length">
+            <div class="tw:lg:col-span-1 tw:lg:pt-0 tw:pt-4 tw:col-span-2" v-if="table.data.length">
               <q-table
                 :title="table.name"
                 :rows="table.data"

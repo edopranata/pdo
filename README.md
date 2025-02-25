@@ -1,6 +1,6 @@
-# PDO Palm Delivery Order (pdo)
+# Palm Delivery Order (q-pdo)
 
-Application for Management Palm Delivery Order
+Palm Delivery Order Cash Management
 
 ## Install the dependencies
 ```bash
@@ -29,7 +29,6 @@ yarn format
 # or
 npm run format
 ```
-
 
 
 ### Build the app for production

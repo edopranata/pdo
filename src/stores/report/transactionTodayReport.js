@@ -20,18 +20,7 @@ export const useTransactionReportStore = defineStore('transactionReport', {
   }),
 
   getters: {
-    summaries(state) {
-      // const total = state.table.data
-      // const opening_balance = total.length > 0 ? parseFloat(total[0].opening_balance) : 0
-      // const total_cash_in = total.length > 0 ? parseFloat(total.reduce((t, n) => t + n.balance_in, 0)) : 0
-      // const total_cash_out = total.length > 0 ? parseFloat(total.reduce((t, n) => t + n.balance_out, 0)) : 0
-      // return  {
-      //   opening_balance: opening_balance,
-      //   total_cash_in: total_cash_in,
-      //   total_cash_out: total_cash_out,
-      //   ending_balance: parseFloat(opening_balance + total_cash_in - total_cash_out)
-      // };
-    }
+
   },
 
   actions: {
@@ -47,7 +36,7 @@ export const useTransactionReportStore = defineStore('transactionReport', {
         this.table.selected = []
       } else {
         this.form[name] = null
-        if (this.errors.hasOwnProperty(name)) {
+        if (Object.prototype.hasOwnProperty.call(this.errors, name)) {
           this.errors[name] = ''
         }
         if (name === 'user_id') {
@@ -57,12 +46,12 @@ export const useTransactionReportStore = defineStore('transactionReport', {
     },
 
     unsetError(error) {
-      if (this.errors.hasOwnProperty(error)) {
+      if (Object.prototype.hasOwnProperty.call(this.errors, error)) {
         delete this.errors[error]
       }
     },
     setError(e) {
-      if (e.hasOwnProperty('response')) {
+      if (Object.prototype.hasOwnProperty.call(e, 'response')) {
         if (e.response.status === 422) {
           let error = e.response.data.errors;
           for (let property in error) {

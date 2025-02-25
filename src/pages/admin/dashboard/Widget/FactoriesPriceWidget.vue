@@ -1,6 +1,5 @@
 <script setup>
 import {date} from "quasar";
-import QNumber from "components/Input/QNumber.vue";
 import {useDashboardStore} from "stores/dashboard";
 import {storeToRefs} from "pinia";
 import {usePageStore} from "stores/pages";
@@ -49,15 +48,15 @@ const onSubmit = () => {
   </q-toolbar>
 
   <div
-       class="tw-grid xl:tw-grid-cols-4 lg:tw-grid-cols-3 md:tw-grid-cols-2 tw-grid-cols-1 tw-gap-4">
+       class="tw:grid tw:xl:grid-cols-4 tw:lg:grid-cols-3 tw:md:grid-cols-2 tw:grid-cols-1 tw:gap-4">
     <q-card v-for="(i) in 4" :key="i" v-show="loading">
       <q-card-section class="row items-center">
         <q-skeleton type="QAvatar"/>
         <q-space></q-space>
-        <div class="tw-w-[75%]">
-          <q-skeleton class="q-ml-sm tw-text-sm text-right" type="text"/>
+        <div class="tw:w-[75%]">
+          <q-skeleton class="q-ml-sm tw:text-sm text-right" type="text"/>
           <q-skeleton class="q-ml-sm text-h5 text-right" type="rect"/>
-          <q-skeleton class="q-ml-sm tw-text-sm text-right" type="text"/>
+          <q-skeleton class="q-ml-sm tw:text-sm text-right" type="text"/>
         </div>
       </q-card-section>
       <q-card-actions>
@@ -70,7 +69,7 @@ const onSubmit = () => {
         <q-avatar color="primary" icon="money" text-color="white"/>
         <q-space></q-space>
         <div>
-          <div class="q-ml-sm tw-text-sm text-right">{{ factory.name }}</div>
+          <div class="q-ml-sm tw:text-sm text-right">{{ factory.name }}</div>
           <div class="q-ml-sm text-h5 text-right">{{
               new Intl.NumberFormat('id-ID', {
                 style: 'currency',
@@ -97,13 +96,13 @@ const onSubmit = () => {
   </div>
 
   <q-dialog v-model="dialog.open" persistent>
-    <q-card class="tw-w-96">
+    <q-card class="tw:w-96">
       <q-card-section class="row items-center">
         <q-field
           :dense="$q.screen.lt.md"
           :stack-label="!!form.name"
           bg-color="blue-grey"
-          class="tw-w-full"
+          class="tw:w-full"
           color="blue-grey-2"
           filled
           hint=""
@@ -123,7 +122,7 @@ const onSubmit = () => {
           :error-message="errors.price_date"
           :stack-label="!!form.price_date"
           bg-color="blue-grey"
-          class="tw-w-full"
+          class="tw:w-full"
           color="blue-grey-2"
           filled
           label="Price Date">
@@ -142,7 +141,7 @@ const onSubmit = () => {
           :error="errors.hasOwnProperty('price')"
           :error-message="errors.price"
           :options="page.currencyFormat"
-          class="tw-w-full"
+          class="tw:w-full"
           filled
           label="Factory Price"
         />

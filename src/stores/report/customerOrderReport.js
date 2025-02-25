@@ -1,7 +1,7 @@
 import {defineStore} from 'pinia'
 import {LocalStorage, Notify} from "quasar";
 import {api} from "boot/axios";
-
+import * as FileSaver from "file-saver";
 export const useCustomerOrderReportStore = defineStore('customerOrderReport', {
   state: () => ({
     customers: [],
@@ -40,7 +40,7 @@ export const useCustomerOrderReportStore = defineStore('customerOrderReport', {
         this.table.selected = []
       } else {
         this.form[name] = null
-        if (this.errors.hasOwnProperty(name)) {
+        if (Object.prototype.hasOwnProperty.call(this.errors, name)) {
           this.errors[name] = ''
         }
         if (name === 'customer_id') {
@@ -50,12 +50,12 @@ export const useCustomerOrderReportStore = defineStore('customerOrderReport', {
     },
 
     unsetError(error) {
-      if (this.errors.hasOwnProperty(error)) {
+      if (Object.prototype.hasOwnProperty.call(this.errors, error)) {
         delete this.errors[error]
       }
     },
     setError(e) {
-      if (e.hasOwnProperty('response')) {
+      if (Object.prototype.hasOwnProperty.call(e, 'response')) {
         if (e.response.status === 422) {
           let error = e.response.data.errors;
           for (let property in error) {
@@ -112,7 +112,7 @@ export const useCustomerOrderReportStore = defineStore('customerOrderReport', {
       await api.post(path, this.form, {
         responseType: 'blob'
       }).then((response) => {
-        saveAs(response.data, fileName);
+        FileSaver.saveAs(response.data, fileName);
         this.table.loading = false
       }).catch((e) => {
         this.setError(e)

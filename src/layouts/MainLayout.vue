@@ -1,45 +1,52 @@
 <template>
-  <q-layout view="lHh Lpr lff" class="full-height">
-    <q-header v-if="!print" class="bg-primary text-white print-hide" elevated height-hint="98">
-      <MainHeader/>
+  <q-layout view="hHh Lpr lff">
+    <q-header v-if="!print" class="bg-primary text-white print-hide" elevated>
+      <MainHeader />
     </q-header>
 
-    <q-drawer v-if="!print" v-model="leftDrawer" bordered class="print-hide" side="left">
-      <MainLeftSidebar/>
+    <q-drawer
+      v-model="page.leftDrawerOpen"
+      :class="$q.dark.isActive ? 'bg-grey-9' : 'bg-grey-3'"
+      :mini="!leftDrawerOpen || miniState"
+      :width="300"
+      bordered
+      show-if-above
+      @click.capture="drawerClick"
+    >
+      <MainLeftSidebar />
     </q-drawer>
 
     <q-drawer v-if="!print" v-model="rightDrawer" bordered class="print-hide" side="right">
-      <MainRightSidebar/>
+      <MainRightSidebar />
     </q-drawer>
 
     <q-page-container>
       <router-view v-slot="{ Component, route }">
         <transition mode="out-in" name="slide-x">
-          <component :is="Component" :key="route.name"/>
+          <component :is="Component" :key="route.name" />
         </transition>
       </router-view>
     </q-page-container>
-
-<!--    <q-footer v-if="!print" class="bg-grey-8 text-white print-hide" elevated>-->
-<!--      <MainFooter/>-->
-<!--    </q-footer>-->
-
   </q-layout>
 </template>
 
 <script setup>
-import {usePageStore} from "stores/pages";
-import {storeToRefs} from "pinia";
-import MainHeader from "layouts/part/MainHeader.vue";
-import MainLeftSidebar from "layouts/part/MainLeftSidebar.vue";
-import MainRightSidebar from "layouts/part/MainRightSidebar.vue";
-import {useDashboardStore} from "stores/dashboard";
-import {onMounted} from "vue";
+import { usePageStore } from 'stores/pages'
+import { storeToRefs } from 'pinia'
+import MainHeader from 'layouts/part/MainHeader.vue'
+import MainLeftSidebar from 'layouts/part/MainLeftSidebar.vue'
+import MainRightSidebar from 'layouts/part/MainRightSidebar.vue'
+import { useDashboardStore } from 'stores/dashboard'
+import { onMounted } from 'vue'
+import { useQuasar } from 'quasar'
 
-const {leftDrawer, rightDrawer, print} = storeToRefs(usePageStore())
+const $q = useQuasar()
+const page = usePageStore()
+const { leftDrawerOpen, miniState, rightDrawer, print } = storeToRefs(usePageStore())
 const dashboard = useDashboardStore()
+const { drawerClick } = usePageStore()
 
-onMounted( async () => {
+onMounted(async () => {
   await dashboard.getUserFactoryInfo('/admin', 'user')
 })
 </script>

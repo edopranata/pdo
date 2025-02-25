@@ -33,8 +33,8 @@ const onSubmit = async () => {
 </script>
 
 <template>
-  <q-page class="print:tw-mt-0 print:tw-py-0 print:tw-text-[12px]">
-    <q-card v-if="data" class="md:tw-w-3/6 print:tw-w-full print-hide" flat>
+  <q-page class="tw:print:mt-0 tw:print:py-0 tw:print:text-[12px]">
+    <q-card v-if="data" class="tw:md:w-3/6 tw:print:w-full print-hide" flat>
       <q-card-section>
         <q-toolbar class="text-primary no-padding">
           <q-toolbar-title>Canceling Invoice</q-toolbar-title>
@@ -52,64 +52,64 @@ const onSubmit = async () => {
       </q-card-section>
 
     </q-card>
-    <div class="tw-flex tw-m-0 tw-p-0">
-      <q-card v-if="data" class="md:tw-w-3/6 print:tw-w-full" flat>
-        <q-card-section class="print:tw-my-0 print:tw-py-0">
-          <div class="tw-flex">
-            <q-img alt="logo" class="tw-w-20" fit="fill" src="/img/logo.png"/>
-            <div class="tw-flex tw-flex-col text-left tw-mt-4">
-              <div class="tw-text-4xl tw-font-bold tw-underline tw-font-sans">TUNAS MUDA</div>
-              <div class="tw-text-xs tw-font-bold">HP: 0811-7600-208</div>
+    <div class="tw:flex tw:m-0 tw:p-0">
+      <q-card v-if="data" class="tw:md:w-3/6 tw:print:w-full" flat>
+        <q-card-section class="tw:print:my-0 tw:print:py-0">
+          <div class="tw:flex">
+            <q-img alt="logo" class="tw:w-20" fit="fill" src="/img/logo.png" style="width: 100px; height: 100px" />
+            <div class="tw:flex tw:flex-col text-left tw:mt-4">
+              <div class="tw:text-4xl tw:font-bold tw:underline tw:font-sans">TUNAS MUDA</div>
+              <div class="tw:text-xs tw:font-bold">HP: 0811-7600-208</div>
             </div>
             <q-space></q-space>
-            <div class="tw-flex tw-flex-col tw-w-64 tw-mt-6">
-              <div class="tw-border-b tw-border-gray-900">Kepada</div>
-              <div class="tw-border-b tw-border-gray-900 tw-font-bold">{{ data.customer?.name.toUpperCase() }}</div>
+            <div class="tw:flex tw:flex-col tw:w-64 tw:mt-6">
+              <div class="tw:border-b tw:border-gray-900">Kepada</div>
+              <div class="tw:border-b tw:border-gray-900 tw:font-bold">{{ data.customer?.name.toUpperCase() }}</div>
             </div>
           </div>
         </q-card-section>
-        <q-card-section class="print:tw-my-0 print:tw-py-0">
+        <q-card-section class="tw:print:my-0 tw:print:py-0">
           <div class="flex justify-between">
-            <div class="tw-font-bold">No Nota: {{ data.invoice_number }}</div>
-            <div class="tw-font-bold">Tanggal Nota: {{ data.invoice_date }}</div>
+            <div class="tw:font-bold">No Nota: {{ data.invoice_number }}</div>
+            <div class="tw:font-bold">Tanggal Nota: {{ data.invoice_date }}</div>
           </div>
-          <div class="tw-grid tw-grid-cols-5">
+          <div class="tw:grid tw:grid-cols-5">
             <span
-              class="tw-font-bold tw-text-center tw-px-4 tw-py-1 tw-border-gray-800 tw-border-l tw-border-y tw-col-span-2">Tanggal / Keterangan</span>
-            <span class="tw-font-bold tw-text-center tw-px-4 tw-py-1 tw-border-gray-800 tw-border-l tw-border-y">Banyaknya</span>
+              class="tw:font-bold tw:text-center tw:px-4 tw:py-1 tw:border-gray-800 tw:border-l tw:border-y tw:col-span-2">Tanggal / Keterangan</span>
+            <span class="tw:font-bold tw:text-center tw:px-4 tw:py-1 tw:border-gray-800 tw:border-l tw:border-y">Banyaknya</span>
             <span
-              class="tw-font-bold tw-text-center tw-px-4 tw-py-1 tw-border-gray-800 tw-border-l tw-border-y">Harga</span>
+              class="tw:font-bold tw:text-center tw:px-4 tw:py-1 tw:border-gray-800 tw:border-l tw:border-y">Harga</span>
             <span
-              class="tw-font-bold tw-text-center tw-px-4 tw-py-1 tw-border-gray-800 tw-border-x tw-border-y">Total</span>
+              class="tw:font-bold tw:text-center tw:px-4 tw:py-1 tw:border-gray-800 tw:border-x tw:border-y">Total</span>
           </div>
-          <div v-if="data.type !== 'LN'" class="tw-grid tw-grid-cols-5">
-            <span class="tw-px-4 tw-border-gray-800 tw-border-l tw-font-bold tw-col-span-2">Transaksi</span>
-            <span class="tw-px-4 tw-border-gray-800 tw-border-l"></span>
-            <span class="tw-px-4 tw-border-gray-800 tw-border-l"></span>
-            <span class="tw-px-4 tw-border-gray-800 tw-border-x"></span>
+          <div v-if="data.type !== 'LN'" class="tw:grid tw:grid-cols-5">
+            <span class="tw:px-4 tw:border-gray-800 tw:border-l tw:font-bold tw:col-span-2">Transaksi</span>
+            <span class="tw:px-4 tw:border-gray-800 tw:border-l"></span>
+            <span class="tw:px-4 tw:border-gray-800 tw:border-l"></span>
+            <span class="tw:px-4 tw:border-gray-800 tw:border-x"></span>
           </div>
 
           <template v-if="data.count_order > 0">
-            <div v-for="(item, index) in data.orders" :key="index" class="tw-grid tw-grid-cols-5">
-              <span class="tw-px-4 tw-border-gray-800 tw-border-l tw-col-span-2">
+            <div v-for="(item, index) in data.orders" :key="index" class="tw:grid tw:grid-cols-5">
+              <span class="tw:px-4 tw:border-gray-800 tw:border-l tw:col-span-2">
                   {{
                     `${date.formatDate(item.trade_date.split('T')[0], 'DD MMMM YYYY')} ${item.hasOwnProperty('factory') ? '- ' + item.factory.name : ''}`
                   }}
               </span>
-              <span class="tw-px-4 tw-border-gray-800 tw-border-l tw-text-right">{{
+              <span class="tw:px-4 tw:border-gray-800 tw:border-l tw:text-right">{{
                   Intl.NumberFormat('id-ID', {
                     style: 'unit',
                     unit: 'kilogram'
                   }).format(item.net_weight)
                 }}</span>
-              <span class="tw-px-4 tw-border-gray-800 tw-border-l tw-text-right">{{
+              <span class="tw:px-4 tw:border-gray-800 tw:border-l tw:text-right">{{
                   Intl.NumberFormat('id-ID', {
                     style: 'currency',
                     currency: 'IDR',
                     minimumFractionDigits: 0
                   }).format(item.customer_price)
                 }}</span>
-              <span class="tw-px-4 tw-border-gray-800 tw-border-x tw-text-right">{{
+              <span class="tw:px-4 tw:border-gray-800 tw:border-x tw:text-right">{{
                   Intl.NumberFormat('id-ID', {
                     style: 'currency',
                     currency: 'IDR',
@@ -118,11 +118,11 @@ const onSubmit = async () => {
                 }}</span>
             </div>
 
-            <div v-if="data.type !== 'LN'" class="tw-grid tw-grid-cols-5">
-              <span class="tw-px-4 tw-border-gray-800 tw-border-l tw-col-span-2"></span>
-              <span class="tw-px-4 tw-border-gray-800 tw-border-l"></span>
-              <span class="tw-px-4 tw-border-gray-800 tw-border-l"></span>
-              <span class="tw-px-4 tw-border-gray-800 tw-border-x tw-font-bold text-right">{{
+            <div v-if="data.type !== 'LN'" class="tw:grid tw:grid-cols-5">
+              <span class="tw:px-4 tw:border-gray-800 tw:border-l tw:col-span-2"></span>
+              <span class="tw:px-4 tw:border-gray-800 tw:border-l"></span>
+              <span class="tw:px-4 tw:border-gray-800 tw:border-l"></span>
+              <span class="tw:px-4 tw:border-gray-800 tw:border-x tw:font-bold text-right">{{
                   Intl.NumberFormat('id-ID', {
                     style: 'currency',
                     currency: 'IDR',
@@ -142,9 +142,9 @@ const onSubmit = async () => {
             <blank-row-print v-for="item in data.count" :key="item"/>
           </template>
 
-          <div class="tw-grid tw-grid-cols-5 tw-border-gray-800 tw-border-b-2 tw-font-bold">
-            <span class="tw-px-4 tw-py-1 tw-border-gray-800 tw-border-l tw-border-t tw-text-right tw-col-span-4">Total Diterima</span>
-            <span class="tw-px-4 tw-py-1 tw-border-gray-800 tw-border-x tw-border-t tw-text-right">{{
+          <div class="tw:grid tw:grid-cols-5 tw:border-gray-800 tw:border-b-2 tw:font-bold">
+            <span class="tw:px-4 tw:py-1 tw:border-gray-800 tw:border-l tw:border-t tw:text-right tw:col-span-4">Total Diterima</span>
+            <span class="tw:px-4 tw:py-1 tw:border-gray-800 tw:border-x tw:border-t tw:text-right">{{
                 Intl.NumberFormat('id-ID', {
                   style: 'currency',
                   currency: 'IDR',

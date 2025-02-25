@@ -37,7 +37,7 @@ const exportExcel = async () => {
 </script>
 
 <template>
-  <q-page class="tw-space-y-4" padding>
+  <q-page class="tw:space-y-4" padding>
     <q-card bordered>
       <q-toolbar class="text-primary">
         <q-toolbar-title>
@@ -47,9 +47,10 @@ const exportExcel = async () => {
       <q-form
         @submit="onSubmit"
       >
-        <q-card-section class="tw-space-y-4">
-          <div class="md:tw-grid md:tw-grid-cols-3 md:tw-gap-4">
+        <q-card-section class="tw:space-y-4">
+          <div class="tw:grid tw:md:grid-cols-3 tw:md:gap-4">
             <q-input
+              class="tw:lg:col-span-1 tw:col-span-3"
               v-model="form.monthly"
               :error="errors.hasOwnProperty('monthly')"
               :error-message="errors.monthly"
@@ -61,8 +62,8 @@ const exportExcel = async () => {
               @change="order.unsetError('monthly')"
             />
             </div>
-          <div class="md:tw-grid md:tw-grid-cols-3 md:tw-gap-4">
-            <div class="tw-flex tw-space-x-4">
+          <div class="tw:grid tw:md:grid-cols-3 tw:md:gap-4">
+            <div class="q-gutter-sm">
               <q-btn
                 :disable="!form_monthly"
                 label="Lihat Data"
