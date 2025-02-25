@@ -152,7 +152,7 @@ const setForm = (id) => {
                   </template>
                 </q-field>
               </q-card-section>
-              <q-card-actions class="tw:px-4" v-if="can('admin.transaction.loan.[addLoan,payLoan]')">
+              <q-card-actions class="q-px-md" v-if="can('admin.transaction.loan.[addLoan,payLoan]')">
                 <q-btn
                   v-if="can('admin.transaction.loan.addLoan')"
                   :dense="$q.screen.lt.md"

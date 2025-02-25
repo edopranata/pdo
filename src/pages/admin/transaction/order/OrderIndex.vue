@@ -35,10 +35,10 @@ onBeforeMount(() => {
   table.search.customer_id = ''
   table.search.factory_id = ''
   table.data = []
+  deliveries.onReset()
 })
 
 onMounted(async () => {
-  deliveries.onReset()
   tableRef.value.requestServerInteraction()
   await deliveries.getCustomerAndFactoryData(path)
 })
@@ -410,7 +410,6 @@ const onUpdate = () => {
               label="Berat bersih (Pabrik)"
             />
 
-
             <q-number
               :disable="table.loading"
               :bg-color="!!form.id ? 'yellow-2' : ''"
@@ -421,7 +420,7 @@ const onUpdate = () => {
               :options="page.currencyFormat"
               class="tw:w-full"
               filled
-              label="Berat bersih (Pabrik)"
+              label="Harga beli (pengepul)"
             />
             <!--            <q-number-->
             <!--              :disable="table.loading"-->
@@ -763,7 +762,7 @@ const onUpdate = () => {
             :size="$q.screen.lt.lg ? 'md' : 'lg'"
             :to="{
               name: 'admin.transaction.invoice.showInvoice',
-              params: { id: form.customer_id ?? '0' },
+              params: { id: form.customer_id ?? '0' }
             }"
             color="positive"
             glossy
