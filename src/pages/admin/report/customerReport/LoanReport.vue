@@ -44,7 +44,7 @@ const exportExcel = async () => {
       </q-toolbar>
       <q-card-section>
         <div class="tw:md:grid tw:md:grid-cols-3 tw:md:gap-4">
-          <div class="tw:flex tw:space-x-4">
+          <div class="q-gutter-sm">
             <q-btn
               v-if="can('admin.report.customerReport.loanReport')"
               :loading="table.loading"
