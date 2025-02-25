@@ -9,6 +9,8 @@ import BlankRowPrint from "components/invoice/BlankRowPrint.vue";
 import LoanRowPrint from "components/invoice/LoanRowPrint.vue";
 import FooterRowPrint from "components/invoice/FooterRowPrint.vue";
 
+const appLogo = import.meta.env.VITE_APP_LOGO
+const productName = import.meta.env.VITE_APP_PRODUCT_NAME
 const page = usePageStore()
 const print = useInvoiceDataStore()
 const {getInvoice: data} = storeToRefs(useInvoiceDataStore())
@@ -52,9 +54,9 @@ const onPrint = () => {
       <q-card v-if="data" class="tw:md:w-3/6 tw:print:w-full" flat>
         <q-card-section class="tw:print:my-0 tw:print:py-0">
           <div class="tw:flex">
-            <q-img alt="logo" class="tw:w-4" fit="fill" src="/img/logo.png" style="width: 100px; height: 100px;" />
+            <q-img alt="logo" class="tw:w-4" fit="fill" :src="appLogo" style="width: 100px; height: 100px;" />
             <div class="tw:flex tw:flex-col text-left tw:mt-4">
-              <div class="tw:text-4xl tw:font-bold tw:underline tw:font-sans">Smart DO</div>
+              <div class="tw:text-4xl tw:font-bold tw:underline tw:font-sans">{{ productName }}</div>
               <div class="tw:text-xs tw:font-bold">HP: 0812-3456-7890</div>
             </div>
             <q-space></q-space>

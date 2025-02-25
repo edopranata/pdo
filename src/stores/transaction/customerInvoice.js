@@ -129,7 +129,7 @@ export const useCustomerInvoiceStore = defineStore('customerInvoice', {
       this.errors = {}
       this.table.selected = []
       for (let property in this.form) {
-        this.form[property] = null
+        this.form[property] = property === 'loan' ? '' : null
         if(property === 'trade_date'){
           this.form[property] = date.formatDate(Date.now(), 'YYYY/MM/DD')
         }

@@ -128,7 +128,7 @@ export const useOrderStore = defineStore('order', {
     onReset(name = null) {
       if (!name) {
         for (let property in this.form) {
-          this.form[property] = null
+          this.form[property] = (property === 'net_weight' || property === 'customer_price') ? '' : null;
           this.errors = {}
           if (property === 'customer_id') {
             this.selected_customer = null

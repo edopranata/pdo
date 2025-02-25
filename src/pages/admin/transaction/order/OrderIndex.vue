@@ -719,7 +719,7 @@ const onUpdate = () => {
             </q-field>
           </div>
         </q-card-section>
-        <q-card-actions class="tw:p-4">
+        <q-card-actions class="q-px-md">
           <q-btn
             v-if="can('admin.transaction.order.createOrder')"
             :dense="$q.screen.lt.lg"

@@ -1,12 +1,17 @@
 <script setup>
-import { reactive } from 'vue'
-import { useAuthStore } from 'stores/auth'
-import { useRoute, useRouter } from 'vue-router'
+import {reactive} from 'vue'
+import {useAuthStore} from 'stores/auth'
+import {useRoute, useRouter} from 'vue-router'
+import {storeToRefs} from "pinia";
+
+const appName = import.meta.env.VITE_APP_NAME
+const appLogo = import.meta.env.VITE_APP_LOGO
 
 const router = useRouter()
 const auth = useAuthStore()
-const { isError } = useAuthStore()
-const { path, query } = useRoute()
+const {errors, loading} = storeToRefs(useAuthStore())
+const {isError} = useAuthStore()
+const {path, query} = useRoute()
 const input = reactive({
   username: null,
   password: null,
@@ -18,10 +23,13 @@ const page_config = reactive({
   passwordFieldType: 'password',
 })
 
+const unsetError = (property) => {
+  delete auth.errors[property]
+}
 const onSubmit = async () => {
   const toPath = query.to || '/admin'
   await auth.login(path, input).then(() => {
-    router.replace({ path: toPath })
+    router.replace({path: toPath})
   })
 }
 const switchVisibility = () => {
@@ -40,32 +48,38 @@ const switchVisibility = () => {
       <div class="row">
         <q-card square class="shadow-24" style="width: 400px; height: 540px">
           <q-card-section class="bg-deep-purple-7">
-            <h4 class="text-h5 text-white q-my-md text-center">EXE Smart DO</h4>
+            <h4 class="text-h5 text-white q-my-md text-center">{{ appName }}</h4>
           </q-card-section>
           <q-card-section class="text-center">
-            <q-img src="/img/logo.png" alt="logo" style="width: 100px; " />
+            <q-img :src="appLogo" alt="logo" style="width: 160px; "/>
           </q-card-section>
           <q-card-section>
-            <q-form class="q-px-sm q-pt-xl">
+            <q-form class="q-px-sm">
               <q-input
+                v-on:update:modelValue="unsetError('username')"
                 ref="Username"
                 square
                 :error="isError('username')"
-                :error-message="auth.errors.username"
+                :error-message="errors.username"
                 :rules="[(val) => (val && val.length > 0) || 'Please type something']"
                 clearable
                 v-model="input.username"
                 lazy-rules
                 label="Username"
                 v-on:keyup.enter="onSubmit"
+                :loading="loading"
+                :disabled="loading"
               >
                 <template v-slot:prepend>
-                  <q-icon name="person" />
+                  <q-icon name="person"/>
                 </template>
               </q-input>
               <q-input
+                v-on:update:modelValue="unsetError('password')"
                 ref="password"
                 square
+                :error="isError('password')"
+                :error-message="errors.password"
                 clearable
                 :rules="[
                   (val) => (val !== null && val !== '') || 'Please type your password',
@@ -76,9 +90,11 @@ const switchVisibility = () => {
                 lazy-rules
                 label="Password"
                 v-on:keyup.enter="onSubmit"
+                :loading="loading"
+                :disabled="loading"
               >
                 <template v-slot:prepend>
-                  <q-icon name="lock" />
+                  <q-icon name="lock"/>
                 </template>
                 <template v-slot:append>
                   <q-icon
@@ -93,6 +109,8 @@ const switchVisibility = () => {
 
           <q-card-actions class="q-px-lg">
             <q-btn
+              :loading="loading"
+              :disabled="loading"
               unelevated
               size="lg"
               color="secondary"
@@ -105,44 +123,6 @@ const switchVisibility = () => {
       </div>
     </div>
   </q-page>
-
-  <!--  <q-page class="flex flex-center" :padding="$q.screen.lt.sm">-->
-  <!--    <q-card style="width: 420px">-->
-  <!--      <q-img alt="Img" src="/undraw/mobile_login.svg"/>-->
-  <!--      <q-form-->
-  <!--        class="q-gutter-md"-->
-  <!--        @submit.prevent="onSubmit"-->
-  <!--      >-->
-  <!--        <q-card-section>-->
-  <!--          <q-input-->
-  <!--            v-model="input.username"-->
-  <!--            :error="isError('username')"-->
-  <!--            :error-message="auth.errors.username"-->
-  <!--            :rules="[ val => val && val.length > 0 || 'Please type something']"-->
-  <!--            filled-->
-  <!--            hint="Username"-->
-  <!--            label="Username *"-->
-  <!--            lazy-rules-->
-  <!--          />-->
-
-  <!--          <q-input-->
-  <!--            v-model="input.password"-->
-  <!--            :rules="[-->
-  <!--          val => val !== null && val !== '' || 'Please type your password',-->
-  <!--          val => val.length > 5 || 'Password must greater than 6 character'-->
-  <!--        ]"-->
-  <!--            filled-->
-  <!--            label="Password *"-->
-  <!--            lazy-rules-->
-  <!--            type="password"-->
-  <!--          />-->
-  <!--          <q-btn color="primary" class="tw-w-full" label="Login" type="submit"/>-->
-
-  <!--        </q-card-section>-->
-
-  <!--      </q-form>-->
-  <!--    </q-card>-->
-  <!--  </q-page>-->
 </template>
 
 <style scoped></style>

@@ -1,8 +1,8 @@
 {
   "name": "q-pdo",
   "version": "0.0.1",
-  "description": "Palm Delivery Order Cash Management",
-  "productName": "Palm Delivery Order",
+  "description": "Smart DO and Cash Management",
+  "productName": "EXE-SmartDO",
   "author": "Edo Pranata <edo.pranata@gmail.com>",
   "type": "module",
   "private": true,

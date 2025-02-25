@@ -87,11 +87,13 @@ export const usePriceStore = defineStore('price', {
     onReset(name = null) {
       if (!name) {
         for (let property in this.form) {
-          this.form[property] = null
+
+          this.form[property] = property === 'price' ? '' : null
           this.errors = {}
           if (property === 'factory_id') {
             this.selected_factory = null
           }
+
         }
         this.table.selected = []
       } else {

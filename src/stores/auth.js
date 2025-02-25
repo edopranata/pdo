@@ -6,6 +6,7 @@ import {api} from 'boot/axios'
 const usePage = usePageStore()
 export const useAuthStore = defineStore('auth', {
   state: () => ({
+    loading: false,
     token: null,
     user: null,
     permissions: [],
@@ -127,6 +128,7 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async login(path, data) {
+      this.loading = true
       try {
         let response = await api.post('/login', data)
         let token = response.data.token
@@ -136,7 +138,9 @@ export const useAuthStore = defineStore('auth', {
 
         await this.attempt(token);
 
+        this.loading = false
       } catch (e) {
+        this.loading = false
         this.setErrors(e)
       }
     },
