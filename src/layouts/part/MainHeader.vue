@@ -9,7 +9,7 @@ const {leftDrawerOpen} = storeToRefs(usePageStore())
 <template>
   <q-toolbar class="glossy">
     <q-btn :icon="!leftDrawerOpen ? 'menu' : 'menu_open' " dense flat round @click="toggleLeftDrawer"/>
-    <q-toolbar-title>Palm Delivery Order</q-toolbar-title>
+    <q-toolbar-title>Exe Smart DO</q-toolbar-title>
 
     <q-btn dense flat icon="manage_accounts" round @click="toggleRightDrawer"/>
   </q-toolbar>

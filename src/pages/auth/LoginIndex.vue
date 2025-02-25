@@ -40,7 +40,10 @@ const switchVisibility = () => {
       <div class="row">
         <q-card square class="shadow-24" style="width: 400px; height: 540px">
           <q-card-section class="bg-deep-purple-7">
-            <h4 class="text-h5 text-white q-my-md">Palm Delivery Order</h4>
+            <h4 class="text-h5 text-white q-my-md text-center">EXE Smart DO</h4>
+          </q-card-section>
+          <q-card-section class="text-center">
+            <q-img src="/img/logo.png" alt="logo" style="width: 100px; " />
           </q-card-section>
           <q-card-section>
             <q-form class="q-px-sm q-pt-xl">
